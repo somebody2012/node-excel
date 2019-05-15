@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "node-xlsx": "^0.14.1"
+    "mysql2": "^1.6.5",
+    "sequelize": "^5.8.6"
   }
 }
