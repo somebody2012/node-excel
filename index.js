@@ -36,12 +36,14 @@ var transfer = [
   [8,	200000000,	400000000],
   [9,	400000000,	800000000],
 ];
-var OPRTN_COND_NO = 1;
-var generateCondNo = function(){
-  var condNo = OPRTN_COND_NO.toString();
-  OPRTN_COND_NO++;
-  return "AU" + condNo.padStart(5,"0")
-}
+var generateCondNo = (function(startNumber){
+  var OPRTN_COND_NO = startNumber;
+  return function(){
+    var condNo = OPRTN_COND_NO.toString();
+    OPRTN_COND_NO++;
+    return "AU" + condNo.padStart(5,"0")
+  }
+})(1)
 // 币种
 var currency = ["01","12","13","14","18","27","28","29","38"];
 // 条件数据
@@ -81,5 +83,5 @@ var buffer = xlsx.build([
   {name: "条件表", data: data},
   {name: "模式表", data: modeData},
 ]); 
-fs.writeFileSync("./授权条件模式表.xlsx",buffer);
+fs.writeFileSync("./金额授权条件模式表.xlsx",buffer);
 
