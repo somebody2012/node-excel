@@ -1,6 +1,11 @@
 {
+  "scripts": {
+    "auth": "node src/parseAuthExcel/index.js",
+    "amtAuth": "node src/parseAuthExcel/parseAmtAuthExcel/index.js"
+  },
   "dependencies": {
     "mysql2": "^1.6.5",
-    "sequelize": "^5.8.6"
+    "sequelize": "^5.8.6",
+    "underscore": "^1.9.1"
   }
 }
