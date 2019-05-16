@@ -6,6 +6,7 @@ var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var utils = require("./utils.js");
 var _ = require("underscore");
 var amtAuthData = require("./parseAmtAuthExcel/index");
+var generateSql = require("./generateSql");
 class Auth {
   constructor(){
     this.maxAmtCondNo = 144;
@@ -276,4 +277,13 @@ var buffer = xlsx.build([
   {name: "字段映射TE_PARA_TRANKEYWORDS_INFO", data: auth.reflexData},
   {name: "字典要素IB_PARA_KEYWORDS_INFO", data: auth.fieldFactor},
 ]); 
+var sqlParams = [
+  {tableName:"IB_OM_RULE_INFO",data:auth.ruleInfoData},
+  {tableName:"IB_OM_RULECOND_INFO",data:auth.condData},
+  {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
+  {tableName:"IB_OM_AUTHMODE_INFO",data:auth.authModeData},
+  {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:auth.reflexData},
+  {tableName:"IB_PARA_KEYWORDS_INFO",data:auth.fieldFactor},
+];
+generateSql(sqlParams);
 fs.writeFileSync(path.resolve(__dirname,process.cwd(),"out","授权表.xlsx"),buffer);
