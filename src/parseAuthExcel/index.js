@@ -1,13 +1,14 @@
 var xlsx = require('node-xlsx');
 var fs = require("fs");
 var path = require("path");
-var excelPath = path.resolve(__dirname,"./授权规则收集表汇总1.0.xlsx");
-var workSheets = xlsx.parse(fs.readFileSync(excelPath));
+
 var utils = require("./utils.js");
 var _ = require("underscore");
 var amtAuthData = require("./parseAmtAuthExcel/index");
 var generateSql = require("./generateSql");
 var config = require("../config");
+var excelPath = path.resolve(__dirname,config.srcExcelName);
+var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 class Auth {
   constructor(){
     this.maxAmtCondNo = 144;
