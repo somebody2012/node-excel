@@ -7,6 +7,7 @@ var utils = require("./utils.js");
 var _ = require("underscore");
 var amtAuthData = require("./parseAmtAuthExcel/index");
 var generateSql = require("./generateSql");
+var config = require("../config");
 class Auth {
   constructor(){
     this.maxAmtCondNo = 144;
@@ -38,7 +39,7 @@ class Auth {
   
   // 初始化
   init(){
-    var sheet1 = this.sheet1;
+    var sheet1 = this.sheet1.filter(row => row.length !== 0);
     var startParseRowIndex = 1;
     /**
      * uniqSheetData 结构
@@ -299,11 +300,16 @@ var amtSqlParams = [
   {tableName:"IB_OM_RULECOND_INFO",data:auth.IB_OM_RULECOND_INFO_AMT},
   {tableName:"IB_OM_AUTHMODE_INFO",data:auth.IB_OM_AUTHMODE_INFO_AMT}
 ];
-generateSql.generateInsertSql("auth.sql",sqlParams);
-generateSql.generateInsertSql("amtAuth.sql",amtSqlParams);
+generateSql.generateInsertSql(`auth_${utils.getCurDateStr()}.sql`,sqlParams);
+generateSql.generateInsertSql(`amtAuth_${utils.getCurDateStr()}.sql`,amtSqlParams);
 
 
 
-generateSql.generateDeleteSql("authDel.sql",sqlParams);
-generateSql.generateDeleteSql("amtAuthDel.sql",amtSqlParams);
-fs.writeFileSync(path.resolve(__dirname,process.cwd(),"out","授权表.xlsx"),buffer);
+generateSql.generateDeleteSql(`authDel_${utils.getCurDateStr()}.sql`,sqlParams);
+generateSql.generateDeleteSql(`amtAuthDel_${utils.getCurDateStr()}.sql`,amtSqlParams);
+
+utils.writeToOutDir(`授权表_${utils.getCurDateStr()}.xlsx`,buffer,config.authSuffix);
+
+module.exports = {
+  suffix:Auth.suffix
+};

@@ -1,5 +1,7 @@
 var fs = require("fs");
 var path = require("path");
+var utils = require("./utils");
+var config = require("../config");
 var generateInsertSql = function(filename,arr){
   var sql = "";
   for(var i=0;i<arr.length;i++){
@@ -23,9 +25,7 @@ SET AUTOCOMMIT=0;
 BEGIN;\n
   ${sql}
   \nCOMMIT;`;
-  // return sql; 
-  fs.writeFileSync(path.resolve(process.cwd(),"out",filename),sql)
-  // console.log(sql);
+  utils.writeToOutDir(filename,sql,config.authSuffix);
 }
 var generateDeleteSql = function(filename,arr){
   var delSql = "";
@@ -40,7 +40,8 @@ var generateDeleteSql = function(filename,arr){
       delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n`;
     }
   }
-  fs.writeFileSync(path.resolve(process.cwd(),"out",filename),delSql)
+  delSql += "\nCOMMIT;";
+  utils.writeToOutDir(filename,delSql,config.authSuffix);
 }
 module.exports = {
   generateInsertSql,

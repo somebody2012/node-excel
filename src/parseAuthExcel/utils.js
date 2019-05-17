@@ -1,3 +1,8 @@
+var fs = require("fs");
+var path = require("path");
+
+
+
 module.exports = {
   generateNo:function(startNumber){
     var number = startNumber;
@@ -29,5 +34,14 @@ module.exports = {
     if(nullValues.length !== 0){
       console.error(arr.toString());
     }
+  },
+  writeToOutDir(filename,buffer,suffix){
+    suffix = suffix || "";
+    var dir = path.resolve(__dirname,process.cwd(),"out",this.getCurDateStr() + suffix);
+    var isDirExists = fs.existsSync(dir);
+    if(!isDirExists){
+      fs.mkdirSync(dir);
+    }
+    fs.writeFileSync(path.resolve(dir,filename),buffer);
   }
 }

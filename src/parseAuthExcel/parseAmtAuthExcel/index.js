@@ -1,6 +1,8 @@
 var xlsx = require('node-xlsx');
 var fs = require("fs");
 var path = require("path");
+var utils = require("../utils");
+var config = require("../../config");
 // const workSheets = xlsx.parse(fs.readFileSync(`${__dirname}/src/resources/abc.xlsx`));
 
 // 授权级别	现金起始金额	现金限制金额
@@ -59,14 +61,16 @@ var modeData = [
 for(var i=0;i<currency.length;i++){
   for(var j=0;j<cash.length;j++){
     var curCondNo = generateCondNo();
+    var curRowTnNwSn = [ curCondNo,"TnNwSn","==","0","","","","现金支付触发授权","","","批量新增","1","0","现金支付" ];
     var curRow1 = [ curCondNo,"txAmt",">=",cash[j][1],"<=",cash[j][2],"","金额超限触发授权","","","批量新增","1","0","交易金额" ];
     var curRow2 = [ curCondNo,"Ccy",  "==",currency[i],"",  "",       "","币种授权","","","批量新增","1","0","币种" ];
-    //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
-    var curModeRow = [curCondNo,"2",cash[j][0],"","","","*","",`币种${currency[i]},金额在范围【${cash[j][1]}-${cash[j][2]}】内，触发授权`,"","","","","",""];
+    var curModeRow = [curCondNo,"2",cash[j][0],"","","","*","",`币种${currency[i]},现金,金额在范围【${cash[j][1]}-${cash[j][2]}】内，触发授权`,"","","","","",""];
     data.push(curRow1);
     data.push(curRow2);
+    data.push(curRowTnNwSn);
     modeData.push(curModeRow);
     if(j === 0){
+      //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
       // 只判断50000,	100000 区间 不通过则判断 金额 和 币种
       var faceRecognitionRow = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","","","批量新增","1","0","人脸识别" ];
       data.push(faceRecognitionRow);
@@ -75,14 +79,16 @@ for(var i=0;i<currency.length;i++){
   }
   for(var j=0;j<transfer.length;j++){
     var curCondNo = generateCondNo();
-    var curRow3 = [ curCondNo,"TnNwSn",">=",transfer[j][1],"<=",transfer[j][2],"","金额超限触发授权","","","批量新增","1","0","交易金额" ];
+    var curRowTnNwSn = [ curCondNo,"TnNwSn","==","1","","","","转账触发授权","","","批量新增","1","0","转账标识" ];
+    var curRow3 = [ curCondNo,"txAmt",">=",transfer[j][1],"<=",transfer[j][2],"","金额超限触发授权","","","批量新增","1","0","交易金额" ];
     var curRow4 = [ curCondNo,"Ccy","==",currency[i],"","","","币种授权","","","批量新增","1","0","币种"];
-    //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
-    var curModeRow = [curCondNo,"2",transfer[j][0],"","","","*","",`币种${currency[i]},金额在范围【${transfer[j][1]}-${transfer[j][2]}】内，触发授权`,"","","","","",""];
+    var curModeRow = [curCondNo,"2",transfer[j][0],"","","","*","",`币种${currency[i]},转账,金额在范围【${transfer[j][1]}-${transfer[j][2]}】内，触发授权`,"","","","","",""];
     data.push(curRow3);
     data.push(curRow4);
+    data.push(curRowTnNwSn);
     modeData.push(curModeRow);
     if(j === 0){
+      //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
       // 只判断50000,	  200000 区间 不通过则判断 金额 和 币种
       var faceRecognitionRow = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","","","批量新增","1","0","人脸识别" ];
       data.push(faceRecognitionRow);
@@ -98,7 +104,8 @@ var buffer = xlsx.build([
   {name: "条件表", data: data},
   {name: "模式表", data: modeData},
 ]); 
-fs.writeFileSync(path.resolve(__dirname,process.cwd(),"out","金额授权条件模式表.xlsx"),buffer);
+
+utils.writeToOutDir(`金额授权条件模式表_${utils.getCurDateStr()}.xlsx`,buffer,config.authSuffix);
 
 module.exports = {
   IB_OM_RULECOND_INFO:data, // 条件表数据
