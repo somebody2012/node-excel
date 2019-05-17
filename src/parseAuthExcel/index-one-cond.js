@@ -64,6 +64,7 @@ class Auth {
       // 生成规则
       this.generateRuleInfoData(RULE_NO,sameCondNoDatas[0]);
 
+
       for(var j=0;j<sameCondNoDatas.length;j++){
         var curSheetRow = sameCondNoDatas[j];
         // 生成条件
@@ -72,15 +73,15 @@ class Auth {
         // 生成映射表
         this.generateReflexData(curSheetRow);
       }
+
       // 生成规则条件映射
       this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,sameCondNoDatas[0]);
       // 为金额映射时 规则 映射 AU00001 - AU00162 条件
       //金额超限
       var authCondition = sameCondNoDatas[0][4];
       if(authCondition.includes(this.amtKeywords)){
-        this.generateAmtRuleCondData(RULE_NO,sameCondNoDatas[0]);
+        // this.generateAmtRuleCondData(RULE_NO,sameCondNoDatas[0]);
       }
-      
       // 生成模式
       this.generateAuthModeData(MODE_NO,sameCondNoDatas[0]);
     }
