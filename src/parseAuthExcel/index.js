@@ -27,9 +27,12 @@ class Auth {
     this.reflexData = [["TRAN_CD","PUB_DICTRY_NM","PRIV_DICTRY_NM","PULDW_MAPG_DICTRY_NM"]];
     // 字段要素表
     this.fieldFactor = [["DICTRY_NM","DICTRY_DESC","DICTRY_TYP_CD","FIELD_CMPR","DATA_ATTR_DESC"]];
+    // 金额条件表
+    this.IB_OM_RULECOND_INFO_AMT = [[]];
+    // 金额授权模式表
+    this.IB_OM_AUTHMODE_INFO_AMT = [[]];
     // 金额授权 条件表 模式表 融合
-    this.condData = this.condData.concat(amtAuthData.IB_OM_RULECOND_INFO.slice(1));
-    this.authModeData = this.authModeData.concat(amtAuthData.IB_OM_AUTHMODE_INFO.slice(1));
+    this.concatAmtData();
     this.init();
   }
   
@@ -45,7 +48,7 @@ class Auth {
       }
      */
     var uniqSheetData =  _.groupBy(sheet1.slice(startParseRowIndex),function(row){
-      return row[1];
+      return row[5];
     })
     var uniqFuncKeys = Object.keys(uniqSheetData);
     for(var i=0;i<uniqFuncKeys.length;i++){
@@ -78,6 +81,13 @@ class Auth {
       this.generateAuthModeData(MODE_NO,sameCondNoDatas[0]);
     }
   }
+  concatAmtData(){
+    // 金额授权 条件表 模式表 融合
+    this.IB_OM_RULECOND_INFO_AMT = amtAuthData.IB_OM_RULECOND_INFO;
+    this.IB_OM_AUTHMODE_INFO_AMT = amtAuthData.IB_OM_AUTHMODE_INFO;
+    // this.condData = this.condData.concat(amtAuthData.IB_OM_RULECOND_INFO.slice(1));
+    // this.authModeData = this.authModeData.concat(amtAuthData.IB_OM_AUTHMODE_INFO.slice(1));
+  }
   // 生成规则表
   generateRuleInfoData(RULE_NO,curSheetRow){
     var RULE_NO = RULE_NO // 规则编号;
@@ -93,7 +103,7 @@ class Auth {
     var OPER_TELR_NO = "900001";  // 操作柜员号
     var OPER_TM = this.curDayStr;  // 操作时间
     var OPER_RSN = "批量新增";  // 操作原因---
-    var curRow = [RULE_NO,RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_TM,OPER_RSN];
+    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_TM,OPER_RSN];
     this.ruleInfoData.push(curRow);
   }
   // 生成条件表
@@ -285,5 +295,15 @@ var sqlParams = [
   {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:auth.reflexData},
   {tableName:"IB_PARA_KEYWORDS_INFO",data:auth.fieldFactor},
 ];
-generateSql(sqlParams);
+var amtSqlParams = [
+  {tableName:"IB_OM_RULECOND_INFO",data:auth.IB_OM_RULECOND_INFO_AMT},
+  {tableName:"IB_OM_AUTHMODE_INFO",data:auth.IB_OM_AUTHMODE_INFO_AMT}
+];
+generateSql.generateInsertSql("auth.sql",sqlParams);
+generateSql.generateInsertSql("amtAuth.sql",amtSqlParams);
+
+
+
+generateSql.generateDeleteSql("authDel.sql",sqlParams);
+generateSql.generateDeleteSql("amtAuthDel.sql",amtSqlParams);
 fs.writeFileSync(path.resolve(__dirname,process.cwd(),"out","授权表.xlsx"),buffer);
