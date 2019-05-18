@@ -28,7 +28,7 @@ BEGIN;\n
   utils.writeToOutDir(filename,sql,config.authSuffix);
 }
 var generateDeleteSql = function(filename,arr){
-  var delSql = "";
+  var delSql = "SET AUTOCOMMIT=0;\nBEGIN;\n\n";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
     var tableName = curTableInfo.tableName;
