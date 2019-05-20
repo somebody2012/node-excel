@@ -11,7 +11,24 @@ var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 class Auth {
   constructor(){
-    this.maxAmtCondNo = 144;
+    /**
+     * 核心 C端 币种对应关系
+     * 
+      01	156	币种-人名币
+      156	01	币种-人民币
+      840	14	币种-美元
+      392	27	币种-日元
+      978	38	币种-欧元
+      036	29	币种-澳大利亚元
+      826	12	币种-英镑
+      344	13	币种-香港元
+      702	18	币种-新加坡元
+      124	28	币种-加元
+    */
+    // 01	156	币种-人名币
+    this.minAmtCondNoOfRMB = 1; // 人名币金额 公共条件范围
+    this.maxAmtCondNoOfRMB = 16;
+
     this.amtKeywords = "金额超限";// 判断是否金额授权
     // 条件从200 开始 200 以下给金额授权条件用
     this.generateNo = utils.generateNo(200);
@@ -145,7 +162,7 @@ class Auth {
   }
   // 生成 金额 规则条件映射表
   generateAmtRuleCondData(RULE_NO,curSheetRow){
-    for(var i=1;i<=this.maxAmtCondNo;i++){
+    for(var i=this.minAmtCondNoOfRMB;i<=this.maxAmtCondNoOfRMB;i++){
       var OPRTN_COND_NO = "AU" + String(i).padStart(5,"0");
       var RULE_COND_NO = OPRTN_COND_NO; // 条件号
       var CMPL_MODE_FLG = (curSheetRow[6] || "1-否").includes("0") ? "0" : "1"; //强制条件 0 是 | 1 否
@@ -185,7 +202,7 @@ class Auth {
     var HOST_AUTH_TYP_CD = ""; // 主机授权类型代码
     var CNTRTN_AUTH_CENT_NM = ""; // 集中授权中心名称
     var CNTRTN_AUTH_LVL_CD = ""; // 集中授权级别代码
-    var REMRK_1 = `${curSheetRow[20] || ""}统计`; // 备注1
+    var REMRK_1 = curSheetRow[20] ? `${curSheetRow[20]}统计` : "" ; // 备注1
     var APP_NO = ""; // 应用编号
     var curRow = [MODE_NO,AUTH_TYP_CD,AUTH_LVL_CD,REMOTE_AUTH_LVL_CD,AUTH_ORG_TYP_CD,AUTH_ORG_NO,AUTH_POST_NO,UGNT_FLG,AUTH_DESC,HOST_AUTH_FLG,HOST_AUTH_TYP_CD,CNTRTN_AUTH_CENT_NM,CNTRTN_AUTH_LVL_CD,REMRK_1,APP_NO];
     this.authModeData.push(curRow);
