@@ -83,6 +83,8 @@ class DoubleScreen {
     var OPER_TM = "";
     var OPER_RSN = "批量新增";
     var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_TM,OPER_RSN];
+    var isExist = this.ruleInfoData.find(v => v[0] == RULE_NO);
+    if(isExist) return;
     this.ruleInfoData.push(curRow);
   }
   // 生成条件表
@@ -130,6 +132,8 @@ class DoubleScreen {
         var STUS_CD = "1"; //状态代码 1 生效
         var REMRK_1 = ""; //备注1
         var curRow = [TRAN_CD,BUNDRY_INDCT_HEDLN_NM,SCRN_NO,SCRN_SORT_SER_NO,BUNDRY_INDCT_NM,GT_VAL_SCP_CD,KEY_GET_VAL,ENTR_NM,STUS_CD,REMRK_1];
+        var isExist = this.doubleScreenField.find(v => (v[0] == TRAN_CD && v[2] == SCRN_NO && v[3] == SCRN_SORT_SER_NO));
+        if(isExist) return;
         this.doubleScreenField.push(curRow);
       }
     });
