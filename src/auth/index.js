@@ -282,8 +282,8 @@ var arr = [
   {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
   {tableName:"IB_OM_AUTHMODE_INFO",data:auth.authModeData}
 ];
-var insertSql = utils.genInsertSql("",arr);
-var deleteSql = utils.genDeleteSql("",arr);
+var insertSql = utils.genInsertSql(arr);
+var deleteSql = utils.genDeleteSql(arr);
 utils.writeToOutDir("authInsert.sql",insertSql,"授权");
 utils.writeToOutDir("authDelete.sql",deleteSql,"授权");
 

@@ -1,8 +1,7 @@
 {
   "scripts": {
     "AU": "node src/auth/index.js",
-    "amtAuth": "node src/parseAuthExcel/parseAmtAuthExcel/index.js",
-    "DS": "node src/parseDoubleScreenExcel/index.js"
+    "DS": "node src/doubleScreen/index.js"
   },
   "dependencies": {
     "mysql2": "^1.6.5",

@@ -3,20 +3,19 @@ var xlsx = require('node-xlsx');
 var fs = require("fs");
 var path = require("path");
 var config = require("../config");
-var utils = require("../parseAuthExcel/utils");
+var utils = require("../utils/index");
 var _ = require("underscore");
-var generateSql = require("./generateSql");
 
 var excelPath = path.resolve(__dirname,config.doubleSrceenExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
-var doubleScreenWorkSheet = workSheets.find(v => v.name === '双屏确认').data;
-var doubleScreenFieldsWorkSheet = workSheets.find(v => v.name === '双屏确认字段信息').data;
+var doubleScreenWorkSheet = workSheets.find(v => v.name.includes('双屏确认')).data;
+var doubleScreenFieldsWorkSheet = workSheets.find(v => v.name.includes('双屏确认字段信息')).data;
 doubleScreenWorkSheet = doubleScreenWorkSheet.filter(row => row.length !== 0);
 doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => row.length !== 0);
 class DoubleScreen {
   constructor(){
-    this.startRuleNoFun = utils.generateNo(30000);// 规则号
-    this.startCondNoFun = utils.generateNo(30000);// 条件号
+    this.startRuleNoFun = utils.generateNo(config.DS_START_NUM);// 规则号
+    this.startCondNoFun = utils.generateNo(config.DS_START_NUM);// 条件号
     /**
      * uniqSheetData 结构
       {
@@ -146,7 +145,7 @@ class DoubleScreen {
 
 
 var doubleScreen = new DoubleScreen();
-debugger
+
 // var buffer = xlsx.build([
 //   {name: "规则IB_OM_RULE_INFO", data: doubleScreen.ruleInfoData},
 //   {name: "条件IB_OM_RULECOND_INFO", data: doubleScreen.condData},
@@ -162,9 +161,13 @@ var sqlParams = [
   {tableName:"TE_PARA_OUTCABINETCFG_INFO",data:doubleScreen.doubleScreenField}
 ];
 
-generateSql.generateInsertSql(`dsInsert_${utils.getCurDateStr()}.sql`,sqlParams);
+var insertSql = utils.genInsertSql(sqlParams);
 
-generateSql.generateDeleteSql(`dsDel_${utils.getCurDateStr()}.sql`,sqlParams);
+var deleteSql = utils.genDeleteSql(sqlParams);
+
+utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
+utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
+
 
 
 

@@ -36,7 +36,7 @@ function getCurDateStr(){
     {tableName:"IB_OM_RULECOND_INFO",data:data}
   ]
  */
-var genInsertSql = function(filename,arr){
+var genInsertSql = function(arr){
   var sql = "";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
@@ -62,7 +62,7 @@ BEGIN;\n
   // utils.writeToOutDir(filename,sql,config.authSuffix);
 return sql;
 }
-var genDeleteSql = function(filename,arr){
+var genDeleteSql = function(arr){
   var delSql = "SET AUTOCOMMIT=0;\nBEGIN;\n\n";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
