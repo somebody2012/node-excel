@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "AU": "node src/parseAuthExcel/index.js",
+    "AU": "node src/auth/index.js",
     "amtAuth": "node src/parseAuthExcel/parseAmtAuthExcel/index.js",
     "DS": "node src/parseDoubleScreenExcel/index.js"
   },
