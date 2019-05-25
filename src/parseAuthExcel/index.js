@@ -154,6 +154,8 @@ class Auth {
   }
   // 生成规则条件映射表
   generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow){
+    var isAmtCond = curSheetRow[4].includes("金额超限");
+    if(isAmtCond) return;
     var RULE_COND_NO = OPRTN_COND_NO; // 条件号
     var CMPL_MODE_FLG = (curSheetRow[6] || "1-否").includes("0") ? "0" : "1"; //强制条件 0 是 | 1 否
     var OPRTN_RULE_NO = RULE_NO; // 规则号
@@ -188,7 +190,8 @@ class Auth {
   }
   // 生成模式表
   generateAuthModeData(MODE_NO,curSheetRow){
-    
+    var isAmtCond = curSheetRow[4].includes("金额超限");
+    if(isAmtCond) return;
     var MODE_NO = MODE_NO; // 模式编号
     var AUTH_TYP_CD = this.getAuthType(curSheetRow[15]); // 授权类型代码
     var AUTH_LVL_CD = curSheetRow[16] || 1; // 授权级别代码
@@ -242,7 +245,10 @@ class Auth {
             utils.assert("比较符2(Ccy映射字段)","比较值2(字段说明)",curSheetRow[12],curSheetRow[13]);
           }
           var curRow = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
-          this.reflexData.push(curRow);
+          var isExist = this.reflexData.find(v => v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM);
+          if(!isExist){
+            this.reflexData.push(curRow);
+          }
           // 生成字典要素表
           this.generateFieldFactorData(curRow,curSheetRow);
         }
@@ -266,7 +272,10 @@ class Auth {
             PULDW_MAPG_DICTRY_NM = "币种";
           }
           var curRow = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
-          this.reflexData.push(curRow);
+          var isExist = this.reflexData.find(v => v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM);
+          if(!isExist){
+            this.reflexData.push(curRow);
+          }
           // 生成字典要素表
           this.generateFieldFactorData(curRow,curSheetRow);
         }
@@ -282,7 +291,10 @@ class Auth {
         var PULDW_MAPG_DICTRY_NM = curSheetRow[9]; //	下拉映射字典名称
         var curRow = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
         utils.assert("交易字段,比较符1(映射字段a.b),字段说明" + TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM);
-        this.reflexData.push(curRow);
+        var isExist = this.reflexData.find(v => v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM);
+          if(!isExist){
+            this.reflexData.push(curRow);
+          }
         // 生成字典要素表
         this.generateFieldFactorData(curRow,curSheetRow);
       }
