@@ -7,7 +7,7 @@ var utils = require("../utils/index");
 
 var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
-var curWorkSheet = workSheets.find(v => v.name.includes("授权规则收集")).data;
+var curWorkSheet = workSheets.find(v => v.name.includes(config.auSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
 
 class Auth {
