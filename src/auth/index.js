@@ -27,13 +27,13 @@ class Auth {
     this.condNoObj = utils.generateNo(config.AU_START_NUM);// 条件号生成函数
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
-    this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_TM","OPER_RSN"]];
+    this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_DT","OPER_RSN"]];
     // 条件表
-    this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESC","OPER_TELR_NO","OPER_TM","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESC"]];
+    this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESCR","OPER_TELR_NO","OPER_DT","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESCR"]];
     // 规则条件映射表
     this.ruleCondData = [["RULE_COND_NO","CMPL_MODE_FLG","OPRTN_RULE_NO"]];
     // 授权模式表
-    this.authModeData =[["MODE_NO","AUTH_TYP_CD","AUTH_LVL_CD","REMOTE_AUTH_LVL_CD","AUTH_ORG_TYP_CD","AUTH_ORG_NO","AUTH_POST_NO","UGNT_FLG","AUTH_DESC","HOST_AUTH_FLG","HOST_AUTH_TYP_CD","CNTRTN_AUTH_CENT_NM","CNTRTN_AUTH_LVL_CD","REMRK_1","APP_NO"]];
+    this.authModeData =[["MODE_NO","AUTH_TYP_CD","AUTH_LVL_CD","REMOTE_AUTH_LVL_CD","AUTH_ORG_TYP_CD","AUTH_ORG_NO","AUTH_PSTN_NO","UGNT_FLG","AUTH_DESCR","HOST_AUTH_FLG","HOST_AUTH_TYP_CD","CNTRTN_AUTH_CENT_NM","CNTRTN_AUTH_LVL_CD","REMRK_1","APP_NO"]];
     this.init();
   }
   
@@ -74,9 +74,9 @@ class Auth {
     var RULE_COMNT = curSheetRow[4];  // 规则说明---
     var EFFT_FLG = "1";  // 生效标志
     var OPER_TELR_NO = "900001";  // 操作柜员号
-    var OPER_TM = this.curDayStr;  // 操作时间
+    var OPER_DT = this.curDayStr;  // 操作时间
     var OPER_RSN = "批量新增";  // 操作原因---
-    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_TM,OPER_RSN];
+    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_DT,OPER_RSN];
     this.ruleInfoData.push(curRow);
   }
     // 生成条件表
@@ -88,14 +88,14 @@ class Auth {
     var OPER_SYM_2 = curSheetRow[12];	 // 运算符号2
     var VALUE2 = curSheetRow[13];	 // 比较值2
     var TRAN_CD = curSheetRow[2];	 // 交易码
-    var COND_DESC = curSheetRow[4];	 // 条件描述
+    var COND_DESCR = curSheetRow[4];	 // 条件描述
     var OPER_TELR_NO = "900001";	 // 操作柜员号
-    var OPER_TM = this.curDayStr;	 // 操作时间
+    var OPER_DT = this.curDayStr;	 // 操作时间
     var OPER_RSN =  "批量新增";	 // 操作原因
     var CMPR_VAL_DATA_DICTRY_FLG = "1";	 // 比较值数据字典标志
     var PUB_DICTRY_FLG = "0";	 // 公共字典标志
-    var DICTRY_DESC = curSheetRow[9];	 // 字典描述
-    var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESC,OPER_TELR_NO,OPER_TM,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESC];
+    var DICTRY_DESCR = curSheetRow[9];	 // 字典描述
+    var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
     this.condData.push(curRow);
     // 生成规则条件映射表
     this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
@@ -123,16 +123,16 @@ class Auth {
     var REMOTE_AUTH_LVL_CD = ""; // 远程授权级别代码
     var AUTH_ORG_TYP_CD = ""; // 授权机构类型代码
     var AUTH_ORG_NO = ""; // 授权机构号
-    var AUTH_POST_NO = "*"; // 授权岗位编号
+    var AUTH_PSTN_NO = "*"; // 授权岗位编号
     var UGNT_FLG = ""; // 加急标志
-    var AUTH_DESC = curSheetRow[4]; // 授权描述
+    var AUTH_DESCR = curSheetRow[4]; // 授权描述
     var HOST_AUTH_FLG = ""; // 主机授权标志
     var HOST_AUTH_TYP_CD = ""; // 主机授权类型代码
     var CNTRTN_AUTH_CENT_NM = ""; // 集中授权中心名称
     var CNTRTN_AUTH_LVL_CD = ""; // 集中授权级别代码
     var REMRK_1 = curSheetRow[20] ? `${curSheetRow[20]}统计` : "" ; // 备注1
     var APP_NO = ""; // 应用编号
-    var curRow = [MODE_NO,AUTH_TYP_CD,AUTH_LVL_CD,REMOTE_AUTH_LVL_CD,AUTH_ORG_TYP_CD,AUTH_ORG_NO,AUTH_POST_NO,UGNT_FLG,AUTH_DESC,HOST_AUTH_FLG,HOST_AUTH_TYP_CD,CNTRTN_AUTH_CENT_NM,CNTRTN_AUTH_LVL_CD,REMRK_1,APP_NO];
+    var curRow = [MODE_NO,AUTH_TYP_CD,AUTH_LVL_CD,REMOTE_AUTH_LVL_CD,AUTH_ORG_TYP_CD,AUTH_ORG_NO,AUTH_PSTN_NO,UGNT_FLG,AUTH_DESCR,HOST_AUTH_FLG,HOST_AUTH_TYP_CD,CNTRTN_AUTH_CENT_NM,CNTRTN_AUTH_LVL_CD,REMRK_1,APP_NO];
     var isExist = this.authModeData.find(v => v[0] == MODE_NO);
     if(isExist) return;
     this.authModeData.push(curRow);
@@ -191,9 +191,9 @@ class Auth {
       for(var j=0;j<curItem.cash.length;j++){
         var cash = curItem.cash;
         var curCondNo = "AU" + this.condNoObj().padStart(5);
-        var tnNwSnCond = [ curCondNo,TnNwSn,"==","0","","","","现金支付触发授权","","","批量新增","1","0","现金支付" ];
-        var txAmtCond = [ curCondNo,txAmt,">=",cash[j][1],"<",cash[j][2],"","金额超限触发授权","","","批量新增","1","0","交易金额" ];
-        var ccyCond = [ curCondNo,Ccy,  "==",curItem.Ccy,"",  "",       "","币种授权","","","批量新增","1","0","币种" ];
+        var tnNwSnCond = [ curCondNo,TnNwSn,"==","0","","","","现金支付触发授权","",this.curDayStr,"批量新增","1","0","现金支付" ];
+        var txAmtCond = [ curCondNo,txAmt,">=",cash[j][1],"<",cash[j][2],"","金额超限触发授权","",this.curDayStr,"批量新增","1","0","交易金额" ];
+        var ccyCond = [ curCondNo,Ccy,  "==",curItem.Ccy,"",  "",       "","币种授权","",this.curDayStr,"批量新增","1","0","币种" ];
         var mode = [curCondNo,"2",cash[j][0],"","","","*","",`${curItem.name},现金,金额在范围【${cash[j][1]}-${cash[j][2]}】内，触发授权`,"","","","","现金金额超限模式",""];
         // 生成条件
         this.generateAmtCondDataInner(tnNwSnCond);
@@ -205,7 +205,7 @@ class Auth {
           // 现金 只有 5w-10w 需要人脸识别规则，转账20w-50w 需要人脸识别规则
           //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
           // 只判断50000,	100000 区间 不通过则判断 金额 和 币种
-          var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","","","批量新增","1","0","人脸识别" ];
+          var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
           // 生成条件
           this.generateAmtCondDataInner(faceReCond);
         }
@@ -219,9 +219,9 @@ class Auth {
       for(var j=0;j<curItem.transfer.length;j++){
         var transfer = curItem.transfer;
         var curCondNo = "AU" + this.condNoObj().padStart(5);
-        var tnNwSnCond = [ curCondNo,TnNwSn,"==","1","","","","转账触发授权","","","批量新增","1","0","转账标识" ];
-        var txAmtCond = [ curCondNo,txAmt,">=",transfer[j][1],"<",transfer[j][2],"","金额超限触发授权","","","批量新增","1","0","交易金额" ];
-        var ccyCond = [ curCondNo,Ccy,"==",curItem.Ccy,"","","","币种授权","","","批量新增","1","0","币种"];
+        var tnNwSnCond = [ curCondNo,TnNwSn,"==","1","","","","转账触发授权","",this.curDayStr,"批量新增","1","0","转账标识" ];
+        var txAmtCond = [ curCondNo,txAmt,">=",transfer[j][1],"<",transfer[j][2],"","金额超限触发授权","",this.curDayStr,"批量新增","1","0","交易金额" ];
+        var ccyCond = [ curCondNo,Ccy,"==",curItem.Ccy,"","","","币种授权","",this.curDayStr,"批量新增","1","0","币种"];
         var mode = [curCondNo,"2",transfer[j][0],"","","","*","",`${curItem.name},转账,金额在范围【${transfer[j][1]}-${transfer[j][2]}】内，触发授权`,"","","","","转账金额超限模式",""];
         // 生成条件
         this.generateAmtCondDataInner(tnNwSnCond);
@@ -232,7 +232,7 @@ class Auth {
         if(j === 0){
           //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
           // 只判断50000,	  200000 区间 不通过则判断 金额 和 币种
-          var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","","","批量新增","1","0","人脸识别" ];
+          var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
           // 生成条件
           this.generateAmtCondDataInner(faceReCond);
         }

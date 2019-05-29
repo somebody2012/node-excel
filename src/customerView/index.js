@@ -29,9 +29,9 @@ class CustomerView {
     this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
-    this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_TM","OPER_RSN"]];
+    this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_DT","OPER_RSN"]];
     // 条件表
-    this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESC","OPER_TELR_NO","OPER_TM","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESC"]];
+    this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESCR","OPER_TELR_NO","OPER_DT","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESCR"]];
     // 规则条件映射表
     this.ruleCondData = [["RULE_COND_NO","CMPL_MODE_FLG","OPRTN_RULE_NO"]];
     //	规则模式编号 字段序号 字段名称 字段字典名称 规则模式类型代码
@@ -62,9 +62,9 @@ class CustomerView {
     var RULE_COMNT = curSheetRow[13];  // 规则说明---
     var EFFT_FLG = "1";  // 生效标志
     var OPER_TELR_NO = "900001";  // 操作柜员号
-    var OPER_TM = this.curDayStr;  // 操作时间
+    var OPER_DT = this.curDayStr;  // 操作时间
     var OPER_RSN = "批量新增";  // 操作原因---
-    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_TM,OPER_RSN];
+    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_DT,OPER_RSN];
     this.ruleInfoData.push(curRow);
   }
     // 生成条件表
@@ -76,18 +76,18 @@ class CustomerView {
     var OPER_SYM_2 = curSheetRow[19];	 // 运算符号2
     var VALUE2 = curSheetRow[20];	 // 比较值2
     var TRAN_CD = curSheetRow[7];	 // 交易码
-    var COND_DESC = curSheetRow[13];	 // 条件描述
+    var COND_DESCR = curSheetRow[13];	 // 条件描述
     var OPER_TELR_NO = "900001";	 // 操作柜员号
-    var OPER_TM = this.curDayStr;	 // 操作时间
+    var OPER_DT = this.curDayStr;	 // 操作时间
     var OPER_RSN =  "批量新增";	 // 操作原因
     var CMPR_VAL_DATA_DICTRY_FLG = "1";	 // 比较值数据字典标志
     var PUB_DICTRY_FLG = "0";	 // 公共字典标志
-    var DICTRY_DESC = curSheetRow[9];	 // 字典描述
-    var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESC,OPER_TELR_NO,OPER_TM,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESC];
+    var DICTRY_DESCR = curSheetRow[9];	 // 字典描述
+    var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
     var isForceCond = (curSheetRow[13] || "强制触发").includes("强制触发"); //是否强制条件
-    // if(!isForceCond) {
+    if(!isForceCond) {
       this.condData.push(curRow);
-    // };
+    };
     // 生成规则条件映射表
     this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
     // 生成模式表
@@ -128,7 +128,7 @@ var arr = [
   {tableName:"IB_OM_RULE_INFO",data:auth.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:auth.condData},
   {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
-  {tableName:"IB_OM_AUTHMODE_INFO",data:auth.modeInfo}
+  {tableName:"IB_OM_MODE_INFO",data:auth.modeInfo}
 ];
 var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
