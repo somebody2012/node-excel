@@ -196,9 +196,9 @@ class Auth {
         var ccyCond = [ curCondNo,Ccy,  "==",curItem.Ccy,"",  "",       "","币种授权","",this.curDayStr,"批量新增","1","0","币种" ];
         var mode = [curCondNo,"2",cash[j][0],"","","","*","",`${curItem.name},现金,金额在范围【${cash[j][1]}-${cash[j][2]}】内，触发授权`,"","","","","现金金额超限模式",""];
         // 生成条件
-        this.generateAmtCondDataInner(tnNwSnCond);
-        this.generateAmtCondDataInner(txAmtCond);
-        this.generateAmtCondDataInner(ccyCond);
+        this.generateAmtCondDataInner(tnNwSnCond,curSheetRow);
+        this.generateAmtCondDataInner(txAmtCond,curSheetRow);
+        this.generateAmtCondDataInner(ccyCond,curSheetRow);
         // 生成模式
         this.generateAmtAuthModeData(mode);
         if(j === 0){
@@ -207,7 +207,7 @@ class Auth {
           // 只判断50000,	100000 区间 不通过则判断 金额 和 币种
           var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
           // 生成条件
-          this.generateAmtCondDataInner(faceReCond);
+          this.generateAmtCondDataInner(faceReCond,curSheetRow);
         }
         // 生成条件规则关系表
         var RULE_COND_NO = curCondNo;
@@ -224,9 +224,9 @@ class Auth {
         var ccyCond = [ curCondNo,Ccy,"==",curItem.Ccy,"","","","币种授权","",this.curDayStr,"批量新增","1","0","币种"];
         var mode = [curCondNo,"2",transfer[j][0],"","","","*","",`${curItem.name},转账,金额在范围【${transfer[j][1]}-${transfer[j][2]}】内，触发授权`,"","","","","转账金额超限模式",""];
         // 生成条件
-        this.generateAmtCondDataInner(tnNwSnCond);
-        this.generateAmtCondDataInner(txAmtCond);
-        this.generateAmtCondDataInner(ccyCond);
+        this.generateAmtCondDataInner(tnNwSnCond,curSheetRow);
+        this.generateAmtCondDataInner(txAmtCond,curSheetRow);
+        this.generateAmtCondDataInner(ccyCond,curSheetRow);
         // 生成模式
         this.generateAmtAuthModeData(mode);
         if(j === 0){
@@ -234,7 +234,7 @@ class Auth {
           // 只判断50000,	  200000 区间 不通过则判断 金额 和 币种
           var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
           // 生成条件
-          this.generateAmtCondDataInner(faceReCond);
+          this.generateAmtCondDataInner(faceReCond,curSheetRow);
         }
         // 生成条件规则关系表
         var RULE_COND_NO = curCondNo;
@@ -246,8 +246,11 @@ class Auth {
     }
   }
   // 生成金额 条件表
-  generateAmtCondDataInner(condRow){
-    this.condData.push(condRow);
+  generateAmtCondDataInner(condRow,curSheetRow){
+    var isForceCond = (curSheetRow[6] || "0-是").includes("0"); //是否强制条件 0 是 | 1 否
+    if(!isForceCond){
+      this.condData.push(condRow);
+    }
   }
   // 生成金额 条件规则映射表
   generateAmtCondRuleData(condRule){
