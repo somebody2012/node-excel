@@ -1,6 +1,7 @@
 {
   "scripts": {
     "AU": "node src/auth/index.js",
+    "AUEXT": "node src/auth/index_rewite.js",
     "DS": "node src/doubleScreen/index.js",
     "CV": "node src/customerView/index.js"
   },

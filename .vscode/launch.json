@@ -13,6 +13,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "授权重写",
+      "program": "${workspaceFolder}/src/auth/index_rewite.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "双屏",
       "program": "${workspaceFolder}/src/doubleScreen/index.js"
     },

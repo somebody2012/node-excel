@@ -16,6 +16,8 @@ function generateNo(startNumber){
   }
 }
 
+
+
 function getCurDateStr(){
   let date = new Date();
   let year = date.getFullYear();

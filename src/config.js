@@ -8,7 +8,8 @@ module.exports = {
   CK_START_NUM:70000,// 复核
   FE_START_NUM:80000,// 收费
   //授权
-  srcExcelName:"授权规则收集表汇总1.0.xlsx",// 资源名字
+  // srcExcelName:"授权规则收集表汇总1.0.xlsx",// 资源名字
+  srcExcelName:"授权规则收集表汇总1.0的副本.xlsx",// 资源名字
   auSheetName:"授权规则收集",
   // 双屏
   doubleSrceenExcelName:"联网核查、黑名单、双屏确认规则统计表_20190228.xlsx",// 双屏确认资源excel名字
