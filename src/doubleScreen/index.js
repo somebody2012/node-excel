@@ -17,6 +17,7 @@ class DoubleScreen {
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     this.startRuleNoFun = utils.generateNo(config.DS_START_NUM);// 规则号
     this.startCondNoFun = utils.generateNo(config.DS_START_NUM);// 条件号
+    this.FIELD_SEQ_NO_FUN = utils.generateNo(1);// 模式序号
     /**
      * uniqSheetData 结构
       {
@@ -37,6 +38,8 @@ class DoubleScreen {
     this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESCR","OPER_TELR_NO","OPER_DT","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESCR"]];
     // 规则条件映射表 IB_OM_RULECOND_RLT
     this.ruleCondData = [["RULE_COND_NO","CMPL_MODE_FLG","OPRTN_RULE_NO"]];
+    // 模式表
+    this.modeInfo = [["RULE_MODE_NO","FIELD_SEQ_NO","FIELD_NM","FIELD_DICTRY_NM","RULE_MODE_TYP_CD"]];
     // 双屏字段表 TE_PARA_OUTCABINETCFG_INFO
     this.doubleScreenField = [["TRAN_CD","BUNDRY_INDCT_HEDLN_NM","SCRN_NO","SCRN_SORT_SEQ_NO","BUNDRY_INDCT_NM","GT_VAL_SCP_CD","KEY_VAL","ENTR_NM","STUS_CD","REMRK_1"]];
     this.init();
@@ -60,6 +63,10 @@ class DoubleScreen {
           // 如果不是强制条件则不生成条件表
           // 生成条件表
           this.generateCondData(OPRTN_COND_NO,curSheetRow);
+        }
+        var isExistMode = this.modeInfo.find(v => v[0] == OPRTN_COND_NO);
+        if(!isExistMode){
+          this.generateModeInfo(OPRTN_COND_NO,curSheetRow);
         }
       }
       // 生成规则条件映射表
@@ -106,6 +113,17 @@ class DoubleScreen {
     var DICTRY_DESCR = "" ;  
     var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
     this.condData.push(curRow);
+  }
+  // 生成模式表
+  generateModeInfo(RULE_MODE_NO,curSheetRow){
+    
+    var RULE_MODE_NO = RULE_MODE_NO;//规则模式编号
+    var FIELD_SEQ_NO = this.FIELD_SEQ_NO_FUN().number;//字段序号
+    var FIELD_NM = "screenSeqNo";//字段名称   用来存屏幕编号
+    var FIELD_DICTRY_NM = curSheetRow[17];//字段字典名称
+    var RULE_MODE_TYP_CD = "DS";//规则模式类型代码
+    var curRow = [RULE_MODE_NO,FIELD_SEQ_NO,FIELD_NM,FIELD_DICTRY_NM,RULE_MODE_TYP_CD];
+    this.modeInfo.push(curRow);
   }
   // 生成规则条件映射表
   generateRuleCondData(RULE_NO,OPRTN_COND_NO,isForceCond){
@@ -162,6 +180,7 @@ var doubleScreen = new DoubleScreen();
 var sqlParams = [
   {tableName:"IB_OM_RULE_INFO",data:doubleScreen.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:doubleScreen.condData},
+  {tableName:"IB_OM_MODE_INFO",data:doubleScreen.modeInfo},
   {tableName:"IB_OM_RULECOND_RLT",data:doubleScreen.ruleCondData},
   {tableName:"TE_PARA_OUTCABINETCFG_INFO",data:doubleScreen.doubleScreenField}
 ];
