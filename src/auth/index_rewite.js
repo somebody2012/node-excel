@@ -44,7 +44,7 @@ class Auth {
       var key = uniqFuncKeys[i];
       var sameRuleData = this.uniqSheetData[key];
       var RULE_NO = this.ruleNoObj().padStart(6);
-      var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
+      var OPRTN_COND_NO_1 = "AU" + this.condNoObj().padStart(5);
       this.generateRuleInfoData(RULE_NO,sameRuleData[0]);
       for(var j=0;j<sameRuleData.length;j++){
         var curSheetRow = sameRuleData[j];
@@ -55,15 +55,44 @@ class Auth {
           var isNotAuth = curSheetRow[17].includes("不授权");
           var isNotChange = curSheetRow[17].includes("不改变");
           if(isNotAuth){
+            // 人脸识别通过后 不授权
             var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
             // faceRecognition = '0' faceRecognition = '1' 两个条件 不同条件号
             // 人脸识别通过则不授权 不通过用前面的授权条件
+            // 只生成需要授权的 条件
             this.genFaceNotPassCond(OPRTN_COND_NO,curSheetRow);
-            var 
+            this.genFaceNotPassMode(OPRTN_COND_NO,curSheetRow);
+            this.genFaceNotPassRuleCond(OPRTN_COND_NO,curSheetRow); 
           }else if(isNotChange){
+            // 生成两个条件 或关系
+            var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
+            // 人脸识别通过后 不改变以前授权规则
             // faceRecognition = '0' faceRecognition = '1' 两个条件 不同条件号
+            this.genFaceIsNotChangeCond(OPRTN_COND_NO,curSheetRow,true);
+            this.genFaceIsNotChangeMode(OPRTN_COND_NO,curSheetRow);
+            this.genFaceIsNotChangeRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow);
+            this.useOldRule(RULE_NO,OPRTN_COND_NO,curSheetRow);
+
+            var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
+            this.genFaceIsNotChangeCond(OPRTN_COND_NO,curSheetRow,false);
+            this.genFaceIsNotChangeMode(OPRTN_COND_NO,curSheetRow);
+            this.genFaceIsNotChangeRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow);
+            this.useOldRule(RULE_NO,OPRTN_COND_NO,curSheetRow);
           }else{
+            // 人脸识别通过后 用现在授权规则 不通过用以前规则
             // faceRecognition = '0' faceRecognition = '1' 两个条件 不同条件号
+            // 不通过 用以前规则
+            var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
+            this.genFaceIsNotChangeCond(OPRTN_COND_NO,curSheetRow,false);
+            this.genFaceIsNotChangeMode(OPRTN_COND_NO,curSheetRow);
+            this.genFaceIsNotChangeRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow);
+            this.useOldRule(RULE_NO,OPRTN_COND_NO,curSheetRow);
+            // 通过用现在规则
+            var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
+            this.genFaceIsNotChangeCond(OPRTN_COND_NO,curSheetRow,true);
+            this.genFaceIsNotChangeMode(OPRTN_COND_NO,curSheetRow);
+            this.genFaceIsNotChangeRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow);
+            this.useNewRule(RULE_NO,OPRTN_COND_NO,curSheetRow);
           }
         }else{
           // 不需要人脸识别
@@ -78,18 +107,18 @@ class Auth {
               // 是强制条件
 
               // 生成规则条件映射表
-              this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
+              this.generateRuleCondData(RULE_NO,OPRTN_COND_NO_1,curSheetRow);
               // 生成模式表
-              this.generateAuthModeData(OPRTN_COND_NO,curSheetRow);
+              this.generateAuthModeData(OPRTN_COND_NO_1,curSheetRow);
             }else{
               // 不是强制条件
 
               // 生成条件
-              this.generateCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
+              this.generateCondData(RULE_NO,OPRTN_COND_NO_1,curSheetRow);
               // 生成规则条件映射表
-              this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
+              this.generateRuleCondData(RULE_NO,OPRTN_COND_NO_1,curSheetRow);
               // 生成模式表
-              this.generateAuthModeData(OPRTN_COND_NO,curSheetRow);
+              this.generateAuthModeData(OPRTN_COND_NO_1,curSheetRow);
             }
           }
         }
@@ -319,26 +348,149 @@ class Auth {
       AUTH_TYP_CD = "3";
     }
     return AUTH_TYP_CD;
-  },
+  }
   // 生成人脸识别 通过 条件  -- 通过则不 不触发此条 条件
   genFaceNotPassCond(OPRTN_COND_NO,curSheetRow){
     var OPRTN_COND_NO = OPRTN_COND_NO;	 // 运营条件编号
     var DICTRY_NM = "faceRecognition";	 // 字典名称
     var OPER_SYM_1 = "==";	 // 运算符号1
-    var CMPR_VAL = "1";	 // 比较值
+    var CMPR_VAL = "0";	 // 比较值
     var OPER_SYM_2 = "";	 // 运算符号2
     var VALUE2 = "";	 // 比较值2
     var TRAN_CD = curSheetRow[2];	 // 交易码
-    var COND_DESCR = "人脸识别不通过";	 // 条件描述
+    var COND_DESCR = "人脸识别通过";	 // 条件描述
     var OPER_TELR_NO = "900001";	 // 操作柜员号
     var OPER_DT = this.curDayStr;	 // 操作时间
     var OPER_RSN =  "批量新增";	 // 操作原因
     var CMPR_VAL_DATA_DICTRY_FLG = "1";	 // 比较值数据字典标志
     var PUB_DICTRY_FLG = "0";	 // 公共字典标志
-    var DICTRY_DESCR = "人脸识别不通过";	 // 字典描述
+    var DICTRY_DESCR = "人脸识别通过";	 // 字典描述
     var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
     this.condData.push(curRow);
   }
+  // 生成人脸识别 不通过 条件
+  genFaceNotPassMode(MODE_NO,curSheetRow){
+    var MODE_NO = MODE_NO; // 模式编号
+    var AUTH_TYP_CD = this.getAuthType(curSheetRow[15]); // 授权类型代码
+    var AUTH_LVL_CD = curSheetRow[16] || 1; // 授权级别代码
+    var REMOTE_AUTH_LVL_CD = ""; // 远程授权级别代码
+    var AUTH_ORG_TYP_CD = ""; // 授权机构类型代码
+    var AUTH_ORG_NO = ""; // 授权机构号
+    var AUTH_PSTN_NO = "*"; // 授权岗位编号
+    var UGNT_FLG = ""; // 加急标志
+    var AUTH_DESCR = curSheetRow[4]; // 授权描述
+    var HOST_AUTH_FLG = ""; // 主机授权标志
+    var HOST_AUTH_TYP_CD = ""; // 主机授权类型代码
+    var CNTRTN_AUTH_CENT_NM = ""; // 集中授权中心名称
+    var CNTRTN_AUTH_LVL_CD = ""; // 集中授权级别代码
+    var REMRK_1 = curSheetRow[20] ? `${curSheetRow[20]}统计` : "" ; // 备注1
+    var APP_NO = ""; // 应用编号
+    var curRow = [MODE_NO,AUTH_TYP_CD,AUTH_LVL_CD,REMOTE_AUTH_LVL_CD,AUTH_ORG_TYP_CD,AUTH_ORG_NO,AUTH_PSTN_NO,UGNT_FLG,AUTH_DESCR,HOST_AUTH_FLG,HOST_AUTH_TYP_CD,CNTRTN_AUTH_CENT_NM,CNTRTN_AUTH_LVL_CD,REMRK_1,APP_NO];
+    var isExist = this.authModeData.find(v => v[0] == MODE_NO);
+    if(isExist) return;
+    this.authModeData.push(curRow);
+  }
+  // 生成人脸识别 不通过 规则条件映射表
+  genFaceNotPassRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow){
+    var RULE_COND_NO = OPRTN_COND_NO; // 条件号
+    var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
+    var OPRTN_RULE_NO = RULE_NO; // 规则号
+    var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
+    // 一个规则对应多个相同条件的时候只需要写一次条件表
+    var isExist = this.ruleCondData.find(v => (v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO));
+    if(isExist) return;
+    this.ruleCondData.push(curRow);
+  }
+  // isNotChange 人脸识别通过后不改变授权
+  genFaceIsNotChangeCond(OPRTN_COND_NO,curSheetRow,passed){
+    var OPRTN_COND_NO = OPRTN_COND_NO;	 // 运营条件编号
+    var DICTRY_NM = "faceRecognition";	 // 字典名称
+    var OPER_SYM_1 = "==";	 // 运算符号1
+    var CMPR_VAL = passed ? "1" : "0";	 // 比较值
+    var OPER_SYM_2 = "";	 // 运算符号2
+    var VALUE2 = "";	 // 比较值2
+    var TRAN_CD = curSheetRow[2];	 // 交易码
+    var COND_DESCR = passed ? "人脸识别通过" : "人脸识别不通过";	 // 条件描述
+    var OPER_TELR_NO = "900001";	 // 操作柜员号
+    var OPER_DT = this.curDayStr;	 // 操作时间
+    var OPER_RSN =  "批量新增";	 // 操作原因
+    var CMPR_VAL_DATA_DICTRY_FLG = "1";	 // 比较值数据字典标志
+    var PUB_DICTRY_FLG = "0";	 // 公共字典标志
+    var DICTRY_DESCR = passed ? "人脸识别通过" : "人脸识别不通过";	 // 字典描述
+    var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
+    this.condData.push(curRow);
+  }
+  genFaceIsNotChangeMode(MODE_NO,curSheetRow){
+    var MODE_NO = MODE_NO; // 模式编号
+    var AUTH_TYP_CD = this.getAuthType(curSheetRow[15]); // 授权类型代码
+    var AUTH_LVL_CD = curSheetRow[16] || 1; // 授权级别代码
+    var REMOTE_AUTH_LVL_CD = ""; // 远程授权级别代码
+    var AUTH_ORG_TYP_CD = ""; // 授权机构类型代码
+    var AUTH_ORG_NO = ""; // 授权机构号
+    var AUTH_PSTN_NO = "*"; // 授权岗位编号
+    var UGNT_FLG = ""; // 加急标志
+    var AUTH_DESCR = curSheetRow[4]; // 授权描述
+    var HOST_AUTH_FLG = ""; // 主机授权标志
+    var HOST_AUTH_TYP_CD = ""; // 主机授权类型代码
+    var CNTRTN_AUTH_CENT_NM = ""; // 集中授权中心名称
+    var CNTRTN_AUTH_LVL_CD = ""; // 集中授权级别代码
+    var REMRK_1 = curSheetRow[20] ? `${curSheetRow[20]}统计` : "" ; // 备注1
+    var APP_NO = ""; // 应用编号
+    var curRow = [MODE_NO,AUTH_TYP_CD,AUTH_LVL_CD,REMOTE_AUTH_LVL_CD,AUTH_ORG_TYP_CD,AUTH_ORG_NO,AUTH_PSTN_NO,UGNT_FLG,AUTH_DESCR,HOST_AUTH_FLG,HOST_AUTH_TYP_CD,CNTRTN_AUTH_CENT_NM,CNTRTN_AUTH_LVL_CD,REMRK_1,APP_NO];
+    var isExist = this.authModeData.find(v => v[0] == MODE_NO);
+    if(isExist) return;
+    this.authModeData.push(curRow);
+  }
+  genFaceIsNotChangeRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow){
+    var RULE_COND_NO = OPRTN_COND_NO; // 条件号
+    var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
+    var OPRTN_RULE_NO = RULE_NO; // 规则号
+    var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
+    // 一个规则对应多个相同条件的时候只需要写一次条件表
+    var isExist = this.ruleCondData.find(v => (v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO));
+    if(isExist) return;
+    this.ruleCondData.push(curRow);
+  }
+  // 用以前规则生成条件
+  useOldRule(RULE_NO,OPRTN_COND_NO,curSheetRow){
+    // 生成条件
+    this.generateCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
+    // 生成规则条件映射表
+    this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
+    // 生成模式表
+    this.generateAuthModeData(OPRTN_COND_NO,curSheetRow);
+  }
+  // 用现在的新规则
+  useNewRule(RULE_NO,OPRTN_COND_NO,curSheetRow){
+    this.generateCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
+    this.genFaceNotPassRuleCond(RULE_NO,OPRTN_COND_NO,curSheetRow);
+    this.genNewMode(OPRTN_COND_NO,curSheetRow);
+  }
+  genNewMode(MODE_NO,curSheetRow){
+    var MODE_NO = MODE_NO; // 模式编号
+    var AUTH_TYP_CD = this.getAuthType(curSheetRow[17]); // 授权类型代码
+    var AUTH_LVL_CD = curSheetRow[19] || 1; // 授权级别代码
+    var REMOTE_AUTH_LVL_CD = ""; // 远程授权级别代码
+    var AUTH_ORG_TYP_CD = ""; // 授权机构类型代码
+    var AUTH_ORG_NO = ""; // 授权机构号
+    var AUTH_PSTN_NO = "*"; // 授权岗位编号
+    var UGNT_FLG = ""; // 加急标志
+    var AUTH_DESCR = curSheetRow[4]; // 授权描述
+    var HOST_AUTH_FLG = ""; // 主机授权标志
+    var HOST_AUTH_TYP_CD = ""; // 主机授权类型代码
+    var CNTRTN_AUTH_CENT_NM = ""; // 集中授权中心名称
+    var CNTRTN_AUTH_LVL_CD = ""; // 集中授权级别代码
+    var REMRK_1 = curSheetRow[20] ? `${curSheetRow[20]}统计` : "" ; // 备注1
+    var APP_NO = ""; // 应用编号
+    var curRow = [MODE_NO,AUTH_TYP_CD,AUTH_LVL_CD,REMOTE_AUTH_LVL_CD,AUTH_ORG_TYP_CD,AUTH_ORG_NO,AUTH_PSTN_NO,UGNT_FLG,AUTH_DESCR,HOST_AUTH_FLG,HOST_AUTH_TYP_CD,CNTRTN_AUTH_CENT_NM,CNTRTN_AUTH_LVL_CD,REMRK_1,APP_NO];
+    var isExist = this.authModeData.find(v => v[0] == MODE_NO);
+    if(isExist) return;
+    this.authModeData.push(curRow);
+  }
+
+
+
+
 }
 
 var auth = new Auth();
