@@ -501,7 +501,7 @@ class Auth {
         this.generateAmtCondDataInner(ccyCond,curSheetRow);
         // 生成模式
         this.generateAmtAuthModeData(mode);
-        if(j === 0){
+        if(curItem.cashFaceNotPassedIndex.includes(j)){
           // 现金 只有 5w-10w 需要人脸识别规则，转账20w-50w 需要人脸识别规则
           //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
           // 只判断50000,	100000 区间 不通过则判断 金额 和 币种
@@ -529,7 +529,7 @@ class Auth {
         this.generateAmtCondDataInner(ccyCond,curSheetRow);
         // 生成模式
         this.generateAmtAuthModeData(mode);
-        if(j === 0){
+        if(curItem.transferFaceNotPassedIndex.includes(j)){
           //faceRecognitionRow 人脸识别为 "0" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
           // 只判断50000,	  200000 区间 不通过则判断 金额 和 币种
           var faceReCond = [ curCondNo,"faceRecognition",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
