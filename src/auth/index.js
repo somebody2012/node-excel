@@ -9,7 +9,20 @@ var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.auSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
-
+curWorkSheet.slice(1).forEach(curSheetRow => {
+  var CMPR_VAL = curSheetRow[11];	 // 比较值
+  var VALUE2 = curSheetRow[13];	 // 比较值2
+  if(CMPR_VAL === 0){
+    curSheetRow[11] = "0";
+  }else{
+    curSheetRow[11] = String(curSheetRow[11] || "");
+  }
+  if(VALUE2 === 0){
+    curSheetRow[13] = "0";
+  }else{
+    curSheetRow[13] = String(curSheetRow[13] || "");
+  }
+});
 class Auth {
   constructor(){
     /**
@@ -45,7 +58,14 @@ class Auth {
       var sameRuleData = this.uniqSheetData[key];
       var RULE_NO = this.ruleNoObj().padStart(6);
       var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
+      // // ----------屏蔽远程授权--begin
+      // var isRemoteAuth = this.getAuthType(sameRuleData[0][15]) == "2";
+      // if(isRemoteAuth){
+      //   continue;
+      // }
+      // // ----------屏蔽远程授权 --end
       this.generateRuleInfoData(RULE_NO,sameRuleData[0]);
+      
       for(var j=0;j<sameRuleData.length;j++){
         var curSheetRow = sameRuleData[j];
         var isAmtCond = curSheetRow[4].includes("金额超限");// 是否金额超限条件
@@ -424,8 +444,8 @@ class Auth {
       //   ]
       // },
     ];
-    var TnNwSn = curSheetRow[8] || "TnNwSn";
-    var txAmt = curSheetRow[10] || "txAmt";
+    var TnNwSn = curSheetRow[10] || "TnNwSn";
+    var txAmt = curSheetRow[8] || "txAmt";
     var Ccy = curSheetRow[12] || "Ccy";
     for(var i=0;i<currencyCond.length;i++){
       var curItem = currencyCond[i];
