@@ -15,7 +15,7 @@ axiosConfig.params.Body.TranCode = TranCode;
 axios.post(axiosConfig.url, axiosConfig.params)
 .then(function (res) {
   console.log("success");
-  var RuleList = JSON.parse(res.data.result.RuleList)
+  var RuleList = JSON.parse(res.data.result.RuleList);
   fs.writeFileSync(path.resolve(__dirname,"ruleList.txt"),`var a = ${res.data.result.RuleList}`)
 })
 .catch(function (error) {

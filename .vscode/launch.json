@@ -34,5 +34,17 @@
       "name": "客户视图",
       "program": "${workspaceFolder}/src/customerView/index.js"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "客户信息录入",
+      "program": "${workspaceFolder}/src/customerInput/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "黑名单",
+      "program": "${workspaceFolder}/src/blackList/index.js"
+    },
   ]
 }

@@ -29,7 +29,7 @@ module.exports = {
     },
     "Body": {
       "RuleLocate": "1",
-      "TranCode": "00301012",
+      "TranCode": "00301009",
       "TranNm": "子账户销户",
       "LegalPersonNum": "001",
       "BranchLevel": "3",

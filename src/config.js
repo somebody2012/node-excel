@@ -1,12 +1,13 @@
 module.exports = {
-  AU_START_NUM:0,//授权--
-  CV_START_NUM:20000,// 客户视图--
+  AU_START_NUM:0,//授权
+  CV_START_NUM:20000,// 客户视图
   DS_START_NUM:30000,// 双屏
   NI_START_NUM:40000,// 联网核查
   DH_START_NUM:50000,// 双热线
   BN_START_NUM:60000,// 黑名单
   CK_START_NUM:70000,// 复核
   FE_START_NUM:80000,// 收费
+  CI_START_NUM:90000,// 客户信息录入
   //授权
   srcExcelName:"授权规则收集表汇总1.0.xlsx",// 资源名字
   // srcExcelName:"授权规则收集表汇总1.0的副本.xlsx",// 资源名字
@@ -17,5 +18,11 @@ module.exports = {
   dsSheetNameField:"双屏确认字段信息",
   // 客户视图
   customerViewExcelName:"客户视图.xlsx",
-  cvSheetName:"客户视图"
+  cvSheetName:"客户视图",
+  // 客户信息录入
+  customerInputExcelName:"客户信息录入.xlsx",
+  ciSheetName:"客户信息录入",
+  // 黑名单
+  blackListExcelName:"黑名单.xlsx",
+  balckListSheetName:"Sheet1"
 }
