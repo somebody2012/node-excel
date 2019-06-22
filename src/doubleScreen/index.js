@@ -6,6 +6,8 @@ var config = require("../config");
 var utils = require("../utils/index");
 var _ = require("underscore");
 
+utils.copySrcExcel(config.doubleSrceenExcelName,__dirname);
+
 var excelPath = path.resolve(__dirname,config.doubleSrceenExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var doubleScreenWorkSheet = workSheets.find(v => v.name.includes(config.dsSheetName)).data;

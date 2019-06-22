@@ -6,6 +6,8 @@ var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
 
+utils.copySrcExcel(config.customerViewExcelName,__dirname);
+
 var excelPath = path.resolve(__dirname,config.customerViewExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.cvSheetName)).data;

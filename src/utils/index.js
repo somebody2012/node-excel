@@ -1,6 +1,6 @@
 var path = require("path");
 var fs = require("fs");
-
+var config = require("../config");
 
 function generateNo(startNumber){
   var number = startNumber;
@@ -92,7 +92,15 @@ var writeToOutDir = function(filename,buffer,suffix){
   fs.writeFileSync(path.resolve(dir,filename),buffer);
 }
 
-
+var copySrcExcel = function(srcFileName,distDirname){
+  // var src = path.resolve(process.cwd(),"../../../","work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/" + srcFileName);
+  var src = path.resolve(config.svnStatisticsDir,srcFileName);
+  var dist = path.resolve(distDirname,srcFileName);
+  var isExist = fs.existsSync(src);
+  if(isExist){
+    fs.copyFileSync(src,dist);
+  }
+}
 
 
 module.exports = {
@@ -100,5 +108,6 @@ module.exports = {
   getCurDateStr,
   genInsertSql,
   genDeleteSql,
-  writeToOutDir
+  writeToOutDir,
+  copySrcExcel
 }

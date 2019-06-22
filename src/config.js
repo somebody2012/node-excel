@@ -8,6 +8,8 @@ module.exports = {
   CK_START_NUM:70000,// 复核
   FE_START_NUM:80000,// 收费
   CI_START_NUM:90000,// 客户信息录入
+  // SVN 规则统计目录
+  svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/",
   //授权
   srcExcelName:"授权规则收集表汇总1.0.xlsx",// 资源名字
   // srcExcelName:"授权规则收集表汇总1.0的副本.xlsx",// 资源名字
