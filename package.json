@@ -6,7 +6,8 @@
     "DS": "node src/doubleScreen/index.js",
     "CV": "node src/customerView/index.js",
     "BN": "node src/blackList/index.js",
-    "CI": "node src/customerInput/index.js"
+    "CI": "node src/customerInput/index.js",
+    "DH": "node src/doubleLine/index.js"
   },
   "dependencies": {
     "axios": "^0.19.0",

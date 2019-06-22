@@ -46,5 +46,11 @@
       "name": "黑名单",
       "program": "${workspaceFolder}/src/blackList/index.js"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "双热线",
+      "program": "${workspaceFolder}/src/doubleLine/index.js"
+    },
   ]
 }

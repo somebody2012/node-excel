@@ -53,10 +53,11 @@ class DoubleScreen {
       var OPRTN_COND_NO_OBJ = this.startCondNoFun();
       var RULE_NO = RULE_NO_OBJ.padStart(6);
       var OPRTN_COND_NO = "DS" + OPRTN_COND_NO_OBJ.padStart(5);
+      // 生成规则
+      this.generateRuleInfoData(RULE_NO,data[0]);
       for(var i=0;i<data.length;i++){
         var curSheetRow = data[i];
-        // 生成规则
-        this.generateRuleInfoData(RULE_NO,curSheetRow);
+        
         // 是否强制条件
         var isForceCond = curSheetRow[8].includes("强制双屏确认");
         if(!isForceCond){
@@ -65,9 +66,9 @@ class DoubleScreen {
           this.generateCondData(OPRTN_COND_NO,curSheetRow);
         }
         var isExistMode = this.modeInfo.find(v => v[0] == OPRTN_COND_NO);
-        if(!isExistMode){
-          this.generateModeInfo(OPRTN_COND_NO,curSheetRow);
-        }
+      }
+      if(!isExistMode){
+        this.generateModeInfo(OPRTN_COND_NO,data[0]);
       }
       // 生成规则条件映射表
       this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,isForceCond);
