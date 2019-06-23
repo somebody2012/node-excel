@@ -52,5 +52,11 @@
       "name": "双热线",
       "program": "${workspaceFolder}/src/doubleLine/index.js"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "test授权",
+      "program": "${workspaceFolder}/src/auth/index_rewite1.js"
+    },
   ]
 }

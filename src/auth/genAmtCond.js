@@ -1,4 +1,5 @@
-
+var utils = require("../utils/index.js");
+var config = require("../config.js");
 
 
 class GenAmtCond{
@@ -359,4 +360,13 @@ class GenAmtCond{
   generateAmtAuthModeData(modeRow){
     this.authModeData.push(modeRow);
   }
+}
+
+var amtCondsObj = new GenAmtCond();
+
+var amtConds = amtCondsObj.condData.map(v => v[0]);
+
+module.exports = {
+  amtCondsObj,
+  amtConds
 }
