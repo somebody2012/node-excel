@@ -65,8 +65,6 @@ class Auth {
     // console.log(chalk.green(`金额条件 ${this.condData[1][0]}  -  ${this.condData.slice(-1)[0][0]}`));
 
     this.init();
-
-    
   }
   
   // 初始化
