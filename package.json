@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "http":"node src/ajax/index.js",
+    "http": "node src/ajax/index.js",
     "AU": "node src/auth/index.js",
     "AUEXT": "node src/auth/index_rewite.js",
     "DS": "node src/doubleScreen/index.js",
@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "chalk": "^2.4.2",
+    "mysql": "^2.17.1",
     "mysql2": "^1.6.5",
     "node-xlsx": "^0.15.0",
+    "open": "^6.3.0",
     "sequelize": "^5.8.6",
     "underscore": "^1.9.1"
   }

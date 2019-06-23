@@ -1,10 +1,12 @@
 var xlsx = require('node-xlsx');
+var open = require("open");
+var axios = require("axios");
 var fs = require("fs");
 var path = require("path");
 var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
-
+var db = require("../db/index");
 var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.auSheetName)).data;
@@ -550,4 +552,9 @@ var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
 utils.writeToOutDir("authInsert.sql",insertSql,"授权");
 utils.writeToOutDir("authDelete.sql",deleteSql,"授权");
+
+
+db.dbHandler(arr,"授权");
+
+
 

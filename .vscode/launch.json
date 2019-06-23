@@ -58,5 +58,11 @@
       "name": "test授权",
       "program": "${workspaceFolder}/src/auth/index_rewite1.js"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "DB",
+      "program": "${workspaceFolder}/src/db/index.js"
+    },
   ]
 }

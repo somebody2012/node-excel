@@ -1,9 +1,11 @@
 var xlsx = require('node-xlsx');
+var chalk = require("chalk");
 var fs = require("fs");
 var path = require("path");
 var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
+var db = require("../db/index");
 
 var { amtCondsObj,amtConds } = require("./genAmtCond.js");
 
@@ -38,7 +40,8 @@ class Auth {
       return row[5];
     })
     this.amtKeywords = "金额超限";// 判断是否金额授权
-    this.ruleNoObj = utils.generateNo(config.AU_START_NUM);// 规则号生成函数
+    // this.ruleNoObj = utils.generateNo(config.AU_START_NUM);// 规则号生成函数
+    this.ruleNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 规则号生成函数
     // this.condNoObj = utils.generateNo(config.AU_START_NUM);// 条件号生成函数
     this.condNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 条件号生成函数
     this.curDayStr = utils.getCurDateStr(); // 当前日期
@@ -56,7 +59,14 @@ class Auth {
     // 字段要素表
     this.fieldFactor = [["DICTRY_NM","DICTRY_DESC","DICTRY_TYP_CD","FIELD_CMPR","DATA_ATTR_DESC"]];
 
+    // 增加金额条件
+    this.condData = this.condData.concat(amtCondsObj.condData.slice(1));
+    this.authModeData = this.authModeData.concat(amtCondsObj.authModeData.slice(1));
+    // console.log(chalk.green(`金额条件 ${this.condData[1][0]}  -  ${this.condData.slice(-1)[0][0]}`));
+
     this.init();
+
+    
   }
   
   // 初始化
@@ -225,7 +235,10 @@ class Auth {
       var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
       var OPRTN_RULE_NO = RULE_NO; // 规则号
       var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
-      this.ruleCondData.push(curRow);
+      var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
+      if(isExist){
+        this.ruleCondData.push(curRow);
+      }
     }
     // 生成字段映射
     var TnNwSn = curSheetRow[10] || "TnNwSn";
@@ -236,14 +249,14 @@ class Auth {
       var TRAN_CD = curSheetRow[2];
       var PUB_DICTRY_NM = "TnNwSn";
       var PRIV_DICTRY_NM = TnNwSn;
-      var PULDW_MAPG_DICTRY_NM = "";
+      var PULDW_MAPG_DICTRY_NM = "现转标志";
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
       var DICTRY_NM = "TnNwSn";
-      var DICTRY_DESC = "";
+      var DICTRY_DESC = "现转标志";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";
-      var DATA_ATTR_DESC = "";
+      var DATA_ATTR_DESC = "现转标志";
       var curRow2 = [DICTRY_NM,DICTRY_DESC,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESC];
 
       var isExist = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM && v[2] == PRIV_DICTRY_NM));
@@ -254,9 +267,45 @@ class Auth {
     }
     if(txAmt != "txAmt"){
       // 需要映射
+      var TRAN_CD = curSheetRow[2];
+      var PUB_DICTRY_NM = "txAmt";
+      var PRIV_DICTRY_NM = TnNwSn;
+      var PULDW_MAPG_DICTRY_NM = "金额";
+      var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
+      
+      var DICTRY_NM = "txAmt";
+      var DICTRY_DESC = "金额";
+      var DICTRY_TYP_CD = "";
+      var FIELD_CMPR = "";
+      var DATA_ATTR_DESC = "金额";
+      var curRow2 = [DICTRY_NM,DICTRY_DESC,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESC];
+
+      var isExist = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM && v[2] == PRIV_DICTRY_NM));
+      if(!isExist){
+        this.reflexData.push(curRow1);
+        this.fieldFactor.push(curRow2);
+      }
     }
     if(Ccy != "Ccy"){
       // 需要映射
+      var TRAN_CD = curSheetRow[2];
+      var PUB_DICTRY_NM = "Ccy";
+      var PRIV_DICTRY_NM = TnNwSn;
+      var PULDW_MAPG_DICTRY_NM = "币种";
+      var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
+      
+      var DICTRY_NM = "Ccy";
+      var DICTRY_DESC = "币种";
+      var DICTRY_TYP_CD = "";
+      var FIELD_CMPR = "";
+      var DATA_ATTR_DESC = "币种";
+      var curRow2 = [DICTRY_NM,DICTRY_DESC,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESC];
+
+      var isExist = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM && v[2] == PRIV_DICTRY_NM));
+      if(!isExist){
+        this.reflexData.push(curRow1);
+        this.fieldFactor.push(curRow2);
+      }
     }
   }
   // 生成金额 条件表
@@ -413,3 +462,4 @@ var deleteSql = utils.genDeleteSql(arr);
 utils.writeToOutDir("authInsert.sql",insertSql,"授权");
 utils.writeToOutDir("authDelete.sql",deleteSql,"授权");
 
+db.dbHandler(arr,"授权");
