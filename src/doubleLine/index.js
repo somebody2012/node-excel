@@ -85,7 +85,7 @@ class DoubleLine {
     var CMPR_VAL = curSheetRow[11];	 // 比较值
     var OPER_SYM_2 = curSheetRow[15];	 // 运算符号2
     var VALUE2 = curSheetRow[12];	 // 比较值2
-    var TRAN_CD = curSheetRow[13];	 // 交易码
+    var TRAN_CD = curSheetRow[4];	 // 交易码
     var COND_DESCR = curSheetRow[7];	 // 条件描述
     var OPER_TELR_NO = "900001";	 // 操作柜员号
     var OPER_DT = this.curDayStr;	 // 操作时间
@@ -117,8 +117,12 @@ class DoubleLine {
   // 生成模式表
   generateAuthModeData(MODE_NO,curSheetRow){
     //规则模式编号 字段序号 字段名称 字段字典名称 规则模式类型代码
-    var row = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"doubleLineField","doubleLineValue","DH"];
-    this.modeInfo.push(row);
+    var FIELD_SEQ_NO = this.FIELD_SEQ_NO_OBJ().number;
+    var row = [MODE_NO,FIELD_SEQ_NO,"doubleLineField","doubleLineValue","DH"];
+    var isExist = this.modeInfo.find(v => v[0] == MODE_NO && v[1] == FIELD_SEQ_NO);
+    if(!isExist){
+      this.modeInfo.push(row);
+    }
   }
 
 }
