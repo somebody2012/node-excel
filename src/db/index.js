@@ -10,16 +10,21 @@ var exeInsert = function(tableName,excelData,whitchEnv){
     var tableFields = excelData[0].map(field => {
       return `\`${field}\``
     }).join(",");
+    if(excelData.length == 1){
+      resolve();
+      return;
+    }
     var sqlStr = `INSERT INTO ${tableName}( ${tableFields} ) VALUES ?`;
     var values = excelData.slice(1);
     var conn = await getConnection(whitchEnv);
     conn.query(sqlStr,[values],(err,ret,fields) => {
       if(err){
+        debugger
         console.log(chalk.red(`插入 - ${tableName} - 失败`));
-        reject();
+        reject(err);
       }else{
         console.log(chalk.green(`插入 - ${tableName} - 成功`));
-        resolve();
+        resolve(err);
       }
     })
   });
@@ -30,15 +35,20 @@ var exeDelete = function(tableName,excelData,whitchEnv){
     var values = excelData.slice(1).map(row => {
       return `"${row[0]}"`;
     }).join(",");
+    if(excelData.length == 1){
+      resolve();
+      return;
+    }
     var sqlStr = `DELETE FROM ${tableName} WHERE ${excelData[0][0]} IN ( ${values} )`;
     var conn = await getConnection(whitchEnv);
     conn.query(sqlStr,(err,ret,fields) => {
       if(err){
+        debugger
         console.log(chalk.red(`删除 - ${tableName} - 失败`));
-        reject();
+        reject(err);
       }else{
         console.log(chalk.green(`删除 - ${tableName} - 成功`));
-        resolve();
+        resolve(err);
       }
     })
   });
@@ -73,9 +83,10 @@ var dbHandler = async function(arr,type){
   await Promise.all(deleteAllSit);
   var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
   await Promise.all(insertAllSit);
-
-  refreshCache(config.refreshRedisUrlDev,"DEV");
-  refreshCache(config.refreshRedisUrlSit,"SIT");
+  if(!(String(process.argv[2]) || "").includes("0")){
+    refreshCache(config.refreshRedisUrlDev,"DEV");
+    refreshCache(config.refreshRedisUrlSit,"SIT");
+  }
 }
 
 module.exports = {

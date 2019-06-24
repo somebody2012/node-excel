@@ -11,9 +11,9 @@ module.exports = {
   // SVN 规则统计目录
   svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/",
   // DEV 刷新redis 缓存地址
-  refreshRedisUrlDev:"https://www.baidu.com/home/msg/data/personalcontent?num=8&indextype=manht&_req_seqid=0xcecd2ecf001e1ee9&asyn=1&t=1561285896475&sid=1442_21089_29135_29237_28518_29099_29131_29368_28835_29221_22158",
+  refreshRedisUrlDev:"http://10.16.2.223:31080/abside/abs-te-ib-ownservices/loadCaceAtStap",
   // SIT 刷新redis 缓存地址
-  refreshRedisUrlSit:"https://www.baidu.com/home/msg/data/personalcontent?num=8&indextype=manht&_req_seqid=0xcecd2ecf001e1ee9&asyn=1&t=1561285896475&sid=1442_21089_29135_29237_28518_29099_29131_29368_28835_29221_22158",
+  refreshRedisUrlSit:"http://10.16.43.90/abside/abs-te-ib-ownservices/loadCaceAtStap",
   //授权
   srcExcelName:"授权规则收集表汇总1.0.xlsx",// 资源名字
   // srcExcelName:"授权规则收集表汇总1.0的副本.xlsx",// 资源名字

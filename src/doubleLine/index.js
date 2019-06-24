@@ -5,6 +5,8 @@ var path = require("path");
 var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
+var db = require("../db/index");
+var chalk = require("chalk");
 
 utils.copySrcExcel(config.doubleLineExcelName,__dirname);
 
@@ -67,7 +69,7 @@ class DoubleLine {
     var SUIT_LPR_SCP = "001";  // 适用法人范围
     var SUIT_ORG_SCP = "*,";  // 适用机构范围
     var SUIT_TX_SCP = curSheetRow[4];  // 适用交易范围---
-    var RULE_COMNT = curSheetRow[9];  // 规则说明---
+    var RULE_COMNT = curSheetRow[9] || "无规则说明";  // 规则说明---
     var EFFT_FLG = "1";  // 生效标志
     var OPER_TELR_NO = "900001";  // 操作柜员号
     var OPER_DT = this.curDayStr;  // 操作时间
@@ -136,4 +138,4 @@ utils.writeToOutDir("doubleLineDelete.sql",deleteSql,"双热线");
 
 
 
-
+db.dbHandler(arr,"双热线");

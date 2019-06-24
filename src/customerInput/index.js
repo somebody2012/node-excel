@@ -5,7 +5,8 @@ var path = require("path");
 var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
-
+var db = require("../db/index");
+var chalk = require("chalk");
 utils.copySrcExcel(config.customerInputExcelName,__dirname);
 
 var excelPath = path.resolve(__dirname,config.customerInputExcelName);
@@ -70,7 +71,7 @@ class CustomerInput {
     var SUIT_LPR_SCP = "001";  // 适用法人范围
     var SUIT_ORG_SCP = "*,";  // 适用机构范围
     var SUIT_TX_SCP = curSheetRow[7];  // 适用交易范围---
-    var RULE_COMNT = curSheetRow[13];  // 规则说明---
+    var RULE_COMNT = curSheetRow[13] || "无规则说明";  // 规则说明---
     var EFFT_FLG = "1";  // 生效标志
     var OPER_TELR_NO = "900001";  // 操作柜员号
     var OPER_DT = this.curDayStr;  // 操作时间
@@ -96,13 +97,23 @@ class CustomerInput {
     var DICTRY_DESCR = curSheetRow[11];	 // 字典描述
     var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
     var isForceCond = !Boolean(curSheetRow[10]); //是否强制条件
+    var isExist = this.condData.find(v => v[0] == OPRTN_COND_NO);
+    if(isExist){
+      return;
+    }
     if(!isForceCond) {
-      this.condData.push(curRow);
-    };
+      if(OPER_SYM_1){
+        this.condData.push(curRow);
+      }else{
+        console.log(chalk.blue(`${TRAN_CD} 无操作运算符`));
+      }
+      
+    }
     // 生成规则条件映射表
     this.generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow);
     // 生成模式表
     this.generateAuthModeData(OPRTN_COND_NO,curSheetRow);
+    
   }
   // 生成规则条件映射表
   generateRuleCondData(RULE_NO,OPRTN_COND_NO,curSheetRow){
@@ -143,5 +154,5 @@ utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
 utils.writeToOutDir("customerInputDelete.sql",deleteSql,"客户信息录入");
 
 
-
+db.dbHandler(arr,"客户信息录入");
 

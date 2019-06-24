@@ -5,7 +5,7 @@ var path = require("path");
 var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
-
+var db = require("../db/index");
 utils.copySrcExcel(config.customerViewExcelName,__dirname);
 
 var excelPath = path.resolve(__dirname,config.customerViewExcelName);
@@ -154,5 +154,5 @@ utils.writeToOutDir("customerViewInsert.sql",insertSql,"客户视图");
 utils.writeToOutDir("customerViewDelete.sql",deleteSql,"客户视图");
 
 
-
+db.dbHandler(arr,"客户视图");
 

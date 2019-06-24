@@ -5,6 +5,8 @@ var path = require("path");
 var config = require("../config");
 var utils = require("../utils/index");
 var _ = require("underscore");
+var db = require("../db/index");
+var chalk = require("chalk");
 
 utils.copySrcExcel(config.doubleSrceenExcelName,__dirname);
 
@@ -14,6 +16,11 @@ var doubleScreenWorkSheet = workSheets.find(v => v.name.includes(config.dsSheetN
 var doubleScreenFieldsWorkSheet = workSheets.find(v => v.name.includes(config.dsSheetNameField)).data;
 doubleScreenWorkSheet = doubleScreenWorkSheet.filter(row => row.length !== 0);
 doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => row.length !== 0);
+doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => {
+  var nullValue = ["",undefined,null]
+  console.log(chalk.blue(`${row[0]} 双屏确认字段信息 交易名称 或 推送字段 为空 被过滤`));
+  return !nullValue.includes(row[1]) && !nullValue.includes(row[4])
+})
 class DoubleScreen {
   constructor(){
     this.curDayStr = utils.getCurDateStr(); // 当前日期
@@ -196,7 +203,7 @@ utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
 utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
 
 
-
+db.dbHandler(sqlParams,"双屏");
 
 
 

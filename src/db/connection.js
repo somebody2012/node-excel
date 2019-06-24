@@ -3,11 +3,11 @@ const mysql = require("mysql");
 
 // 创建 mysql 连接池并配置参数
 const poolDev = mysql.createPool({
-    host: "120.27.209.87",    // 主机地址
+    host: "10.16.2.152",    // 主机地址
     port: 3306,                 // 端口
-    user: "root",               // 数据库访问账号
-    password: "123456",         // 数据库访问密码
-    database: "DR",           // 要访问的数据库
+    user: "app",               // 数据库访问账号
+    password: "app",         // 数据库访问密码
+    database: "dev_st_ut",           // 要访问的数据库
     charset: "UTF8_GENERAL_CI", // 字符编码 ( 必须大写 )
     typeCast: true,             // 是否把结果值转换为原生的 javascript 类型
     supportBigNumbers: true,    // 处理大数字 (bigint, decimal), 需要开启 ( 结合 bigNumberStrings 使用 )
@@ -22,11 +22,11 @@ poolDev.queueLimit = 0;            // 每个连接可操作的 列数 上限, 0 
 
 // 创建 mysql 连接池并配置参数
 const poolSit = mysql.createPool({
-    host: "120.27.209.87",    // 主机地址
+    host: "10.16.43.99",    // 主机地址
     port: 3306,                 // 端口
-    user: "root",               // 数据库访问账号
-    password: "123456",         // 数据库访问密码
-    database: "DR",           // 要访问的数据库
+    user: "app",               // 数据库访问账号
+    password: "app",         // 数据库访问密码
+    database: "dev_st_ut",           // 要访问的数据库
     charset: "UTF8_GENERAL_CI", // 字符编码 ( 必须大写 )
     typeCast: true,             // 是否把结果值转换为原生的 javascript 类型
     supportBigNumbers: true,    // 处理大数字 (bigint, decimal), 需要开启 ( 结合 bigNumberStrings 使用 )

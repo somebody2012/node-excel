@@ -5,6 +5,8 @@ var path = require("path");
 var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
+var db = require("../db/index");
+var chalk = require("chalk");
 
 utils.copySrcExcel(config.blackListExcelName,__dirname);
 
@@ -150,4 +152,4 @@ utils.writeToOutDir("customerViewDelete.sql",deleteSql,"黑名单");
 
 
 
-
+db.dbHandler(arr,"黑名单");
