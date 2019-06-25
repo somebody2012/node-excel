@@ -1,6 +1,8 @@
 var path = require("path");
 var fs = require("fs");
 var config = require("../config");
+var shell = require('shelljs');
+var chalk = require("chalk");
 
 function generateNo(startNumber){
   var number = startNumber;
@@ -91,8 +93,20 @@ var writeToOutDir = function(filename,buffer,suffix){
   }
   fs.writeFileSync(path.resolve(dir,filename),buffer);
 }
-
+var svnUpdate = function(){
+  try{
+    console.log(chalk.green("SVN 开始更新"));
+    var cwdPath = process.cwd();
+    shell.cd(config.svnStatisticsDir);
+    var a = shell.exec("svn update");
+    console.log(chalk.green("SVN 更新完成"));
+    shell.cd(cwdPath);
+  }catch(e){
+    console.log(chalk.red("svn update 出错"));
+  } 
+}
 var copySrcExcel = function(srcFileName,distDirname){
+  svnUpdate();
   // var src = path.resolve(process.cwd(),"../../../","work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/" + srcFileName);
   var src = path.resolve(config.svnStatisticsDir,srcFileName);
   var dist = path.resolve(distDirname,srcFileName);
