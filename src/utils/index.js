@@ -113,6 +113,8 @@ var copySrcExcel = function(srcFileName,distDirname){
   var isExist = fs.existsSync(src);
   if(isExist){
     fs.copyFileSync(src,dist);
+  }else{
+    console.log(chalk.red(`不存在文件${src}`));
   }
 }
 
