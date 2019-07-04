@@ -7,12 +7,51 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 
-var { amtCondsObj,amtConds } = require("./genAmtCond.js");
+utils.copySrcExcel(config.srcExcelName,__dirname);
 
+var { amtCondsObj,amtConds } = require("./genAmtCond.js");
+var isFilteredData = []; // 被过滤的数据
 var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.auSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
+curWorkSheet = curWorkSheet.filter((v,i) => {
+  if(i == 0){
+    return true;
+  }
+  
+  if(!v[1] && !v[2] && !v[5] && !v[7] && !(v[6])){
+    var msg = `${v[2] || "无交易码"}-${v[3]}-::${chalk.red("数据统计不全")},被过滤`;
+    console.log(chalk.blue(`${msg}`));
+    isFilteredData.push(msg);
+    return false;
+  }else{
+    if(!v[6]){
+      var msg = `${v[2] || "无交易码"}-${v[3]}-::${chalk.red("数据统计不全")},被过滤`;
+      console.log(chalk.blue(`${msg}`));
+      isFilteredData.push(msg);
+      return;
+    }else{
+      var isForceCond = v[6].includes("是");
+      var isEmpty = [v[8],v[10],String(v[11] === 0 ? "0" : v[11])].some(v => !v);
+      if(!isForceCond && isEmpty){
+        var msg = `${v[2] || "无交易码"}-${v[3]}-::${chalk.red("数据统计不全")},被过滤`;
+        console.log(chalk.blue(`${msg}`));
+        isFilteredData.push(msg);
+        return false;
+      }else{
+        var isReflex = (v[7] || "").includes("是");
+        if(isReflex && !v[8]){
+          var msg = `${v[2] || "无交易码"}-${v[3]}-::字段映射为空,被过滤`;
+          console.log(chalk.blue(`${msg}`));
+        }else{
+          return true;
+        }
+      }
+    }
+    
+  }
+});
 curWorkSheet.slice(1).forEach(curSheetRow => {
   var CMPR_VAL = curSheetRow[11];	 // 比较值
   var VALUE2 = curSheetRow[13];	 // 比较值2
@@ -54,10 +93,11 @@ class Auth {
     // 授权模式表
     this.authModeData =[["MODE_NO","AUTH_TYP_CD","AUTH_LVL_CD","REMOTE_AUTH_LVL_CD","AUTH_ORG_TYP_CD","AUTH_ORG_NO","AUTH_PSTN_NO","UGNT_FLG","AUTH_DESCR","HOST_AUTH_FLG","HOST_AUTH_TYP_CD","CNTRTN_AUTH_CENT_NM","CNTRTN_AUTH_LVL_CD","REMRK_1","APP_NO"]];
 
-    // 字段映射表
+    // 字段映射表 TE_PARA_TRANKEYWORDS_INFO  
     this.reflexData = [["TRAN_CD","PUB_DICTRY_NM","PRIV_DICTRY_NM","PULDW_MAPG_DICTRY_NM"]];
-    // 字段要素表
-    this.fieldFactor = [["DICTRY_NM","DICTRY_DESC","DICTRY_TYP_CD","FIELD_CMPR","DATA_ATTR_DESC"]];
+    // 字段要素表 IB_PARA_KEYWORDS_INFO 
+
+    this.fieldFactor = [["DICTRY_NM","DICTRY_DESCR","DICTRY_TYP_CD","FIELD_CMPR","DATA_ATTR_DESCR"]];
 
     // 增加金额条件
     this.condData = this.condData.concat(amtCondsObj.condData.slice(1));
@@ -91,9 +131,9 @@ class Auth {
         this.genFaceAuthPassCond(OPRTN_COND_NO_1,curSheetRows);
         var passMethod = curSheetRows[0][17]
         if(passMethod.includes("不改变")){
-          this.genAuthData(RULE_NO,OPRTN_COND_NO_1,curSheetRows,false);
+          this.genAuthData(RULE_NO,OPRTN_COND_NO_1,curSheetRows,isForceCond);
         }else if(passMethod.includes("不授权")){
-          // 不生成
+          // 不生成 
         }else{
           // 本地 远程 异终端
           // 条件
@@ -109,7 +149,7 @@ class Auth {
         var OPRTN_COND_NO_2 = "AU" + this.condNoObj().padStart(5);
         // 生成不通过条件
         this.genFaceAuthNotPassCond(OPRTN_COND_NO_2,curSheetRows);
-        this.genAuthData(RULE_NO,OPRTN_COND_NO_2,curSheetRows,false);
+        this.genAuthData(RULE_NO,OPRTN_COND_NO_2,curSheetRows,isForceCond);
       }else{
         // 不需要人脸识别
         
@@ -234,13 +274,13 @@ class Auth {
       var OPRTN_RULE_NO = RULE_NO; // 规则号
       var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
       var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
-      if(isExist){
+      if(!isExist){
         this.ruleCondData.push(curRow);
       }
     }
     // 生成字段映射
-    var TnNwSn = curSheetRow[10] || "TnNwSn";
     var txAmt = curSheetRow[8] || "txAmt";
+    var TnNwSn = curSheetRow[10] || "TnNwSn";
     var Ccy = curSheetRow[12] || "Ccy";
     if(TnNwSn != "TnNwSn"){
       // 需要映射
@@ -251,15 +291,19 @@ class Auth {
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
       var DICTRY_NM = "TnNwSn";
-      var DICTRY_DESC = "现转标志";
+      var DICTRY_DESCR = "现转标志";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";
-      var DATA_ATTR_DESC = "现转标志";
-      var curRow2 = [DICTRY_NM,DICTRY_DESC,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESC];
+      var DATA_ATTR_DESCR = "现转标志";
+      //DICTRY_DESCR  DATA_ATTR_DESCR
+      var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
 
-      var isExist = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM && v[2] == PRIV_DICTRY_NM));
-      if(!isExist){
+      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
+      if(!isExist1){
         this.reflexData.push(curRow1);
+      }
+      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
+      if(!isExist2){
         this.fieldFactor.push(curRow2);
       }
     }
@@ -272,15 +316,18 @@ class Auth {
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
       var DICTRY_NM = "txAmt";
-      var DICTRY_DESC = "金额";
+      var DICTRY_DESCR = "金额";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";
-      var DATA_ATTR_DESC = "金额";
-      var curRow2 = [DICTRY_NM,DICTRY_DESC,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESC];
+      var DATA_ATTR_DESCR = "金额";
+      var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
 
-      var isExist = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM && v[2] == PRIV_DICTRY_NM));
-      if(!isExist){
+      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
+      if(!isExist1){
         this.reflexData.push(curRow1);
+      }
+      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
+      if(!isExist2){
         this.fieldFactor.push(curRow2);
       }
     }
@@ -288,20 +335,23 @@ class Auth {
       // 需要映射
       var TRAN_CD = curSheetRow[2];
       var PUB_DICTRY_NM = "Ccy";
-      var PRIV_DICTRY_NM = TnNwSn;
+      var PRIV_DICTRY_NM = Ccy;
       var PULDW_MAPG_DICTRY_NM = "币种";
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
       var DICTRY_NM = "Ccy";
-      var DICTRY_DESC = "币种";
+      var DICTRY_DESCR = "币种";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";
-      var DATA_ATTR_DESC = "币种";
-      var curRow2 = [DICTRY_NM,DICTRY_DESC,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESC];
+      var DATA_ATTR_DESCR = "币种";
+      var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
 
-      var isExist = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM && v[2] == PRIV_DICTRY_NM));
-      if(!isExist){
+      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
+      if(!isExist1){
         this.reflexData.push(curRow1);
+      }
+      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
+      if(!isExist2){
         this.fieldFactor.push(curRow2);
       }
     }
@@ -453,11 +503,18 @@ var arr = [
   {tableName:"IB_OM_RULE_INFO",data:auth.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:auth.condData},
   {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
-  {tableName:"IB_OM_AUTHMODE_INFO",data:auth.authModeData}
+  {tableName:"IB_OM_AUTHMODE_INFO",data:auth.authModeData},
 ];
-var insertSql = utils.genInsertSql(arr);
-var deleteSql = utils.genDeleteSql(arr);
+var arr1 = [
+  {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:auth.reflexData},
+  {tableName:"IB_PARA_KEYWORDS_INFO",data:auth.fieldFactor},
+];
+var insertSql = utils.genInsertSql(arr.concat(arr1));
+var deleteSql = utils.genDeleteSql(arr.concat(arr1));
 utils.writeToOutDir("authInsert.sql",insertSql,"授权");
 utils.writeToOutDir("authDelete.sql",deleteSql,"授权");
+utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权");
 
-db.dbHandler(arr,"授权");
+// db.dbHandler(arr1,"授权-参数映射",false);
+db.dbHandler(arr,"授权",true);
+

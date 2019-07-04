@@ -4,6 +4,7 @@ var config = require("../config.js");
 
 class GenAmtCond{
   constructor(){
+    this.curDayStr = utils.getCurDateStr();
     this.condNoObj = utils.generateNo(config.AU_START_NUM);// 条件号生成函数
     // 条件
     this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESCR","OPER_TELR_NO","OPER_DT","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESCR"]];

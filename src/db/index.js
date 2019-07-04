@@ -69,7 +69,7 @@ var refreshCache = function(url,desc){
   });
 }
 
-var dbHandler = async function(arr,type){
+var dbHandler = async function(arr,type,needRefresh = true){
   console.log(chalk.red(`${type} - DEV`));
 
   var deleteAllDev = arr.map(item => exeDelete(item.tableName,item.data,"DEV"));
@@ -77,16 +77,19 @@ var dbHandler = async function(arr,type){
   var insertAllDev = arr.map(item => exeInsert(item.tableName,item.data,"DEV"));
   await Promise.all(insertAllDev);
 
-  console.log(chalk.red(`${type} - SIT`));
+  // console.log(chalk.red(`${type} - SIT`));
 
-  var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
-  await Promise.all(deleteAllSit);
-  var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
-  await Promise.all(insertAllSit);
-  if(!(String(process.argv[2]) || "").includes("0")){
+  // var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
+  // await Promise.all(deleteAllSit);
+  // var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
+  // await Promise.all(insertAllSit);
+
+
+  if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
     refreshCache(config.refreshRedisUrlDev,"DEV");
     refreshCache(config.refreshRedisUrlSit,"SIT");
   }
+  
 }
 
 module.exports = {
