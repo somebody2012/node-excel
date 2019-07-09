@@ -11,7 +11,7 @@ module.exports = {
   // SVN 规则统计目录
   svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/",
   // DEV 刷新redis 缓存地址
-  refreshRedisUrlDev:"http://10.16.2.223:31080/abside/abs-te-ib-ownservices/loadCaceAtStap",
+  refreshRedisUrlDev:"http://10.16.2.228/abside/abs-te-ib-ownservices/loadCaceAtStap",
   // SIT 刷新redis 缓存地址
   refreshRedisUrlSit:"http://10.16.43.90/abside/abs-te-ib-ownservices/loadCaceAtStap",
   //授权
