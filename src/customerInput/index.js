@@ -68,10 +68,10 @@ class CustomerInput {
     var HOLI_FLG = "N";  // 节假日标志
     var RULE_TRI_POSITION = "1";  // 规则触发位置
     var SUIT_CHNL_SCP = "TE";  // 适用渠道范围
-    var SUIT_LPR_SCP = "001";  // 适用法人范围
+    var SUIT_LPR_SCP = "9999";  // 适用法人范围
     var SUIT_ORG_SCP = "*,";  // 适用机构范围
-    var SUIT_TX_SCP = curSheetRow[7];  // 适用交易范围---
-    var RULE_COMNT = curSheetRow[13] || "无规则说明";  // 规则说明---
+    var SUIT_TX_SCP = curSheetRow[5];  // 适用交易范围---
+    var RULE_COMNT = curSheetRow[9] || "无规则说明";  // 规则说明---
     var EFFT_FLG = "1";  // 生效标志
     var OPER_TELR_NO = "900001";  // 操作柜员号
     var OPER_DT = this.curDayStr;  // 操作时间
