@@ -34,4 +34,8 @@ module.exports = {
   // 双热线
   doubleLineExcelName:"双热线.xlsx",
   doubleLineSheetName:"双热线",
+  // 复核
+  ckExcelName:"复核规则统计.xlsx",
+  ckSheetName:"复核规则统计",
+  ckSheetNameField:"复核字段",
 }

@@ -21,9 +21,11 @@ var exeInsert = function(tableName,excelData,whitchEnv){
       if(err){
         debugger
         console.log(chalk.red(`插入 - ${tableName} - 失败`));
+        conn.release();
         reject(err);
       }else{
         console.log(chalk.green(`插入 - ${tableName} - 成功`));
+        conn.release();
         resolve(err);
       }
     })
@@ -45,9 +47,11 @@ var exeDelete = function(tableName,excelData,whitchEnv){
       if(err){
         debugger
         console.log(chalk.red(`删除 - ${tableName} - 失败`));
+        conn.release();
         reject(err);
       }else{
         console.log(chalk.green(`删除 - ${tableName} - 成功`));
+        conn.release();
         resolve(err);
       }
     })
@@ -77,17 +81,20 @@ var dbHandler = async function(arr,type,needRefresh = true){
   var insertAllDev = arr.map(item => exeInsert(item.tableName,item.data,"DEV"));
   await Promise.all(insertAllDev);
 
-  console.log(chalk.red(`${type} - SIT`));
 
-  var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
-  await Promise.all(deleteAllSit);
-  var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
-  await Promise.all(insertAllSit);
+  // console.log(chalk.red(`${type} - SIT`));
 
-
+  // var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
+  // await Promise.all(deleteAllSit);
+  // var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
+  // await Promise.all(insertAllSit);
+  
   if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
-    refreshCache(config.refreshRedisUrlDev,"DEV");
-    refreshCache(config.refreshRedisUrlSit,"SIT");
+    await Promise.all([
+      refreshCache(config.refreshRedisUrlDev,"DEV"),
+      refreshCache(config.refreshRedisUrlSit,"SIT")
+    ]);
+    process.exit();
   }
   
 }

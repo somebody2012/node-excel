@@ -515,6 +515,6 @@ utils.writeToOutDir("authInsert.sql",insertSql,"授权");
 utils.writeToOutDir("authDelete.sql",deleteSql,"授权");
 utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权");
 
-db.dbHandler(arr1,"授权-参数映射",false);
-// db.dbHandler(arr,"授权",true);
+// db.dbHandler(arr1.concat(arr),"授权-参数映射",false);
+db.dbHandler(arr.concat(arr1),"授权",true);
 

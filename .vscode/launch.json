@@ -19,6 +19,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "复核",
+      "program": "${workspaceFolder}/src/check/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "授权重写",
       "program": "${workspaceFolder}/src/auth/index_rewite.js"
     },
@@ -63,6 +69,12 @@
       "request": "launch",
       "name": "DB",
       "program": "${workspaceFolder}/src/db/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "SERVER",
+      "program": "${workspaceFolder}/src/server/index.js"
     },
   ]
 }
