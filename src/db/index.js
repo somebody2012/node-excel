@@ -82,12 +82,12 @@ var dbHandler = async function(arr,type,needRefresh = true){
   await Promise.all(insertAllDev);
 
 
-  // console.log(chalk.red(`${type} - SIT`));
+  console.log(chalk.red(`${type} - SIT`));
 
-  // var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
-  // await Promise.all(deleteAllSit);
-  // var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
-  // await Promise.all(insertAllSit);
+  var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
+  await Promise.all(deleteAllSit);
+  var insertAllSit = arr.map(item => exeInsert(item.tableName,item.data,"SIT"));
+  await Promise.all(insertAllSit);
   
   if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
     await Promise.all([
