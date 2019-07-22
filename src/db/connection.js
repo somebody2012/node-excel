@@ -1,13 +1,16 @@
 // 引入 mysql 数据库连接依赖
 const mysql = require("mysql");
 
-// 创建 mysql 连接池并配置参数
+// DEV 创建 mysql 连接池并配置参数
 const poolDev = mysql.createPool({
     host: "10.16.2.152",    // 主机地址
     port: 3306,                 // 端口
-    user: "app",               // 数据库访问账号
-    password: "app",         // 数据库访问密码
-    database: "dev_st_ut",           // 要访问的数据库
+    user: "devapp",               // 数据库访问账号
+    password: "devapp",         // 数据库访问密码
+    database: "pub_db",           // 要访问的数据库
+    // user: "app",               // 数据库访问账号
+    // password: "app",         // 数据库访问密码
+    // database: "dev_st_ut",           // 要访问的数据库
     charset: "UTF8_GENERAL_CI", // 字符编码 ( 必须大写 )
     typeCast: true,             // 是否把结果值转换为原生的 javascript 类型
     supportBigNumbers: true,    // 处理大数字 (bigint, decimal), 需要开启 ( 结合 bigNumberStrings 使用 )
@@ -20,7 +23,7 @@ poolDev.waitForConnections = true; // 连接使用量超负荷是否等待, fals
 poolDev.queueLimit = 0;            // 每个连接可操作的 列数 上限, 0 为没有上限
 
 
-// 创建 mysql 连接池并配置参数
+// SIT 创建 mysql 连接池并配置参数
 const poolSit = mysql.createPool({
     host: "10.16.43.99",    // 主机地址
     port: 3306,                 // 端口

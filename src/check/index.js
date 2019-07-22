@@ -32,7 +32,7 @@ ckScreenWorkSheet = ckScreenWorkSheet.filter(row => {
 ckScreenFieldsWorkSheet = ckScreenFieldsWorkSheet.filter(row => {
   var isEmptyRow = (row.length == 0);
   var nullValue = ["",undefined,null]
-  var isEmptyCell = [row[0],row[1],row[2],row[3],row[13],row[14]].some(v => nullValue.includes(v));
+  var isEmptyCell = [row[0],row[1],row[2]].some(v => nullValue.includes(v));
   var isEmpty = isEmptyRow || isEmptyCell;
   if(isEmpty){
     console.log(chalk.blue(`${row[0]} 复核字段统计被过滤  ${row.toString()}`));
