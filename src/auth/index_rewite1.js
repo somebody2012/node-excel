@@ -282,6 +282,30 @@ class Auth {
     var txAmt = curSheetRow[8] || "txAmt";
     var TnNwSn = curSheetRow[10] || "TnNwSn";
     var Ccy = curSheetRow[12] || "Ccy";
+    if(txAmt != "txAmt"){
+      // 需要映射
+      var TRAN_CD = curSheetRow[2];
+      var PUB_DICTRY_NM = "txAmt";
+      var PRIV_DICTRY_NM = txAmt;
+      var PULDW_MAPG_DICTRY_NM = "金额";
+      var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
+      
+      var DICTRY_NM = "txAmt";
+      var DICTRY_DESCR = "金额";
+      var DICTRY_TYP_CD = "";
+      var FIELD_CMPR = "";
+      var DATA_ATTR_DESCR = "金额";
+      var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
+
+      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
+      if(!isExist1){
+        this.reflexData.push(curRow1);
+      }
+      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
+      if(!isExist2){
+        this.fieldFactor.push(curRow2);
+      }
+    }
     if(TnNwSn != "TnNwSn"){
       // 需要映射
       var TRAN_CD = curSheetRow[2];
@@ -296,30 +320,6 @@ class Auth {
       var FIELD_CMPR = "";
       var DATA_ATTR_DESCR = "现转标志";
       //DICTRY_DESCR  DATA_ATTR_DESCR
-      var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
-
-      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
-      if(!isExist1){
-        this.reflexData.push(curRow1);
-      }
-      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
-      if(!isExist2){
-        this.fieldFactor.push(curRow2);
-      }
-    }
-    if(txAmt != "txAmt"){
-      // 需要映射
-      var TRAN_CD = curSheetRow[2];
-      var PUB_DICTRY_NM = "txAmt";
-      var PRIV_DICTRY_NM = TnNwSn;
-      var PULDW_MAPG_DICTRY_NM = "金额";
-      var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
-      
-      var DICTRY_NM = "txAmt";
-      var DICTRY_DESCR = "金额";
-      var DICTRY_TYP_CD = "";
-      var FIELD_CMPR = "";
-      var DATA_ATTR_DESCR = "金额";
       var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
 
       var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
