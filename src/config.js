@@ -31,7 +31,7 @@ module.exports = {
   ciSheetName:"客户信息录入",
   // 黑名单
   blackListExcelName:"黑名单.xlsx",
-  balckListSheetName:"Sheet1",
+  balckListSheetName:"黑名单规则统计",
   // 双热线
   doubleLineExcelName:"双热线.xlsx",
   doubleLineSheetName:"双热线",
