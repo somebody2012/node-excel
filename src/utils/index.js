@@ -83,6 +83,26 @@ var genDeleteSql = function(arr){
   delSql += "\nCOMMIT;";
   return delSql;
 }
+// 删除字段转换表
+var genDeleteTransWordSql = function(arr){
+  var delSql = "SET AUTOCOMMIT=0;\nBEGIN;\n\n";
+  for(var i=0;i<arr.length;i++){
+    var curTableInfo = arr[i];
+    var tableName = curTableInfo.tableName;
+    var data = curTableInfo.data;
+    var tableData = data.slice(1);
+    var keyWord0 = data[0][0];
+    var keyWord1 = data[0][1];
+
+    debugger
+    delSql += (data.slice(1).map((value,index) => {
+      var sqlItem = `DELETE FROM ${tableName} WHERE ${keyWord0}='${value[0]}' AND ${keyWord1}='${value[1]}';\n`;
+      return sqlItem
+    }).join("") + "\n")
+  }
+  delSql += "\nCOMMIT;";
+  return delSql;
+}
 
 var writeToOutDir = function(filename,buffer,suffix){
   suffix = suffix || "";
@@ -125,5 +145,6 @@ module.exports = {
   genInsertSql,
   genDeleteSql,
   writeToOutDir,
-  copySrcExcel
+  copySrcExcel,
+  genDeleteTransWordSql
 }

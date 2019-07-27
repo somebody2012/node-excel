@@ -450,7 +450,10 @@ class Auth {
       var PUB_DICTRY_FLG = "0";	 // 公共字典标志
       var DICTRY_DESCR = curSheetRow[9];	 // 字典描述
       var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
-      this.condData.push(curRow);
+      var isForceCond = (curSheetRows[6] || "是").includes("是");
+      if(!isForceCond){
+        this.condData.push(curRow);
+      }
     }
   }
   // 模式
@@ -510,11 +513,12 @@ var arr1 = [
   {tableName:"IB_PARA_KEYWORDS_INFO",data:auth.fieldFactor},
 ];
 var insertSql = utils.genInsertSql(arr.concat(arr1));
-var deleteSql = utils.genDeleteSql(arr.concat(arr1));
+var deleteSql = utils.genDeleteSql(arr);
+var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 utils.writeToOutDir("authInsert.sql",insertSql,"授权");
-utils.writeToOutDir("authDelete.sql",deleteSql,"授权");
+utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql,"授权");
 utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权");
 
-db.dbHandler(arr.concat(arr1),"授权",true);//无字段映射
-// db.dbHandler(arr,"授权",true);//全量
+db.dbHandler(arr.concat(arr1),"授权",true);//全量
+// db.dbHandler(arr,"授权",true);//无字段映射
 

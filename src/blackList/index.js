@@ -15,7 +15,7 @@ var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.balckListSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => {
   var isEmpty =( row.length == 0);
-  var needCheckRow = [row[0],row[1],row[2],row[3],row[6],row[7]];
+  var needCheckRow = [row[0],row[1],row[6],row[7]];
   var isPassedCheck = needCheckRow.some(v => !v);
   if(isPassedCheck){
     console.log(`${row[1]}  数据配置不完整 被过滤`);
@@ -137,10 +137,12 @@ class BlackList {
   // 生成模式表
   generateAuthModeData(MODE_NO,curSheetRow){
     //规则模式编号 字段序号 字段名称 字段字典名称 规则模式类型代码
-    var row = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"blockCodeStr",String(curSheetRow[17] || ""),"BN"];
+    var row1 = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"blockCodeStr",String(curSheetRow[17] || ""),"BN"];
+    var row2 = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"checkFields",String(curSheetRow[18] || ""),"BN"];
     var isExist = this.modeInfo.find(v => v[0] == MODE_NO);
     if(!isExist){
-      this.modeInfo.push(row);
+      this.modeInfo.push(row1);
+      this.modeInfo.push(row2);
     }
   }
 }
