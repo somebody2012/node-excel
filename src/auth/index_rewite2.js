@@ -131,59 +131,87 @@ class Auth {
       }else{
         // 不是金额条件
         // 不是金额超限条件，金额超限默认需要人脸识别
-        var RULE_NO1 = this.ruleNoObj().padStart(6);
-        this.generateRuleInfoData(RULE_NO1,curSheetRows[0]);
+        if(isNeedFaceAuth){
+          // 规则配置了是需要人脸识别
+          var RULE_NO1 = this.ruleNoObj().padStart(6);
+          this.generateRuleInfoData(RULE_NO1,curSheetRows[0]);
 
-        //  人脸识别通过
-        var OPRTN_COND_NO_0 = "AU" + this.condNoObj().padStart(5);
-        // 需要人脸识别条件
-        this.genIsNeedfaceRecognition(OPRTN_COND_NO_0,curSheetRows,true);
-        // 生成通过条件
-        this.genFaceAuthPassCond(OPRTN_COND_NO_0,curSheetRows);
-        var passMethod = curSheetRows[0][17] || "不改变"
-        if(passMethod.includes("不改变")){
-          // this.genAuthData(RULE_NO1,OPRTN_COND_NO_0,curSheetRows,isForceCond);
-        }else if(passMethod.includes("不授权")){
-          // 生成不授权条件
-          this.genNotAuthCond(OPRTN_COND_NO_0,curSheetRows);
-        }else{
-          // 本地 远程 异终端
-          // 条件
-          this.genFacePassCond(OPRTN_COND_NO_0,curSheetRows);
-          // 模式
-          this.genFacePassMode(OPRTN_COND_NO_0,curSheetRows);
-          // 规则条件
-          this.genFacePassRuleCond(RULE_NO1,OPRTN_COND_NO_0,curSheetRows);
-        }
-
-
-        // 人脸识别不通过
-        var OPRTN_COND_NO_1 = "AU" + this.condNoObj().padStart(5);
-        // 需要人脸识别条件
-        this.genIsNeedfaceRecognition(OPRTN_COND_NO_1,curSheetRows,true);
-        // 生成不通过条件
-        this.genFaceAuthNotPassCond(OPRTN_COND_NO_1,curSheetRows);
-        this.genAuthData(RULE_NO1,OPRTN_COND_NO_1,curSheetRows,isForceCond);
-
-        
-        /*******************************不需要人脸识别***********************************/
-        // 生成规则 不需要人脸识别
-        var RULE_NO2 = this.ruleNoObj().padStart(6);
-        this.generateRuleInfoData(RULE_NO2,curSheetRows[0]);
-        var OPRTN_COND_NO2 = "AU" + this.condNoObj().padStart(5);
-        this.genIsNeedfaceRecognition(OPRTN_COND_NO2,curSheetRows,false);
-        if(isForceCond){
-          // 是强制条件
-          this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,true);
-        }else{
-          // 不是强制条件
-          if(isAmtCond){
-            // 金额超限
-            // this.generateAmtCondData(RULE_NO2,curSheetRows[0]);
+          //  人脸识别通过
+          var OPRTN_COND_NO_0 = "AU" + this.condNoObj().padStart(5);
+          // 需要人脸识别条件
+          this.genIsNeedfaceRecognition(OPRTN_COND_NO_0,curSheetRows,true);
+          // 生成通过条件
+          this.genFaceAuthPassCond(OPRTN_COND_NO_0,curSheetRows);
+          var passMethod = curSheetRows[0][17] || "不改变"
+          if(passMethod.includes("不改变")){
+            this.genAuthData(RULE_NO1,OPRTN_COND_NO_0,curSheetRows,isForceCond);
+          }else if(passMethod.includes("不授权")){
+            // 生成不授权条件
+            this.genNotAuthCond(OPRTN_COND_NO_0,curSheetRows);
           }else{
-            this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,false);
+            // 本地 远程 异终端
+            // 条件
+            this.genFacePassCond(OPRTN_COND_NO_0,curSheetRows,isForceCond);
+            // 模式
+            this.genFacePassMode(OPRTN_COND_NO_0,curSheetRows);
+            // 规则条件
+            this.genFacePassRuleCond(RULE_NO1,OPRTN_COND_NO_0,curSheetRows);
+          }
+
+
+          // 人脸识别不通过
+          var OPRTN_COND_NO_1 = "AU" + this.condNoObj().padStart(5);
+          // 需要人脸识别条件
+          this.genIsNeedfaceRecognition(OPRTN_COND_NO_1,curSheetRows,true);
+          // 生成不通过条件
+          this.genFaceAuthNotPassCond(OPRTN_COND_NO_1,curSheetRows);
+          this.genAuthData(RULE_NO1,OPRTN_COND_NO_1,curSheetRows,isForceCond);
+
+          
+          /*******************************不需要人脸识别***********************************/
+          // 生成规则 不需要人脸识别
+          var RULE_NO2 = this.ruleNoObj().padStart(6);
+          this.generateRuleInfoData(RULE_NO2,curSheetRows[0]);
+          var OPRTN_COND_NO2 = "AU" + this.condNoObj().padStart(5);
+          this.genIsNeedfaceRecognition(OPRTN_COND_NO2,curSheetRows,false);
+          if(isForceCond){
+            // 是强制条件
+            this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,true);
+          }else{
+            // 不是强制条件
+            if(isAmtCond){
+              // 金额超限
+              // this.generateAmtCondData(RULE_NO2,curSheetRows[0]);
+            }else{
+              this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,false);
+            }
+          }
+        }else{
+          // 规则配置了不需要人脸识别
+          // 生成规则 不需要人脸识别
+          var RULE_NO2 = this.ruleNoObj().padStart(6);
+          this.generateRuleInfoData(RULE_NO2,curSheetRows[0]);
+          var OPRTN_COND_NO2 = "AU" + this.condNoObj().padStart(5);
+          // this.genIsNeedfaceRecognition(OPRTN_COND_NO2,curSheetRows,false);
+          if(isForceCond){
+            // 是强制条件
+            this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,true);
+          }else{
+            // 不是强制条件
+            if(isAmtCond){
+              // 金额超限
+              // this.generateAmtCondData(RULE_NO2,curSheetRows[0]);
+            }else{
+              this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,false);
+            }
           }
         }
+        
+        
+
+
+
+
       }
     }
   }
@@ -485,7 +513,10 @@ class Auth {
   }
 
   // 人脸识别通过条件
-  genFacePassCond(OPRTN_COND_NO,curSheetRows){
+  genFacePassCond(OPRTN_COND_NO,curSheetRows,isForceCond){
+    if(isForceCond){
+      return;
+    }
     // 人脸识别通过后 是强制授权还是 带上 以前的条件?
     for(var i=0;i<curSheetRows.length;i++){
       var curSheetRow = curSheetRows[i];

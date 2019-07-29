@@ -150,6 +150,8 @@ class CK {
     var PUB_DICTRY_FLG = "0" ;
     var DICTRY_DESCR = "" ;  
     var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
+    var isExist = this.condData.find(v => v[0] == OPRTN_COND_NO);
+    if(isExist) return;
     this.condData.push(curRow);
   }
   // 生成模式表
