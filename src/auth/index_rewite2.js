@@ -7,7 +7,7 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 
-// utils.copySrcExcel(config.srcExcelName,__dirname);
+utils.copySrcExcel(config.srcExcelName,__dirname);
 
 var { amtCondsObj,amtConds } = require("./genAmtCond.js");
 var isFilteredData = []; // 被过滤的数据
@@ -121,16 +121,17 @@ class Auth {
       // 是否金额超限
       var isAmtCond = curSheetRows[0][4].includes("金额超限");
 
-      /*******************************需要人脸识别***********************************/
-      // 生成规则 需要人脸识别
+      
+      // 生成规则 需要人脸识别 excel里面统计了需要人脸识别 才生成 需要 不需要 条件 如果不需要人脸识别 正常生成规则
       if(isAmtCond){
         // 金额条件 默认需要人脸识别
         var RULE_NO = this.ruleNoObj().padStart(6);
         this.generateRuleInfoData(RULE_NO,curSheetRows[0]);
         this.generateAmtCondData(RULE_NO,curSheetRows[0]);
       }else{
+        /*******************************需要人脸识别***********************************/
         // 不是金额条件
-        // 不是金额超限条件，金额超限默认需要人脸识别
+        // 不是金额超限条件，金额超限默认需要人脸识别 
         if(isNeedFaceAuth){
           // 规则配置了是需要人脸识别
           var RULE_NO1 = this.ruleNoObj().padStart(6);
@@ -187,12 +188,11 @@ class Auth {
             }
           }
         }else{
-          // 规则配置了不需要人脸识别
           // 生成规则 不需要人脸识别
           var RULE_NO2 = this.ruleNoObj().padStart(6);
           this.generateRuleInfoData(RULE_NO2,curSheetRows[0]);
           var OPRTN_COND_NO2 = "AU" + this.condNoObj().padStart(5);
-          // this.genIsNeedfaceRecognition(OPRTN_COND_NO2,curSheetRows,false);
+          this.genIsNeedfaceRecognition(OPRTN_COND_NO2,curSheetRows,false);
           if(isForceCond){
             // 是强制条件
             this.genAuthData(RULE_NO2,OPRTN_COND_NO2,curSheetRows,true);
