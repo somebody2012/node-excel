@@ -25,6 +25,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "授权2",
+      "program": "${workspaceFolder}/src/auth/index_rewite2.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "双屏",
       "program": "${workspaceFolder}/src/doubleScreen/index.js"
     },
