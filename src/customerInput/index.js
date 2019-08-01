@@ -129,9 +129,9 @@ class CustomerInput {
   // 生成模式表
   generateAuthModeData(MODE_NO,curSheetRow){
     //规则模式编号 字段序号 字段名称 字段字典名称 规则模式类型代码
-    var REF_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"ref",curSheetRow[6],"CI"];
-    var NI_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"NI",curSheetRow[7],"CI"];
-    var FR_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"FR",curSheetRow[8],"CI"];
+    var REF_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"ref",curSheetRow[6]==0?"0":curSheetRow[6],"CI"];
+    var NI_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"NI",curSheetRow[7]==0?"0":curSheetRow[7],"CI"];
+    var FR_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"FR",curSheetRow[8]==0?"0":curSheetRow[8],"CI"];
 
     this.modeInfo.push(REF_ROW);
     this.modeInfo.push(NI_ROW);
