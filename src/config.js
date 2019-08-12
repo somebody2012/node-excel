@@ -14,7 +14,8 @@ module.exports = {
   // refreshRedisUrlDev:"http://10.16.2.228/abside/abs-te-ib-ownservices/loadCaceAtStap",
   refreshRedisUrlDev:"http://10.16.2.228/abside/abs-te-cacheserver/loadCaceAtStap",
   // SIT 刷新redis 缓存地址
-  refreshRedisUrlSit:"http://10.16.43.90/abside/abs-te-ib-ownservices/loadCaceAtStap",
+  //refreshRedisUrlSit:"http://10.16.43.90/abside/abs-te-ib-ownservices/loadCaceAtStap",
+  refreshRedisUrlSit:"http://10.16.43.182/abside/abs-te-cacheserver/loadCaceAtStap",
   //授权
   srcExcelName:"授权规则收集表汇总1.0.xlsx",// 资源名字
   // srcExcelName:"授权规则收集表汇总1.0的副本.xlsx",// 资源名字

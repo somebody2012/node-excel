@@ -81,7 +81,7 @@ var dbHandler = async function(arr,type,needRefresh = true){
   var insertAllDev = arr.map(item => exeInsert(item.tableName,item.data,"DEV"));
   await Promise.all(insertAllDev);
 
-  // // 插入 SIT 数据库
+  // // // 插入 SIT 数据库
   // console.log(chalk.red(`${type} - SIT`));
   // var deleteAllSit = arr.map(item => exeDelete(item.tableName,item.data,"SIT"));
   // await Promise.all(deleteAllSit);

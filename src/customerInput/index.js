@@ -68,7 +68,7 @@ class CustomerInput {
     var HOLI_FLG = "N";  // 节假日标志
     var RULE_TRI_POSITION = "1";  // 规则触发位置
     var SUIT_CHNL_SCP = "TE";  // 适用渠道范围
-    var SUIT_LPR_SCP = "9999";  // 适用法人范围
+    var SUIT_LPR_SCP = "0000";  // 适用法人范围
     var SUIT_ORG_SCP = "*,";  // 适用机构范围
     var SUIT_TX_SCP = curSheetRow[5];  // 适用交易范围---
     var RULE_COMNT = curSheetRow[9] || "无规则说明";  // 规则说明---
@@ -97,10 +97,10 @@ class CustomerInput {
     var DICTRY_DESCR = curSheetRow[11];	 // 字典描述
     var curRow = [OPRTN_COND_NO,DICTRY_NM,OPER_SYM_1,CMPR_VAL,OPER_SYM_2,VALUE2,TRAN_CD,COND_DESCR,OPER_TELR_NO,OPER_DT,OPER_RSN,CMPR_VAL_DATA_DICTRY_FLG,PUB_DICTRY_FLG,DICTRY_DESCR];
     var isForceCond = !Boolean(curSheetRow[10]); //是否强制条件
-    var isExist = this.condData.find(v => v[0] == OPRTN_COND_NO);
-    if(isExist){
-      return;
-    }
+    // var isExist = this.condData.find(v => v[0] == OPRTN_COND_NO);
+    // if(isExist){
+    //   return;
+    // }
     if(!isForceCond) {
       if(OPER_SYM_1){
         this.condData.push(curRow);
@@ -133,9 +133,19 @@ class CustomerInput {
     var NI_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"NI",curSheetRow[7]==0?"0":curSheetRow[7],"CI"];
     var FR_ROW = [MODE_NO,this.FIELD_SEQ_NO_OBJ().number,"FR",curSheetRow[8]==0?"0":curSheetRow[8],"CI"];
 
-    this.modeInfo.push(REF_ROW);
-    this.modeInfo.push(NI_ROW);
-    this.modeInfo.push(FR_ROW);
+    var isExistREF_ROW = this.modeInfo.find(v => v[0] == REF_ROW[0] && v[2] == REF_ROW[2] && v[3] == REF_ROW[3] && v[4] == REF_ROW[4]);
+    var isExistNI_ROW = this.modeInfo.find(v => v[0] == REF_ROW[0] && v[2] == REF_ROW[2] && v[3] == REF_ROW[3] && v[4] == REF_ROW[4]);
+    var isExistFR_ROW = this.modeInfo.find(v => v[0] == REF_ROW[0] && v[2] == REF_ROW[2] && v[3] == REF_ROW[3] && v[4] == REF_ROW[4]);
+    if(!isExistREF_ROW){
+      this.modeInfo.push(REF_ROW);
+    }
+    if(!isExistNI_ROW){
+      this.modeInfo.push(NI_ROW);
+    }
+    if(!isExistFR_ROW){
+      this.modeInfo.push(FR_ROW);
+    }
+
   }
 
 }
