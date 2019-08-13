@@ -515,10 +515,33 @@ var arr1 = [
 var insertSql = utils.genInsertSql(arr.concat(arr1));
 var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
+
+var deleteAllAuth = `\n
+  DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'AU';
+  DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%AU%';
+  DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%AU%';
+  DELETE FROM IB_OM_AUTHMODE_INFO WHERE MODE_NO LIKE '%AU%';
+\n`;
+
 utils.writeToOutDir("authInsert.sql",insertSql,"授权");
-utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql,"授权");
+utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql + "\n" + deleteAllAuth,"授权");
 utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权");
 
 db.dbHandler(arr.concat(arr1),"授权",true);//全量
 // db.dbHandler(arr,"授权",true);//无字段映射
+
+
+
+
+
+/* 
+var a = arr[1].data
+var b = a.filter((v1,i1) => {
+	var b = a.filter(v2 => v2[0] == v1[0] && v2[1] == v1[1])
+	return b.length != 1
+})
+
+*/
+
+
 

@@ -94,7 +94,6 @@ var genDeleteTransWordSql = function(arr){
     var keyWord0 = data[0][0];
     var keyWord1 = data[0][1];
 
-    debugger
     delSql += (data.slice(1).map((value,index) => {
       var sqlItem = `DELETE FROM ${tableName} WHERE ${keyWord0}='${value[0]}' AND ${keyWord1}='${value[1]}';\n`;
       return sqlItem

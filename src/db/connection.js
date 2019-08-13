@@ -25,10 +25,10 @@ poolDev.queueLimit = 0;            // 每个连接可操作的 列数 上限, 0 
 
 // SIT 创建 mysql 连接池并配置参数
 const poolSit = mysql.createPool({
-    host: "10.16.44.233",    // 主机地址
+    host: "10.16.44.234",    // 主机地址
     port: 3306,                 // 端口
-    user: "app",               // 数据库访问账号
-    password: "app",         // 数据库访问密码
+    user: "dbview",               // 数据库访问账号
+    password: "dbview",         // 数据库访问密码
     database: "pub_db",           // 要访问的数据库
     charset: "UTF8_GENERAL_CI", // 字符编码 ( 必须大写 )
     typeCast: true,             // 是否把结果值转换为原生的 javascript 类型
