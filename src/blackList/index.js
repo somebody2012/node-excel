@@ -157,8 +157,20 @@ var arr = [
 ];
 var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
+
+
+let deleteAll = `\n
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'BN';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%BN%';
+DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%BN%';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%BN%';
+\n
+`;
+
+
+
 utils.writeToOutDir("blackListInsert.sql",insertSql,"黑名单");
-utils.writeToOutDir("blackListDelete.sql",deleteSql,"黑名单");
+utils.writeToOutDir("blackListDelete.sql",deleteSql + "\n" + deleteAll,"黑名单");
 
 
 

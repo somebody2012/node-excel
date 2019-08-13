@@ -137,8 +137,20 @@ var arr = [
 ];
 var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
+
+
+
+let deleteAll = `\n
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'DH';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%DH%';
+DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%DH%';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%DH%';
+\n
+`;
+
+
 utils.writeToOutDir("doubleLineInsert.sql",insertSql,"双热线");
-utils.writeToOutDir("doubleLineDelete.sql",deleteSql,"双热线");
+utils.writeToOutDir("doubleLineDelete.sql",deleteSql + "\n" + deleteAll,"双热线");
 
 
 

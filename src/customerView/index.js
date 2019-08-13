@@ -150,8 +150,21 @@ var arr = [
 ];
 var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
+
+
+
+let deleteAll = `\n
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'CV';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%CV%';
+DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%CV%';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%CV%';
+\n
+`;
+
+
+
 utils.writeToOutDir("customerViewInsert.sql",insertSql,"客户视图");
-utils.writeToOutDir("customerViewDelete.sql",deleteSql,"客户视图");
+utils.writeToOutDir("customerViewDelete.sql",deleteSql + "\n" + deleteAll,"客户视图");
 
 
 db.dbHandler(arr,"客户视图");

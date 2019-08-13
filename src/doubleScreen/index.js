@@ -200,8 +200,16 @@ var insertSql = utils.genInsertSql(sqlParams);
 
 var deleteSql = utils.genDeleteSql(sqlParams);
 
+let deleteAll = `\n
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'DS';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%DS%';
+DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%DS%';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%DS%';
+\n
+`;
+
 utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
-utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
+utils.writeToOutDir("dsDelete.sql",deleteSql + "\n" + deleteAll,"双屏确认");
 
 
 db.dbHandler(sqlParams,"双屏");
