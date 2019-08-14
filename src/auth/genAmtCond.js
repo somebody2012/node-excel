@@ -313,7 +313,7 @@ class GenAmtCond{
         var curCondNo = "AU" + this.condNoObj().padStart(5);
         var tnNwSnCond = [ curCondNo,TnNwSn,"==","0","","","","现金支付触发授权","",this.curDayStr,"批量新增","1","0","现金支付" ];
         var txAmtCond = [ curCondNo,txAmt,">=",cash[j][1],"<",cash[j][2],"","金额超限触发授权","",this.curDayStr,"批量新增","1","0","交易金额" ];
-        var ccyCond = [ curCondNo,Ccy,  "==",curItem.Ccy,"",  "",       "","币种授权","",this.curDayStr,"批量新增","1","0","币种" ];
+        var ccyCond = [ curCondNo,Ccy,  "==",curItem.Ccy,"",  "",       "","币种授权","",this.curDayStr,"批量新增","1","0",curItem.name ];
         var mode = [curCondNo,"2",cash[j][0],"","","","*","",`${curItem.name},现金,金额在范围【${cash[j][1]}-${cash[j][2]}】内，触发授权`,"","","","","现金金额超限模式",""];
         // 生成条件
         this.generateAmtCondDataInner(tnNwSnCond);
@@ -335,7 +335,7 @@ class GenAmtCond{
         var curCondNo = "AU" + this.condNoObj().padStart(5);
         var tnNwSnCond = [ curCondNo,TnNwSn,"==","1","","","","转账触发授权","",this.curDayStr,"批量新增","1","0","转账标识" ];
         var txAmtCond = [ curCondNo,txAmt,">=",transfer[j][1],"<",transfer[j][2],"","金额超限触发授权","",this.curDayStr,"批量新增","1","0","交易金额" ];
-        var ccyCond = [ curCondNo,Ccy,"==",curItem.Ccy,"","","","币种授权","",this.curDayStr,"批量新增","1","0","币种"];
+        var ccyCond = [ curCondNo,Ccy,"==",curItem.Ccy,"","","","币种授权","",this.curDayStr,"批量新增","1","0",curItem.name];
         var mode = [curCondNo,"2",transfer[j][0],"","","","*","",`${curItem.name},转账,金额在范围【${transfer[j][1]}-${transfer[j][2]}】内，触发授权`,"","","","","转账金额超限模式",""];
         // 生成条件
         this.generateAmtCondDataInner(tnNwSnCond);

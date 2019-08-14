@@ -51,7 +51,7 @@ var genInsertSql = function(arr){
     var tableData = data.slice(1);
     var sqlValues = tableData.map(row => {
       row = row.map(v => `"${String(v || '').trim()}"`);
-      return `(${row.toString()})`;
+      return `(${row.toString()})`.replace(/\"/g,"\'").replace(/\'/g,"\'");
     });
     if(tableData.length > 0){
       sql += `\n-- ${tableName} insert\n`;
@@ -75,7 +75,7 @@ var genDeleteSql = function(arr){
     var data = curTableInfo.data;
     var tableData = data.slice(1);
     var keyWord = data[0][0]
-    var inValues = tableData.map(v => `"${String(v[0])}"`);
+    var inValues = tableData.map(v => `"${String(v[0])}"`.replace(/\"/g,"\'").replace(/\'/g,"\'"));
     if(tableData.length > 0){
       delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n`;
     }
