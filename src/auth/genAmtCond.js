@@ -303,9 +303,12 @@ class GenAmtCond{
       },
     ];
     
-    var TnNwSn = "TnNwSn";
-    var txAmt = "txAmt";
-    var Ccy =  "Ccy";
+    var TnNwSn = "CASH_TRAN_FLG";
+    var txAmt = "TX_AMT";
+    var Ccy =  "CUR_CD";
+    // var TnNwSn = "TnNwSn";
+    // var txAmt = "txAmt";
+    // var Ccy =  "Ccy";
     for(var i=0;i<currencyCond.length;i++){
       var curItem = currencyCond[i];
       for(var j=0;j<curItem.cash.length;j++){

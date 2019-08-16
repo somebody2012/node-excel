@@ -279,18 +279,24 @@ class Auth {
       }
     }
     // 生成字段映射
-    var txAmt = curSheetRow[8] || "txAmt";
-    var TnNwSn = curSheetRow[10] || "TnNwSn";
-    var Ccy = curSheetRow[12] || "Ccy";
-    if(txAmt != "txAmt"){
+    var TnNwSn_PUB = "CASH_TRAN_FLG";
+    var txAmt_PUB = "TX_AMT";
+    var Ccy_PUB =  "CUR_CD";
+
+    var txAmt = curSheetRow[8] || txAmt_PUB;
+    var TnNwSn = curSheetRow[10] || TnNwSn_PUB;
+    var Ccy = curSheetRow[12] || Ccy_PUB;
+
+    
+    if(txAmt != txAmt_PUB){
       // 需要映射
       var TRAN_CD = curSheetRow[2];
-      var PUB_DICTRY_NM = "txAmt";
+      var PUB_DICTRY_NM = txAmt_PUB;
       var PRIV_DICTRY_NM = txAmt;
       var PULDW_MAPG_DICTRY_NM = "金额";
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
-      var DICTRY_NM = "txAmt";
+      var DICTRY_NM = txAmt_PUB;
       var DICTRY_DESCR = "金额";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";
@@ -306,15 +312,15 @@ class Auth {
         this.fieldFactor.push(curRow2);
       }
     }
-    if(TnNwSn != "TnNwSn"){
+    if(TnNwSn != TnNwSn_PUB){
       // 需要映射
       var TRAN_CD = curSheetRow[2];
-      var PUB_DICTRY_NM = "TnNwSn";
+      var PUB_DICTRY_NM = TnNwSn_PUB;
       var PRIV_DICTRY_NM = TnNwSn;
       var PULDW_MAPG_DICTRY_NM = "现转标志";
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
-      var DICTRY_NM = "TnNwSn";
+      var DICTRY_NM = TnNwSn_PUB;
       var DICTRY_DESCR = "现转标志";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";
@@ -331,15 +337,15 @@ class Auth {
         this.fieldFactor.push(curRow2);
       }
     }
-    if(Ccy != "Ccy"){
+    if(Ccy != Ccy_PUB){
       // 需要映射
       var TRAN_CD = curSheetRow[2];
-      var PUB_DICTRY_NM = "Ccy";
+      var PUB_DICTRY_NM = Ccy_PUB;
       var PRIV_DICTRY_NM = Ccy;
       var PULDW_MAPG_DICTRY_NM = "币种";
       var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
       
-      var DICTRY_NM = "Ccy";
+      var DICTRY_NM = Ccy_PUB;
       var DICTRY_DESCR = "币种";
       var DICTRY_TYP_CD = "";
       var FIELD_CMPR = "";

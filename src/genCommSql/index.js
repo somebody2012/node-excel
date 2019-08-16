@@ -13,6 +13,9 @@ var curWorkSheet = workSheets.find(v => v.name.includes(sheetName)).data;
 
 
 for(var i=0;i<curWorkSheet.length;i++){
+  curWorkSheet[i][31] || (curWorkSheet[i][31] = ''); 
+  curWorkSheet[i][32] || (curWorkSheet[i][32] = ''); 
+  curWorkSheet[i][33] || (curWorkSheet[i][33] = ''); 
   for(var j=0;j<curWorkSheet[i].length;j++){
     var item = curWorkSheet[i][j];
     if(item === 0){
@@ -26,7 +29,7 @@ for(var i=0;i<curWorkSheet.length;i++){
 
 
 var oringinData = [
-  {tableName:"TEST_TABLE_NAME",data:curWorkSheet.slice(1)}
+  {tableName:"IB_UPM_MENU_INFO",data:curWorkSheet.slice(1)}
 ];
 
 var insertSql = utils.genInsertSql(oringinData)
