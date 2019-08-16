@@ -79,6 +79,12 @@ class CK {
     // RCHK_FIELD_INFO	复核字段信息
     // STUS_CD	状态代码
     this.ckField = [["TRAN_CD","LPR_NO","RCHK_FIELD_NM","RCHK_FIELD_INFO","STUS_CD"]];
+
+    // 字段映射表 TE_PARA_TRANKEYWORDS_INFO  
+    this.reflexData = [["TRAN_CD","PUB_DICTRY_NM","PRIV_DICTRY_NM","PULDW_MAPG_DICTRY_NM"]];
+    // 字段要素表 IB_PARA_KEYWORDS_INFO 
+    this.fieldFactor = [["DICTRY_NM","DICTRY_DESCR","DICTRY_TYP_CD","FIELD_CMPR","DATA_ATTR_DESCR"]];
+
     this.init();
   }
   init(){
@@ -182,6 +188,7 @@ class CK {
       // var data = this.uniqSheetFieldsData[key];
       for(var i=0;i<this.uniqSheetFieldsData.length;i++){
         var row = this.uniqSheetFieldsData[i];
+        this.genReflexData(row);
         var TRAN_CD = row[0]; //	交易码
         var LPR_NO = row[1]; //	法人编号
         var RCHK_FIELD_NM = row[2]; //	复核字段名称
@@ -194,6 +201,34 @@ class CK {
         this.ckField.push(curRow);
       }
     });
+  }
+  // 生成字段映射表
+  genReflexData(curSheetRow){
+    // 需要映射
+    var TRAN_CD = curSheetRow[0];
+    var PUB_DICTRY_NM = curSheetRow[5] || "";
+    var PRIV_DICTRY_NM = curSheetRow[2].split(",")[0] || "";
+    var PULDW_MAPG_DICTRY_NM = curSheetRow[3] || "无说明";
+    var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
+    
+    var DICTRY_NM = curSheetRow[5] || "";
+    var DICTRY_DESCR = curSheetRow[3] || "无说明";
+    var DICTRY_TYP_CD = "";
+    var FIELD_CMPR = "";
+    var DATA_ATTR_DESCR = curSheetRow[3] || "无说明";
+    var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
+    if(PUB_DICTRY_NM){
+      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
+      if(!isExist1){
+        this.reflexData.push(curRow1);
+      }
+    }
+    if(DICTRY_NM){
+      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
+      if(!isExist2){
+        this.fieldFactor.push(curRow2);
+      }
+    }
   }
 }
 
@@ -213,7 +248,9 @@ var sqlParams = [
   {tableName:"IB_OM_RULECOND_INFO",data:ck.condData},
   {tableName:"IB_OM_CHECKMODE_INFO",data:ck.modeInfo},
   {tableName:"IB_OM_RULECOND_RLT",data:ck.ruleCondData},
-  {tableName:"IB_OM_CHECKFIELD_RLT",data:ck.ckField}
+  {tableName:"IB_OM_CHECKFIELD_RLT",data:ck.ckField},
+  {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:ck.reflexData},
+  {tableName:"IB_PARA_KEYWORDS_INFO",data:ck.fieldFactor},
 ];
 
 var insertSql = utils.genInsertSql(sqlParams);
@@ -222,6 +259,9 @@ var deleteSql = utils.genDeleteSql(sqlParams);
 
 utils.writeToOutDir("dsInsert.sql",insertSql,"复核");
 utils.writeToOutDir("dsDelete.sql",deleteSql,"复核");
+
+let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
+utils.writeToOutDir(`刁信瑞-SIT3-复核规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 
 db.dbHandler(sqlParams,"复核");

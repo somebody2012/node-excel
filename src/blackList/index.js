@@ -172,6 +172,7 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%BN%';
 utils.writeToOutDir("blackListInsert.sql",insertSql,"黑名单");
 utils.writeToOutDir("blackListDelete.sql",deleteSql + "\n" + deleteAll,"黑名单");
 
-
+let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
+utils.writeToOutDir(`刁信瑞-SIT3-黑名单规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 db.dbHandler(arr,"黑名单");

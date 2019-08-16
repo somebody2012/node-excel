@@ -156,7 +156,7 @@ class DoubleScreen {
         var SCRN_NO = row[5]; //屏幕编号
         var SCRN_SORT_SEQ_NO = row[2]; //屏幕排列序号
         var BUNDRY_INDCT_NM = row[3]; //界面显示名称
-        var GT_VAL_SCP_CD = "0"; //取值范围代码 0 变量 2 固定值
+        var GT_VAL_SCP_CD = row[6] || "0"; //取值范围代码 0 变量 2 固定值 3 金额
         var KEY_VAL = ""; //KEY取值
         var ENTR_NM = row[4]; //条目名称
         var STUS_CD = "1"; //状态代码 1 生效
@@ -211,6 +211,8 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%DS%';
 utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
 utils.writeToOutDir("dsDelete.sql",deleteSql + "\n" + deleteAll,"双屏确认");
 
+let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
+utils.writeToOutDir(`刁信瑞-SIT3-双屏确认规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 db.dbHandler(sqlParams,"双屏");
 

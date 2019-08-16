@@ -536,6 +536,9 @@ utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权")
 db.dbHandler(arr.concat(arr1),"授权",true);//全量
 // db.dbHandler(arr,"授权",true);//无字段映射
 
+let updateVersionSql = [deleteTransWordSql,deleteAllAuth,insertSql].join(`\n\n\n\n\n\n`);
+utils.writeToOutDir(`刁信瑞-SIT3-授权规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+
 
 
 
