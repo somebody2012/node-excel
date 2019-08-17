@@ -157,7 +157,7 @@ class DoubleScreen {
         var SCRN_SORT_SEQ_NO = row[2]; //屏幕排列序号
         var BUNDRY_INDCT_NM = row[3]; //界面显示名称
         var GT_VAL_SCP_CD = row[6] || "0"; //取值范围代码 0 变量 2 固定值 3 金额
-        var KEY_VAL = ""; //KEY取值
+        var KEY_VAL = row[7] || ""; //KEY取值 取值范围位 2 时 用此字段
         var ENTR_NM = row[4]; //条目名称
         var STUS_CD = "1"; //状态代码 1 生效
         var REMRK_1 = ""; //备注1

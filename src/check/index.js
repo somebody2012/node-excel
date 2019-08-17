@@ -17,7 +17,8 @@ var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var ckScreenWorkSheet = workSheets.find(v => v.name.includes(config.ckSheetName)).data;
 // 字段页签
 var ckScreenFieldsWorkSheet = workSheets.find(v => v.name.includes(config.ckSheetNameField)).data;
-
+// 字段映射页签
+var ckFieldsReflectWorkSheet = workSheets.find(v => v.name.includes(config.ckSheetReflectField)).data;
 
 ckScreenWorkSheet = ckScreenWorkSheet.filter(row => {
   var isEmptyRow = (row.length == 0);
@@ -33,6 +34,16 @@ ckScreenFieldsWorkSheet = ckScreenFieldsWorkSheet.filter(row => {
   var isEmptyRow = (row.length == 0);
   var nullValue = ["",undefined,null]
   var isEmptyCell = [row[0],row[1],row[2]].some(v => nullValue.includes(v));
+  var isEmpty = isEmptyRow || isEmptyCell;
+  if(isEmpty){
+    console.log(chalk.blue(`${row[0]} 复核字段统计被过滤  ${row.toString()}`));
+  }
+  return !isEmpty;
+})
+ckFieldsReflectWorkSheet = ckFieldsReflectWorkSheet.filter(row => {
+  var isEmptyRow = (row.length == 0);
+  var nullValue = ["",undefined,null]
+  var isEmptyCell = [row[0],row[1],row[2],row[3]].some(v => nullValue.includes(v));
   var isEmpty = isEmptyRow || isEmptyCell;
   if(isEmpty){
     console.log(chalk.blue(`${row[0]} 复核字段统计被过滤  ${row.toString()}`));
@@ -118,6 +129,8 @@ class CK {
     });
     // 生成复核字段表
     this.generateCkFields();
+    // 生成字段映射
+    this.genReflexData();
   }
   // 生成规则表
   generateRuleInfoData(RULE_NO,curSheetRow){
@@ -188,7 +201,6 @@ class CK {
       // var data = this.uniqSheetFieldsData[key];
       for(var i=0;i<this.uniqSheetFieldsData.length;i++){
         var row = this.uniqSheetFieldsData[i];
-        this.genReflexData(row);
         var TRAN_CD = row[0]; //	交易码
         var LPR_NO = row[1]; //	法人编号
         var RCHK_FIELD_NM = row[2]; //	复核字段名称
@@ -203,30 +215,34 @@ class CK {
     });
   }
   // 生成字段映射表
-  genReflexData(curSheetRow){
-    // 需要映射
-    var TRAN_CD = curSheetRow[0];
-    var PUB_DICTRY_NM = curSheetRow[5] || "";
-    var PRIV_DICTRY_NM = curSheetRow[2].split(",")[0] || "";
-    var PULDW_MAPG_DICTRY_NM = curSheetRow[3] || "无说明";
-    var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
-    
-    var DICTRY_NM = curSheetRow[5] || "";
-    var DICTRY_DESCR = curSheetRow[3] || "无说明";
-    var DICTRY_TYP_CD = "";
-    var FIELD_CMPR = "";
-    var DATA_ATTR_DESCR = curSheetRow[3] || "无说明";
-    var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
-    if(PUB_DICTRY_NM){
-      var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
-      if(!isExist1){
-        this.reflexData.push(curRow1);
+  genReflexData(){
+    ckFieldsReflectWorkSheet = ckFieldsReflectWorkSheet.slice(1);
+    for(var i=0;i<ckFieldsReflectWorkSheet.length;i++){
+      let curSheetRow = ckFieldsReflectWorkSheet[i];
+      // 需要映射
+      var TRAN_CD = curSheetRow[0];
+      var PUB_DICTRY_NM = curSheetRow[2] || "";
+      var PRIV_DICTRY_NM = curSheetRow[1] || "";
+      var PULDW_MAPG_DICTRY_NM = curSheetRow[3] || "无说明";
+      var curRow1 = [TRAN_CD,PUB_DICTRY_NM,PRIV_DICTRY_NM,PULDW_MAPG_DICTRY_NM];
+      
+      var DICTRY_NM = curSheetRow[2] || "";
+      var DICTRY_DESCR = curSheetRow[3] || "无说明";
+      var DICTRY_TYP_CD = "";
+      var FIELD_CMPR = "";
+      var DATA_ATTR_DESCR = curSheetRow[3] || "无说明";
+      var curRow2 = [DICTRY_NM,DICTRY_DESCR,DICTRY_TYP_CD,FIELD_CMPR,DATA_ATTR_DESCR];
+      if(PUB_DICTRY_NM){
+        var isExist1 = this.reflexData.find(v => (v[0] == TRAN_CD && v[1] == PUB_DICTRY_NM));
+        if(!isExist1){
+          this.reflexData.push(curRow1);
+        }
       }
-    }
-    if(DICTRY_NM){
-      var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
-      if(!isExist2){
-        this.fieldFactor.push(curRow2);
+      if(DICTRY_NM){
+        var isExist2 = this.fieldFactor.find(v => (v[0] == DICTRY_NM && v[1] == DICTRY_DESCR));
+        if(!isExist2){
+          this.fieldFactor.push(curRow2);
+        }
       }
     }
   }
@@ -248,19 +264,23 @@ var sqlParams = [
   {tableName:"IB_OM_RULECOND_INFO",data:ck.condData},
   {tableName:"IB_OM_CHECKMODE_INFO",data:ck.modeInfo},
   {tableName:"IB_OM_RULECOND_RLT",data:ck.ruleCondData},
-  {tableName:"IB_OM_CHECKFIELD_RLT",data:ck.ckField},
+  {tableName:"IB_OM_CHECKFIELD_RLT",data:ck.ckField}
+];
+var arr1 = [
   {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:ck.reflexData},
   {tableName:"IB_PARA_KEYWORDS_INFO",data:ck.fieldFactor},
 ];
 
-var insertSql = utils.genInsertSql(sqlParams);
+
+var insertSql = utils.genInsertSql(sqlParams.concat(arr1));
 
 var deleteSql = utils.genDeleteSql(sqlParams);
+var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 
 utils.writeToOutDir("dsInsert.sql",insertSql,"复核");
-utils.writeToOutDir("dsDelete.sql",deleteSql,"复核");
+utils.writeToOutDir("dsDelete.sql",deleteSql + "\n" + deleteTransWordSql,"复核");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [deleteSql,deleteTransWordSql,insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-复核规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 

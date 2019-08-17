@@ -40,4 +40,5 @@ module.exports = {
   ckExcelName:"复核规则统计.xlsx",
   ckSheetName:"复核规则统计",
   ckSheetNameField:"复核字段",
+  ckSheetReflectField:"复核字段映射",
 }
