@@ -3,6 +3,7 @@ var chalk = require('chalk');
 var axios = require("axios");
 var config = require("../config");
 var getConnection = require("./connection.js");
+var utils = require("../utils/index");
 
 
 var exeInsert = function(tableName,excelData,whitchEnv){
@@ -32,7 +33,8 @@ var exeInsert = function(tableName,excelData,whitchEnv){
   });
 }
 
-var exeDelete = function(tableName,excelData,whitchEnv){
+var exeDelete = function(tableName,excelData,whitchEnv,isDeleteKeyWords){
+  
   return new Promise(async (resolve,reject) => {
     var values = excelData.slice(1).map(row => {
       return `"${row[0]}"`;
@@ -58,7 +60,14 @@ var exeDelete = function(tableName,excelData,whitchEnv){
   });
 }
 
-// var updateC
+
+var updateCacheVersion = async function(){
+  var conn = await getConnection("DEV");
+  var selectSqlStr = ``;
+  conn.query(selectSqlStr,[],(err,ret,fields) => {
+    debugger
+  })
+}
 
 var refreshCache = function(url,desc){
   return new Promise((resolve,reject) => {
@@ -75,10 +84,10 @@ var refreshCache = function(url,desc){
   });
 }
 
-var dbHandler = async function(arr,type,needRefresh = true){
+var dbHandler = async function(arr,type,needRefresh = true,isDeleteKeyWords){
   // //插入DEV 数据库
   console.log(chalk.red(`${type} - DEV`));
-  var deleteAllDev = arr.map(item => exeDelete(item.tableName,item.data,"DEV"));
+  var deleteAllDev = arr.map(item => exeDelete(item.tableName,item.data,"DEV",isDeleteKeyWords));
   await Promise.all(deleteAllDev);
   var insertAllDev = arr.map(item => exeInsert(item.tableName,item.data,"DEV"));
   await Promise.all(insertAllDev);
@@ -105,11 +114,14 @@ var dbHandler = async function(arr,type,needRefresh = true){
   
 }
 
+
+
 module.exports = {
   exeInsert,
   exeDelete,
   dbHandler,
-  refreshCache
+  refreshCache,
+  updateCacheVersion
 }
 
 
