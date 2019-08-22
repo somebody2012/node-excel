@@ -14,6 +14,7 @@ var isFilteredData = []; // 被过滤的数据
 var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.auSheetName)).data;
+utils.transformEmpty(curWorkSheet);
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
 curWorkSheet = curWorkSheet.filter((v,i) => {
   if(i == 0){
@@ -122,7 +123,7 @@ class Auth {
       // 是否强制授权
       var isForceCond = (sameCondData[0][6] || "是").includes("是");
       // 是否金额超限
-      var isAmtCond = sameCondData[0][4].includes("金额超限");
+      var isAmtCond = (sameCondData[0][4] || "").trim() == "金额超限";
       if(isNeedFaceAuth){
         // 需要人脸识别 生成两条规则 一条通过规则一条不通过规则，或关系
         // 通过

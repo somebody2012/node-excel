@@ -15,6 +15,10 @@ var excelPath = path.resolve(__dirname,config.doubleSrceenExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var doubleScreenWorkSheet = workSheets.find(v => v.name.includes(config.dsSheetName)).data;
 var doubleScreenFieldsWorkSheet = workSheets.find(v => v.name.includes(config.dsSheetNameField)).data;
+
+utils.transformEmpty(doubleScreenWorkSheet);
+utils.transformEmpty(doubleScreenFieldsWorkSheet);
+
 doubleScreenWorkSheet = doubleScreenWorkSheet.filter(row => row.length !== 0);
 doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => row.length !== 0);
 doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => {

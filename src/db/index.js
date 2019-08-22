@@ -58,6 +58,8 @@ var exeDelete = function(tableName,excelData,whitchEnv){
   });
 }
 
+// var updateC
+
 var refreshCache = function(url,desc){
   return new Promise((resolve,reject) => {
     console.log(chalk.yellow(`开始刷新${desc}缓存`));
@@ -95,7 +97,7 @@ var dbHandler = async function(arr,type,needRefresh = true){
   
   if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
     await Promise.all([
-      refreshCache(config.refreshRedisUrlDev,"DEV"),
+      // refreshCache(config.refreshRedisUrlDev,"DEV"),
       // refreshCache(config.refreshRedisUrlSit,"SIT")
     ]);
     process.exit();

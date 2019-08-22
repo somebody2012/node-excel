@@ -59,16 +59,12 @@ var genInsertSql = function(arr){
     }
     
   }
-  sql = `
-SET AUTOCOMMIT=0;
-BEGIN;\n
-  ${sql}
-  \nCOMMIT;`;
+  sql = `${sql}`;
   // utils.writeToOutDir(filename,sql,config.authSuffix);
 return sql;
 }
 var genDeleteSql = function(arr){
-  var delSql = "SET AUTOCOMMIT=0;\nBEGIN;\n\n";
+  var delSql = "\n\n";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
     var tableName = curTableInfo.tableName;
@@ -80,12 +76,12 @@ var genDeleteSql = function(arr){
       delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n`;
     }
   }
-  delSql += "\nCOMMIT;";
+  delSql += "\n";
   return delSql;
 }
 // 删除字段转换表
 var genDeleteTransWordSql = function(arr){
-  var delSql = "SET AUTOCOMMIT=0;\nBEGIN;\n\n";
+  var delSql = "\n\n";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
     var tableName = curTableInfo.tableName;
@@ -99,7 +95,7 @@ var genDeleteTransWordSql = function(arr){
       return sqlItem
     }).join("") + "\n")
   }
-  delSql += "\nCOMMIT;";
+  delSql += "\n";
   return delSql;
 }
 
@@ -136,6 +132,21 @@ var copySrcExcel = function(srcFileName,distDirname){
     console.log(chalk.red(`不存在文件${src}`));
   }
 }
+var transformEmpty = function(curWorkSheet){
+  for(var i=0;i<curWorkSheet.length;i++){
+    var curRow = curWorkSheet[i];
+    for(var j=0;j<curRow.length;j++){
+      var curValue = curRow[j];
+      if(!curValue){
+        if(curValue === 0){
+          curRow[j] = "0";
+        }else{
+          curRow[j] = "";
+        }
+      }
+    }
+  }
+}
 
 
 module.exports = {
@@ -145,5 +156,6 @@ module.exports = {
   genDeleteSql,
   writeToOutDir,
   copySrcExcel,
-  genDeleteTransWordSql
+  genDeleteTransWordSql,
+  transformEmpty
 }
