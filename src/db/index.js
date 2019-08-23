@@ -61,11 +61,42 @@ var exeDelete = function(tableName,excelData,whitchEnv,isDeleteKeyWords){
 }
 
 
-var updateCacheVersion = async function(){
+var updateCacheVersion = async function(options){
+  var defaultOptions = {
+    table:"TP_CIP_CACHE",
+    condKey:"CACH_ID",
+    condKeyValue:['trankeywords','omcond2','trancode','printinfo','omrule','omcond1','omauth','omcheck','omrulemode','quyChkInfo','parameter'],
+    updateKey:"VERS_NO"
+  };
+  options = options || defaultOptions;
+  var {table,condKey,condKeyValue,updateKey} = options;
   var conn = await getConnection("DEV");
-  var selectSqlStr = ``;
-  conn.query(selectSqlStr,[],(err,ret,fields) => {
-    debugger
+  var sqlStr = `SELECT * FROM ${table} WHERE ${condKey} IN ( ${condKeyValue.map(v => `'${v}'`).join(",")} );`;
+  conn.query(sqlStr,[],(err,ret,fields) => {
+    if(err){
+      console.log("error")
+      return;
+    }
+    var updateStrArr = ret.map(retItem => {
+      var oldValue = retItem[updateKey] || "";
+      var newValue = String(parseInt(oldValue) + 1);
+      if(!retItem[condKey] || !newValue){
+        console.log("error");
+        return;
+      }
+      var updateStr = `UPDATE ${table} SET ${updateKey} = '${newValue}' WHERE ${condKey} = '${retItem[condKey]}';`;
+      return updateStr;
+    });
+    console.log(updateStrArr);
+    updateStrArr.map(sqlStr => {
+      conn.query(sqlStr,[],(err,ret,fields) => {
+        if(err){
+          console.log("error");
+          return;
+        }
+        console.log(`${sqlStr} ----成功`)
+      });
+    });
   })
 }
 
@@ -101,15 +132,16 @@ var dbHandler = async function(arr,type,needRefresh = true,isDeleteKeyWords){
 
 
 
-
+  updateCacheVersion();
 
   
   if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
-    await Promise.all([
-      // refreshCache(config.refreshRedisUrlDev,"DEV"),
-      // refreshCache(config.refreshRedisUrlSit,"SIT")
-    ]);
-    process.exit();
+    
+    // await Promise.all([
+    //   // refreshCache(config.refreshRedisUrlDev,"DEV"),
+    //   // refreshCache(config.refreshRedisUrlSit,"SIT")
+    // ]);
+    // process.exit();
   }
   
 }
