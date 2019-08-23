@@ -541,7 +541,7 @@ let updateVersionSql = [deleteTransWordSql,deleteAllAuth,insertSql].join(`\n\n\n
 utils.writeToOutDir(`刁信瑞-SIT3-授权规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 
-
+utils.checkCond(arr[1].data);
 
 
 /* 
