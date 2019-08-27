@@ -21,7 +21,7 @@ curWorkSheet = curWorkSheet.filter((v,i) => {
     return true;
   }
   
-  if(!v[1] && !v[2] && !v[5] && !v[7] && !(v[6])){
+  if(!v[1] || !v[2] || !v[5] || !v[7] || !(v[6])){
     var msg = `${v[2] || "无交易码"}-${v[3]}-::${chalk.red("数据统计不全")},被过滤`;
     console.log(chalk.blue(`${msg}`));
     isFilteredData.push(msg);
@@ -69,6 +69,7 @@ curWorkSheet.slice(1).forEach(curSheetRow => {
 });
 class Auth {
   constructor(){
+    this.dynamicRows = {};// 动态生成的行
     /**
      * uniqSheetData 结构
       {
@@ -470,10 +471,52 @@ class Auth {
     if(isExist) return;
     this.ruleCondData.push(curRow);
   }
+  getId(curSheetRow){
+    return curSheetRow[2] + _.uniqueId("$");
+  }
+  // 生成人脸识别不通过行
+  genFaceRecordNotPass(curSheetRows){
+    var col0 = curSheetRows[0][0]; // 组别 
+    var col1 = curSheetRows[0][1]; // 功能码 
+    var col2 = curSheetRows[0][2]; // 交易码 
+    var col3 = curSheetRows[0][3]; // 交易名称 
+    var col4 = curSheetRows[0][4]; // 授权条件 
+    var col5 = curSheetRows[0][5]; // 条件关系 
+    var col6 = curSheetRows[0][6]; // 是否强制授权 
+    var col7 = curSheetRows[0][7]; // 是否映射 
+    var col8 = curSheetRows[0][8]; // 交易字段 
+    var col9 = curSheetRows[0][9]; // 字段说明 
+    var col10 = curSheetRows[0][10]; // 比较符1 
+    var col11 = curSheetRows[0][11]; // 比较值1 
+    var col12 = curSheetRows[0][12]; // 比较符2 
+    var col13 = curSheetRows[0][13]; // 比较值2 
+    var col14 = curSheetRows[0][14]; // 是否人脸识别 
+    var col15 = curSheetRows[0][15]; // 授权方式 
+    var col16 = curSheetRows[0][16]; // 授权级别 
+    var col17 = curSheetRows[0][17]; // 通过人脸识别时授权方式 
+    var col18 = curSheetRows[0][18]; // 人脸识别结果 
+    var col19 = curSheetRows[0][19]; // 通过人脸识别时授权级别 
+    var col20 = curSheetRows[0][20]; // 规则确认人 
+    var row = [col0,col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col13,col14,col15,col16,col17,col18,col19,col20];
+  }
   // 改变授权方式
   changeAuthMethod(){
     var uniqSheetData = this.uniqSheetData;
-    
+    for(key in uniqSheetData){
+      let curSheetRows = uniqSheetData[key];
+      // 是否强制
+      var isForceCond = (curSheetRows[0][6] || "是").includes("是");
+      // 是否金额超限
+      var isAmtCond = (curSheetRows[0][4] || "").trim() == "金额超限";
+      // 是否需要人脸识别
+      var isNeedFace = curSheetRows[0][15].includes("是")
+      if(isAmtCond){
+        continue;
+      }
+      if(isNeedFace){
+        
+      }
+    }
   }
   
 
