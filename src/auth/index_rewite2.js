@@ -491,8 +491,8 @@ class Auth {
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "netcheckHandlePass"; // 交易字段 
     var col9 = "联网核查手工通过"; // 字段说明 
-    var col10 = "1"; // 比较符1 
-    var col11 = ""; // 比较值1 
+    var col10 = "=="; // 比较符1 
+    var col11 = "1"; // 比较值1 
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
@@ -521,6 +521,9 @@ class Auth {
   }
   // 生成人脸识别通过数据行
   genFaceRecoPassData(curSheetRows){
+    var groupId = this.getId(curSheetRows[0]);
+
+    // 新增行
     var col15 = curSheetRows[0][15]; // 授权方式 
     var col16 = curSheetRows[0][16]; // 授权级别 
     var col17 = curSheetRows[0][17]; // 通过人脸识别时授权方式 
@@ -541,7 +544,7 @@ class Auth {
     var col2 = curSheetRows[0][2]; // 交易码 
     var col3 = curSheetRows[0][3]; // 交易名称 
     var col4 = "人脸识别通过"; // 授权条件 
-    var col5 = this.getId(curSheetRows[0]); // 条件关系 
+    var col5 = groupId; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceRecognition"; // 交易字段 
@@ -559,6 +562,49 @@ class Auth {
     // var col20 = curSheetRows[0][20]; // 规则确认人 
     var row = [col0,col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col13,col14,col15,col16,col17,col18,col19,col20];
     this.dynamicWorkSheet.push(row);
+    // ---------------------------------------------------------------
+    // 拷贝现有行 第一行作为规则行
+    for(var i=0;i<curSheetRows.length;i++){
+      var rowItem = curSheetRows[i];
+      var col15 = rowItem[15]; // 授权方式 
+      var col16 = rowItem[16]; // 授权级别 
+      var col17 = rowItem[17]; // 通过人脸识别时授权方式 
+      var col19 = rowItem[19]; // 通过人脸识别时授权级别 
+      var col20 = curSheetRows[0][20]; // 规则确认人 
+      if(col17.includes("不授权")){
+        // this.genNotAuthCond(rowItem);
+      }else if(col17.includes("本地授权")){
+        col15 = "本地授权";
+        col16 = col19;
+      }else if(col17.includes("不改变")){
+        // 不操作
+      }else{
+        col20 += "需人脸，无通过人脸识别时授权方式";
+      }
+      var col0 = rowItem[0]; // 组别 
+      var col1 = rowItem[1]; // 功能码 
+      var col2 = rowItem[2]; // 交易码 
+      var col3 = rowItem[3]; // 交易名称 
+      var col4 = rowItem[4]; // 授权条件 
+      var col5 = groupId; // 条件关系 
+      var col6 = "否"; // 是否强制授权 
+      var col7 = rowItem[7]; // 是否映射 
+      var col8 = rowItem[8];; // 交易字段 
+      var col9 = rowItem[9];; // 字段说明 
+      var col10 = rowItem[10];; // 比较符1 
+      var col11 = rowItem[11];; // 比较值1 
+      var col12 = rowItem[12];; // 比较符2 
+      var col13 = rowItem[13];; // 比较值2 
+      var col14 = "否"; // 是否人脸识别 
+      // var col15 = rowItem[0][15]; // 授权方式 
+      // var col16 = rowItem[0][16]; // 授权级别 
+      // var col17 = rowItem[0][17]; // 通过人脸识别时授权方式 
+      var col18 = rowItem[18]; // 人脸识别结果 
+      // var col19 = rowItem[0][19]; // 通过人脸识别时授权级别 
+      // var col20 = rowItem[0][20]; // 规则确认人 
+      var row = [col0,col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col13,col14,col15,col16,col17,col18,col19,col20];
+      this.dynamicWorkSheet.push(row);
+    }
   }
   // 生成人脸识别不通过数据行
   genFaceRecoNotPassData(curSheetRows){
@@ -626,11 +672,11 @@ class Auth {
       if(isAmtCond){
         continue;
       }
-      if(!isForceCond){
-        // 不为强制条件 增加联网核查手工通过授权条件 或条件
-        var groupId = this.getId(curSheetRows[0]);
-        this.genNetCheckHandlePassCond(curSheetRows,groupId);
-      }
+
+      // 增加联网核查手工通过授权条件 或条件
+      var groupId = this.getId(curSheetRows[0]);
+      this.genNetCheckHandlePassCond(curSheetRows,groupId);
+
       if(isNeedFace){
         // 需要人脸识别
         this.genFaceRecognitionNotPassCond(curSheetRows);
@@ -669,9 +715,9 @@ var deleteAllAuth = `\n
   DELETE FROM IB_OM_AUTHMODE_INFO WHERE MODE_NO LIKE '%AU%';
 \n`;
 
-utils.writeToOutDir("authInsert.sql",insertSql,"授权");
-utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql + "\n" + deleteAllAuth,"授权");
-utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权");
+utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
+utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql + "\n" + deleteAllAuth,"授权2");
+utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权2");
 
 // db.dbHandler(arr,"授权",true);
 
