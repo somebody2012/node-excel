@@ -30,6 +30,7 @@ ckScreenWorkSheet = ckScreenWorkSheet.filter(row => {
   }
   return !isEmpty;
 })
+utils.transformEmpty(ckScreenWorkSheet);
 ckScreenFieldsWorkSheet = ckScreenFieldsWorkSheet.filter(row => {
   var isEmptyRow = (row.length == 0);
   var nullValue = ["",undefined,null]

@@ -22,7 +22,7 @@ curWorkSheet = curWorkSheet.filter(row => {
   }
   return !(isEmpty || isPassedCheck);
 });
-
+utils.transformEmpty(curWorkSheet);
 class BlackList {
   constructor(){
     /**

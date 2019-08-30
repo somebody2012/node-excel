@@ -14,7 +14,7 @@ var excelPath = path.resolve(__dirname,config.doubleLineExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.doubleLineSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
-
+utils.transformEmpty(curWorkSheet);
 class DoubleLine {
   constructor(){
     /**

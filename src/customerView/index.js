@@ -12,7 +12,7 @@ var excelPath = path.resolve(__dirname,config.customerViewExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.cvSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
-
+utils.transformEmpty(curWorkSheet);
 class CustomerView {
   constructor(){
     /**

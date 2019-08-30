@@ -13,7 +13,7 @@ var excelPath = path.resolve(__dirname,config.customerInputExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
 var curWorkSheet = workSheets.find(v => v.name.includes(config.ciSheetName)).data;
 curWorkSheet = curWorkSheet.filter(row => row.length != 0);
-
+utils.transformEmpty(curWorkSheet);
 class CustomerInput {
   constructor(){
     /**

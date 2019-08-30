@@ -143,6 +143,8 @@ var transformEmpty = function(curWorkSheet){
         }else{
           curRow[j] = "";
         }
+      }else{
+        curRow[j] = String(curValue).trim();
       }
     }
   }

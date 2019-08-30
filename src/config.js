@@ -2,11 +2,11 @@ module.exports = {
   AU_START_NUM:0,//授权
   CV_START_NUM:20000,// 客户视图
   DS_START_NUM:30000,// 双屏
-  NI_START_NUM:40000,// 联网核查
+  // NI_START_NUM:40000,// 联网核查
   DH_START_NUM:50000,// 双热线
   BN_START_NUM:60000,// 黑名单
   CK_START_NUM:70000,// 复核
-  FE_START_NUM:80000,// 收费
+  // FE_START_NUM:80000,// 收费
   CI_START_NUM:90000,// 客户信息录入
   // SVN 规则统计目录
   svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/",
