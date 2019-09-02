@@ -558,7 +558,7 @@ class Auth {
     var col19 = curSheetRows[0][19]; // 通过人脸识别时授权级别 
     var col20 = curSheetRows[0][20]; // 规则确认人 
     if(col17.includes("不授权")){
-      this.genNotAuthCond(curSheetRows);
+      this.genNotAuthCond(curSheetRows,groupId);
     }else if(col17.includes("本地授权")){
       col15 = "本地授权";
       col16 = col19;
@@ -661,13 +661,14 @@ class Auth {
     this.dynamicWorkSheet.push(row);
   }
   // 生成不授权条件
-  genNotAuthCond(curSheetRows){
+  genNotAuthCond(curSheetRows,groupId){
     var col0 = curSheetRows[0][0]; // 组别 
     var col1 = curSheetRows[0][1]; // 功能码 
     var col2 = curSheetRows[0][2]; // 交易码 
     var col3 = curSheetRows[0][3]; // 交易名称 
     var col4 = "不授权条件"; // 授权条件 
-    var col5 = curSheetRows[0][5]; // 条件关系 
+    // var col5 = curSheetRows[0][5]; // 条件关系 
+    var col5 = groupId; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "$notAuthCond$"; // 交易字段 
