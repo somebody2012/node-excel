@@ -97,7 +97,7 @@ class DoubleScreen {
     var HOLI_FLG = "N";
     var RULE_TRI_POSITION = "1";
     var SUIT_CHNL_SCP = "TE";
-    var SUIT_LPR_SCP = "9999";
+    var SUIT_LPR_SCP = "0000";
     var SUIT_ORG_SCP = curSheetRow[6];
     var SUIT_TX_SCP = curSheetRow[7];
     var RULE_COMNT = curSheetRow[16];

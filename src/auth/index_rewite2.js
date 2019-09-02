@@ -81,7 +81,10 @@ class Auth {
       return row[5];
     })
     this.changeAuthMethod();
-    curWorkSheet = curWorkSheet.concat(this.dynamicWorkSheet)
+    curWorkSheet = curWorkSheet.concat(this.dynamicWorkSheet);
+    curWorkSheet = curWorkSheet.sort((a,b) => {
+      return a[2].slice(0,8) - b[2].slice(0,8);
+    })
     this.uniqSheetData = _.groupBy(curWorkSheet.slice(1),function(row){
       return row[5];
     })
@@ -165,7 +168,7 @@ class Auth {
     var HOLI_FLG = "N";  // 节假日标志
     var RULE_TRI_POSITION = "1";  // 规则触发位置
     var SUIT_CHNL_SCP = "TE";  // 适用渠道范围
-    var SUIT_LPR_SCP = "9999";  // 适用法人范围
+    var SUIT_LPR_SCP = "0000";  // 适用法人范围
     var SUIT_ORG_SCP = "*,";  // 适用机构范围
     var SUIT_TX_SCP = curSheetRow[2];  // 适用交易范围---
     var RULE_COMNT = curSheetRow[4];  // 规则说明---
@@ -374,9 +377,9 @@ class Auth {
     var curSheetRow = curSheetRows[0];
 
     var OPRTN_COND_NO = OPRTN_COND_NO;	 // 运营条件编号
-    var DICTRY_NM = "faceRecognition";	 // 字典名称
+    var DICTRY_NM = "faceChkRslt";	 // 字典名称
     var OPER_SYM_1 = "==";	 // 运算符号1
-    var CMPR_VAL = "0";	 // 比较值
+    var CMPR_VAL = "";	 // 比较值
     var OPER_SYM_2 = "";	 // 运算符号2
     var VALUE2 = "";	 // 比较值2
     var TRAN_CD = curSheetRow[2];	 // 交易码
@@ -395,7 +398,7 @@ class Auth {
     var curSheetRow = curSheetRows[0];
 
     var OPRTN_COND_NO = OPRTN_COND_NO;	 // 运营条件编号
-    var DICTRY_NM = "faceRecognition";	 // 字典名称
+    var DICTRY_NM = "faceChkRslt";	 // 字典名称
     var OPER_SYM_1 = "==";	 // 运算符号1
     var CMPR_VAL = "1";	 // 比较值
     var OPER_SYM_2 = "";	 // 运算符号2
@@ -489,10 +492,35 @@ class Auth {
     var col5 = groupId; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
-    var col8 = "netcheckHandlePass"; // 交易字段 
+    var col8 = "chkRslt"; // 交易字段 
     var col9 = "联网核查手工通过"; // 字段说明 
     var col10 = "=="; // 比较符1 
-    var col11 = "1"; // 比较值1 
+    var col11 = "2"; // 比较值1 
+    var col12 = ""; // 比较符2 
+    var col13 = ""; // 比较值2 
+    var col14 = "否"; // 是否人脸识别 
+    var col15 = "本地授权"; // 授权方式 
+    var col16 = "1"; // 授权级别 
+    var col17 = ""; // 通过人脸识别时授权方式 
+    var col18 = ""; // 人脸识别结果 
+    var col19 = ""; // 通过人脸识别时授权级别 
+    var col20 = curSheetRows[0][20]; // 规则确认人 
+    var row = [col0,col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col13,col14,col15,col16,col17,col18,col19,col20];
+    this.dynamicWorkSheet.push(row);
+  }
+  genFaceRecoHandlePassCond(curSheetRows,groupId){
+    var col0 = curSheetRows[0][0]; // 组别 
+    var col1 = curSheetRows[0][1]; // 功能码 
+    var col2 = curSheetRows[0][2]; // 交易码 
+    var col3 = curSheetRows[0][3]; // 交易名称 
+    var col4 = "人脸识别手工通过"; // 授权条件 
+    var col5 = groupId; // 条件关系 
+    var col6 = "否"; // 是否强制授权 
+    var col7 = curSheetRows[0][7]; // 是否映射 
+    var col8 = "faceChkRslt"; // 交易字段 
+    var col9 = "人脸识别手工通过"; // 字段说明 
+    var col10 = "=="; // 比较符1 
+    var col11 = "2"; // 比较值1 
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
@@ -547,7 +575,7 @@ class Auth {
     var col5 = groupId; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
-    var col8 = "faceRecognition"; // 交易字段 
+    var col8 = "faceChkRslt"; // 交易字段 
     var col9 = "人脸识别通过"; // 字段说明 
     var col10 = "=="; // 比较符1 
     var col11 = "1"; // 比较值1 
@@ -602,8 +630,8 @@ class Auth {
       var col18 = rowItem[18]; // 人脸识别结果 
       // var col19 = rowItem[0][19]; // 通过人脸识别时授权级别 
       // var col20 = rowItem[0][20]; // 规则确认人 
-      var row = [col0,col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col13,col14,col15,col16,col17,col18,col19,col20];
-      this.dynamicWorkSheet.push(row);
+      var row1 = [col0,col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col13,col14,col15,col16,col17,col18,col19,col20];
+      this.dynamicWorkSheet.push(row1);
     }
   }
   // 生成人脸识别不通过数据行
@@ -616,10 +644,10 @@ class Auth {
     var col5 = curSheetRows[0][5]; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
-    var col8 = "faceRecognition"; // 交易字段 
+    var col8 = "faceChkRslt"; // 交易字段 
     var col9 = "人脸识别不通过"; // 字段说明 
-    var col10 = "!="; // 比较符1 
-    var col11 = "1"; // 比较值1 
+    var col10 = "=="; // 比较符1 
+    var col11 = ""; // 比较值1 
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
@@ -676,6 +704,9 @@ class Auth {
       // 增加联网核查手工通过授权条件 或条件
       var groupId = this.getId(curSheetRows[0]);
       this.genNetCheckHandlePassCond(curSheetRows,groupId);
+      // 人脸识别手工通过需要授权 或条件
+      var groupId1 = this.getId(curSheetRows[0]);
+      this.genFaceRecoHandlePassCond(curSheetRows,groupId1);
 
       if(isNeedFace){
         // 需要人脸识别

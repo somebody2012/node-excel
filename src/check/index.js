@@ -140,7 +140,7 @@ class CK {
     var HOLI_FLG = "N";
     var RULE_TRI_POSITION = "1";
     var SUIT_CHNL_SCP = "TE";
-    var SUIT_LPR_SCP = curSheetRow[13] || "9999";
+    var SUIT_LPR_SCP = curSheetRow[13] || "0000";
     var SUIT_ORG_SCP = "*,";
     var SUIT_TX_SCP = curSheetRow[2];
     var RULE_COMNT = curSheetRow[6] || "无规则说明";
