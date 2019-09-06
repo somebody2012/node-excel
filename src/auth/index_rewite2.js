@@ -229,7 +229,7 @@ class Auth {
       var AUTH_LVL_CD = curSheetRow[16] || 1; // 授权级别代码
       var REMOTE_AUTH_LVL_CD = ""; // 远程授权级别代码
       var AUTH_ORG_TYP_CD = ""; // 授权机构类型代码
-      var AUTH_ORG_NO = "2039"; // 授权机构号
+      var AUTH_ORG_NO = ""; // 授权机构号
       var AUTH_PSTN_NO = "*"; // 授权岗位编号
       var UGNT_FLG = ""; // 加急标志
       var AUTH_DESCR = curSheetRow[4]; // 授权描述
@@ -451,7 +451,7 @@ class Auth {
     var AUTH_LVL_CD = curSheetRow[19] || 1; // 授权级别代码
     var REMOTE_AUTH_LVL_CD = ""; // 远程授权级别代码
     var AUTH_ORG_TYP_CD = ""; // 授权机构类型代码
-    var AUTH_ORG_NO = "2039"; // 授权机构号
+    var AUTH_ORG_NO = ""; // 授权机构号
     var AUTH_PSTN_NO = "*"; // 授权岗位编号
     var UGNT_FLG = ""; // 加急标志
     var AUTH_DESCR = curSheetRow[4]; // 授权描述
