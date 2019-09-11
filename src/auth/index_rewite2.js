@@ -34,7 +34,7 @@ curWorkSheet = curWorkSheet.filter((v,i) => {
       return;
     }else{
       var isForceCond = v[6].includes("是");
-      var isEmpty = [v[8],v[10],String(v[11] === 0 ? "0" : v[11])].some(v => !v);
+      var isEmpty = [v[8],v[10]].some(v => !v);
       if(!isForceCond && isEmpty){
         var msg = `${v[2] || "无交易码"}-${v[3]}-::${chalk.red("数据统计不全")},被过滤`;
         console.log(chalk.blue(`${msg}`));
