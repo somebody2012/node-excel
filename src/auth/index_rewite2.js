@@ -77,6 +77,11 @@ class Auth {
         funcKey2:[[7,8,9]],
       }
      */
+    let uniqSheetData1 = _.groupBy(curWorkSheet.slice(1),function(row){
+      return row[2];
+    })
+    this.genNetCheckFaceRecoHandlePassCond(uniqSheetData1);
+
     this.uniqSheetData = _.groupBy(curWorkSheet.slice(1),function(row){
       return row[5];
     })
@@ -646,8 +651,8 @@ class Auth {
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
     var col9 = "人脸识别不通过"; // 字段说明 
-    var col10 = "=="; // 比较符1 
-    var col11 = ""; // 比较值1 
+    var col10 = "in"; // 比较符1 
+    var col11 = "0,"; // 比较值1 
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
@@ -702,12 +707,12 @@ class Auth {
         continue;
       }
 
-      // 增加联网核查手工通过授权条件 或条件
-      var groupId = this.getId(curSheetRows[0]);
-      this.genNetCheckHandlePassCond(curSheetRows,groupId);
-      // 人脸识别手工通过需要授权 或条件
-      var groupId1 = this.getId(curSheetRows[0]);
-      this.genFaceRecoHandlePassCond(curSheetRows,groupId1);
+      // // 增加联网核查手工通过授权条件 或条件
+      // var groupId = this.getId(curSheetRows[0]);
+      // this.genNetCheckHandlePassCond(curSheetRows,groupId);
+      // // 人脸识别手工通过需要授权 或条件
+      // var groupId1 = this.getId(curSheetRows[0]);
+      // this.genFaceRecoHandlePassCond(curSheetRows,groupId1);
 
       if(isNeedFace){
         // 需要人脸识别
@@ -715,6 +720,18 @@ class Auth {
       }else{
         // 不需要人脸识别
       }
+    }
+  }
+  // 人脸识别 联网核查 手工通过条件
+  genNetCheckFaceRecoHandlePassCond(uniqSheetData){
+    for(var key in uniqSheetData){
+      let curSheetRows = uniqSheetData[key];
+      // 增加联网核查手工通过授权条件 或条件
+      var groupId = this.getId(curSheetRows[0]);
+      this.genNetCheckHandlePassCond(curSheetRows,groupId);
+      // 人脸识别手工通过需要授权 或条件
+      var groupId1 = this.getId(curSheetRows[0]);
+      this.genFaceRecoHandlePassCond(curSheetRows,groupId1);
     }
   }
   
