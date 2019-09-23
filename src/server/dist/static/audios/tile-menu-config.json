@@ -1,0 +1,9 @@
+[
+  {
+    "isOnlyShowOne": false,
+    "tileWidth": 130,
+    "tileHeight": 130,
+    "tileSpace": 8,
+    "secondLevelMenuType": "DIALOG"
+  }
+]

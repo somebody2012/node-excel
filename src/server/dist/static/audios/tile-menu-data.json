@@ -1,0 +1,158 @@
+[
+  [
+    {
+      "categoryName": "银行卡功能",
+      "themeColor": "#3E9CFF",        
+      "layout": [3,2],
+      "items": [
+        {
+          "tradeName": "自助开卡",
+          "icon": "static/images/ico/bankcard01.png",
+          "bg": "",
+          "size": "wide",
+          "isEnabled": true,
+          "activeClass": "test-active",
+          "navigationMode": "step",
+          "tadPath": "/selfservice/src/modules/auto-create-card/AutoCreateCard.tad",
+          "code": "1001"
+        },
+        {
+          "tradeName": "卡激活",
+          "icon": "static/images/ico/bankcard03.png",
+          "bg": "",          
+          "size": "wide",
+          "isEnabled": true,
+          "navigationMode": "step",
+          "tadPath": "/selfservice/src/modules/card-activation/CardActivation.tad",
+          "code": "1002"
+        },
+        {
+          "tradeName": "电子银行",
+          "icon": "static/images/ico/bankcard04.png",
+          "bg": "",
+          "size": "normal",
+          "isEnabled": true,
+          "code": "1003",
+          "children": [
+            [
+              {
+                "categoryName": "银行卡功能",
+                "themeColor": "#3E9CFF",        
+                "layout": [1,2],
+                "items":  [
+                  {
+                    "tradeName": "公交卡查询",
+                    "icon": "static/images/ico/bankcard06.png",
+                    "bg": "",
+                    "size": "normal",
+                    "isEnabled": true,
+                    "navigationMode": "step",
+                    "tadPath": "/selfservice/src/modules/bus-card-select/BusCardSelect.tad",
+                    "code": "2001"
+                  },
+                  {
+                    "tradeName": "公交卡充值",
+                    "icon": "static/images/ico/bankcard09.png",
+                    "bg": "",
+                    "size": "normal",
+                    "isEnabled": true,
+                    "navigationMode": "step",
+                    "tadPath": "/selfservice/src/modules/bus-card-recharge/BusCardRecharge.tad",
+                    "code": "2002"
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "icon": "static/images/ico/bankcard03.png", 
+          "tradeName": "密码修改", 
+          "bg": "",
+          "size": "normal",
+          "isEnabled": false
+        },
+        {
+          "icon": "static/images/ico/bankcard03.png", 
+          "tradeName": "密码修改", 
+          "bg": "",
+          "size": "normal",
+          "isEnabled": false
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "categoryName": "理财业务",
+      "themeColor": "#70D48A",
+      "layout": [3,2],        
+      "items": [
+        {
+          "tradeName": "个人理财",
+          "icon": "static/images/ico/fin01.png",
+          "bg": "",
+          "size": "wide",
+          "isEnabled": true,
+          "navigationMode": "step",
+          "tadPath": ""
+        },
+        {"icon": "static/images/ico/fin02.png", "tradeName": "密码修改", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/fin03.png", "tradeName": "信用卡自动扣款", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/fin04.png", "tradeName": "电子银行", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/fin05.png", "tradeName": "精灵信使", "size": "smallWide", "isEnabled": false},
+        {"icon": "static/images/ico/fin06.png", "tradeName": "电子现金", "size": "small", "isEnabled": false},
+        {"icon": "static/images/ico/fin01.png", "tradeName": "信息修改", "size": "small", "isEnabled": false},
+        {"icon": "static/images/ico/fin02.png", "tradeName": "密码修改", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/fin03.png", "tradeName": "信用卡自动扣款", "size": "normal", "isEnabled": false}
+      ]
+    }
+  ],
+  [
+    {
+      "categoryName": "查询转账",
+      "themeColor": "#C576CD",
+      "layout": [2,2],        
+      "items": [
+        {"icon": "static/images/ico/que01.png", "tradeName": "借记卡激活", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/que02.png", "tradeName": "密码修改", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/que03.png", "tradeName": "信用卡自动扣款", "size": "normal", "isEnabled": false},
+        {"icon": "static/images/ico/que04.png", "tradeName": "电子银行", "size": "normal", "isEnabled": false}
+      ]
+    },
+    {
+      "categoryName": "个人信息维护",
+      "themeColor": "#E88383",        
+      "layout": [1,1],        
+      "items": [
+        {
+          "tradeName": "个人信息维护",
+          "icon": "static/images/ico/pub.png",
+          "size": "wide",
+          "isEnabled": true,
+          "navigationMode": "step",
+          "tadPath": "/selfservice/src/modules/personal-information-maintenanc/PersonalInformationMaintenanc.tad",
+          "code": "4001"
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "categoryName": "",
+      "themeColor": "",        
+      "layout": [3,2],        
+      "items": [
+        {
+          "tradeName": "",
+          "bg": "static/images/ico/ads.png",
+          "size": [370,600],
+          "isEnabled": true,
+          "navigationMode": "step",
+          "tadPath": "",
+          "code": ""
+        }
+      ]
+    }
+  ]
+]

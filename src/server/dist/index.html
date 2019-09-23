@@ -1,0 +1,103 @@
+<!DOCTYPE html><html><style>body,html{
+        margin:0;
+        padding:0;
+      }
+      .loadingCover{
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        z-index: 40000;
+        background: #000;
+        transition: .3s;
+      }
+      .tipCover{
+        display: none;
+        justify-content:center;
+        text-align: center;
+        position: fixed;
+        z-index: 30000;
+        height: 100%;
+        width: 100%;
+        background: #E1E1E1;
+        align-items:center;
+        color: #555;
+      }
+      .navIconCtn{
+        width: 530px;
+        margin: 0 auto;
+        min-height: 400px;
+      }
+      .navIconItem{
+        margin:0 20px;
+        float: left;
+      }
+      .navIconItem img{
+        width: 65px;
+      }
+      .navIconItem h4{
+        margin: 10px 0;
+      }</style><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>AUMS</title><link rel="shortcut icon" href=/favicon.ico><link href=/static/css/app.d5826158d9c8365990677d5bd145b15a.css rel=stylesheet></head><body><div class=loadingCover></div><div class=tipCover><h3>您当前的浏览器版本过低</h3><h4>请使用以下浏览器版本以继续操作</h4><div class=navIconCtn><div class=navIconItem><a href=https://www.google.cn/chrome/ ><img class="" src=./static/images/navIcon/Chrome.ico alt=""></a><h4>Chrome</h4><h4>49+</h4></div><div class=navIconItem><a href=http://www.firefox.com.cn/ ><img class="" src=./static/images/navIcon/Firefox.ico alt=""></a><h4>Firefox</h4><h4>45+</h4></div><div class=navIconItem><a href=https://support.microsoft.com/zh-cn/help/17621/internet-explorer-downloads><img class="" src=./static/images/navIcon/IE.ico alt=""></a><h4>IE</h4><h4>9+</h4></div><div class=navIconItem><a href=https://www.opera.com/zh-cn><img class="" src=./static/images/navIcon/Opera.ico alt=""></a><h4>Opera</h4><h4>36+</h4></div><div class=navIconItem><a href=https://www.apple.com/cn/safari/ ><img class="" src=./static/images/navIcon/Safai.ico alt=""></a><h4>Safai</h4><h4>9+</h4></div></div></div><div id=app></div><script type=text/javascript src=/static/js/manifest.js></script><script type=text/javascript src=/static/js/vendor.js></script><script type=text/javascript src=/static/js/app.js></script></body></html><script>//浏览器最小支持版本，目前只支持比较第一位版本号
+  //页面显示暂时写死
+  var supVer = {
+    msie: {
+      brand: 'IE',
+      ver: 9
+    },
+    chrome: {
+      brand: 'Chrome',
+      ver: 49
+    },
+    firefox: {
+      brand: 'Firefox',
+      ver: 45
+    },
+    opera: {
+      brand: 'Opera',
+      ver: 36
+    },
+    safari: {
+      brand: 'Safari',
+      ver: 9
+    },
+  }
+
+  function getBrowserInfo() {
+    var Sys = {};
+    var ua = navigator.userAgent.toLowerCase();
+    var re = /(msie|firefox|chrome|opera|version).*?([\d.]+)/;//这里要和上面supVer中的key一致
+    var m = ua.match(re);
+    if(!m){
+      return
+    }
+    Sys.browser = m[1].replace(/version/, "safari");
+    Sys.ver = m[2];
+    console.log(Sys);
+    return Sys;
+  }
+
+  function checkAgent(supVer) {
+    var agentInfo = getBrowserInfo();
+    if(!agentInfo){
+      return
+    }
+    if(Number(agentInfo.ver.split(".")[0]) >= Number(supVer[agentInfo.browser].ver) ){
+      //可用
+    }
+    else{
+      //不可用
+      showTip();
+    }
+    function showTip(){
+      document.querySelector(".tipCover").style.display="block";
+    }
+  }
+
+  function dismissLoading(){
+    document.querySelector(".loadingCover").style.opacity=0;
+    setTimeout(function(){document.querySelector(".loadingCover").style.display="none";}, 300);
+  }
+
+checkAgent(supVer);
+window.onload=function(){
+  dismissLoading();
+}</script>

@@ -1,0 +1,364 @@
+{
+  "communicationTimeout": 30000,
+  "communicationAddress": "https://10.16.2.223:443/abside/abs-",
+  "communicationAddressAccredit": "http://10.16.2.124:31080/abside/te-flow/getTranData",
+  "uploadFileToABSAddress": "https://10.16.2.223:443/abside/abs-ib-fileserver/uploadFile",
+  "viewFileAddress": "https://10.16.2.223:443/abside/abs-ib-fileserver/static/",
+  "absFilePath": "/aase/upload/",
+  "absDownFilePath": "/aase/static/",
+  "afaToJSUploadFilePath": "/publicfile/jsfile/upload/",
+  "afaToJSDownloadFilePath": "/publicfile/jsfile/download/",
+  "plTemplateIp": "http://acaas-gateway.agree/afanewgroup/afa-pl-ple-voucher/voucher/upload",
+  "remoteAFAFilePath": "/fileServer/sharedFiles/elecImage/069/",
+  "remoteAFAPdfPath": "/root/afa/fileServer/sharedFiles/elecPdf",
+  "otherSystemAddress": "10.16.43.231:8080",
+  "agentFilePath": "http://10.16.2.223:8000/afanewgroup/afa-agent-agentmonitor/file/",
+  "BrandInfoNum": 5,
+  "PageSize": 10,
+  "predefineColors": [
+    "#ff4500",
+    "#ff8c00",
+    "#ffd700",
+    "#90ee90",
+    "#00ced1",
+    "#1e90ff",
+    "#c71585",
+    "#c7158577"
+  ],
+  "brnoLevel": [
+    {
+      "value": "0",
+      "label": "0-网点级"
+    },
+    {
+      "value": "1",
+      "label": "1-大社级"
+    },
+    {
+      "value": "2",
+      "label": "2-县级"
+    },
+    {
+      "value": "3",
+      "label": "3-地市级"
+    },
+    {
+      "value": "4",
+      "label": "4-省级"
+    },
+    {
+      "value": "5",
+      "label": "5-国家级"
+    }
+  ],
+  "devState": [
+    {
+      "value": "0",
+      "label": "0-已入库"
+    },
+    {
+      "value": "1",
+      "label": "1-设备布放申请"
+    },
+    {
+      "value": "2",
+      "label": "2-设备布放审批"
+    },
+    {
+      "value": "3",
+      "label": "3-待激活"
+    },
+    {
+      "value": "4",
+      "label": "4-设备投产"
+    },
+    {
+      "value": "5",
+      "label": "5-故障状态"
+    },
+    {
+      "value": "6",
+      "label": "6-报废状态"
+    },
+    {
+      "value": "9",
+      "label": "9-其他"
+    }
+  ],
+  "brnoProp": [
+    {
+      "value": "0",
+      "label": "0-无"
+    },
+    {
+      "value": "1",
+      "label": "1-管理机构"
+    },
+    {
+      "value": "2",
+      "label": "2-营业机构"
+    },
+    {
+      "value": "3",
+      "label": "3-虚拟机构"
+    }
+  ],
+  "brnoState": [
+    {
+      "value": "1",
+      "label": "1-正常"
+    },
+    {
+      "value": "2",
+      "label": "2-被撤并"
+    },
+    {
+      "value": "3",
+      "label": "3-失效"
+    }
+  ],
+  "isEffectivetype": {
+    "1": "是",
+    "2": "否"
+  },
+  "role": {
+    "1": "技术",
+    "2": "业务",
+    "1,2": "技术+业务"
+  },
+  "deviceForm": {
+    "1": "柜式",
+    "2": "PAD"
+  },
+  "userState": {
+    "N": "正常",
+    "H": "休假",
+    "S": "停用",
+    "L": "注销",
+    "LK": "锁定"
+  },
+  "notifyMethod": {
+    "1": "短信",
+    "2": "邮件",
+    "1,2": "短信+邮件"
+  },
+  "deviceStatus": {
+    "0": "关闭",
+    "1": "正常",
+    "2": "停止服务",
+    "3": "部分服务可用",
+    "4": "无法访问P端",
+    "5": "设备待维护",
+    "6": "设备未启用",
+    "7": "未知"
+  },
+  "videoStatus": {
+    "0": "视频中断（客户离开）",
+    "1": "视频正常",
+    "2": "视频未连接",
+    "3": "视频中断（坐席挂断）",
+    "4": "未知"
+  },
+  "customReviews": {
+    "0": "不满意",
+    "1": "一般",
+    "2": "满意"
+  },
+  "roleState": {
+    "0": "失效",
+    "1": "正常",
+    "2": "锁定"
+  },
+  "transactionType": {
+    "01": "存款",
+    "02": "取款",
+    "03": "转账",
+    "04": "查询"
+  },
+  "tradeStatus": {
+    "0": "成功",
+    "1": "失败",
+    "2": "超时",
+    "3": "已冲正",
+    "4": "未处理"
+  },
+  "expflag": {
+    "A": "系统",
+    "M": "人工"
+  },
+  "operatetype": {
+    "00": "子交易处理",
+    "01": "停机",
+    "03": "吞卡",
+    "99": "提示信息"
+  },
+  "adStatustype": {
+    "0": "已发送通知",
+    "1": "C端已受理",
+    "2": "C端更新策略已下载",
+    "3": "版本升级成功",
+    "4": "版本升级失败"
+  },
+  "reatincarddealflagtype": {
+    "0": "未处理",
+    "1": "移交",
+    "2": "归还卡盾箱"
+  },
+  "reatincardtypetype": {
+    "0": "开卡过程中吞卡",
+    "1": "非开卡过程中吞卡"
+  },
+  "Status": {
+    "0": "0-启用",
+    "1": "1-不启用"
+  },
+  "BsAttr1": {
+    "2": "2-个人业务",
+    "1": "1-对公业务"
+  },
+  "BsIDTp1": {
+    "1": "1-预约业务"
+  },
+  "postStatus": {
+    "0": "0-停用",
+    "1": "1-启用"
+  },
+  "roleclass": {
+    "01": "01-岗位"
+  },
+  "userLevel": {
+    "0": "无授权级别柜员",
+    "1": "实习柜员",
+    "3": "普通柜员",
+    "5": "机构主办",
+    "7": "机构主管",
+    "8": "机构协办负责人",
+    "9": "机构负责人"
+  },
+  "state": {
+    "0": "0-停用",
+    "1": "1-启用"
+  },
+  "winState": {
+    "0": "0-不可用",
+    "1": "1-可用"
+  },
+  "callRule": {
+    "1": "1-按队列优先级",
+    "2": "2-加权算法",
+    "3": "3-按入队时间"
+  },
+  "winServStatus": {
+    "0": "0-离线",
+    "1": "1-空闲",
+    "2": "2-正在办理",
+    "3": "3-暂停服务"
+  },
+  "transferFlag": {
+    "0": "0-不可以",
+    "1": "1-可以"
+  },
+  "IsReserve": {
+    "1": "是",
+    "0": "否"
+  },
+  "isDefault": {
+    "0": "默认模板",
+    "1": "非默认"
+  },
+  "callVoice": {
+    "0": "普通话",
+    "1": "英语",
+    "2": "粤语"
+  },
+  "isShow": {
+    "0": "显示",
+    "1": "不显示"
+  },
+  "PreserveFlag": {
+    "Y": "Y-是",
+    "N": "N-否"
+  },
+  "AuthType": {
+    "2": "2-远程授权",
+    "4": "4-集中授权",
+    "5": "5"
+  },
+  "AuthAdeTye": {
+    "01": "01-文本框",
+    "02": "02-下拉框",
+    "03": "03-日期框",
+    "04": "04-金额框",
+    "05": "05-表格",
+    "06": "06-单选框",
+    "07": "07-复选框"
+  },
+  "PlayStyle": {
+    "1": "循环播放",
+    "2": "随机播放",
+    "3": "仅播放一次"
+  },
+  "WordStyle": {
+    "0": "从右向左移(默认)",
+    "1": "立即显示",
+    "2": "从下向上移",
+    "3": "从左向右展开",
+    "4": "百叶窗从左向右展开",
+    "5": "从上向下展开",
+    "6": "从上向下移",
+    "7": "闪烁显示",
+    "8": "连续左移"
+  },
+  "PictureStyle": {
+    "0": "立即显示（默认)",
+    "1": "渐变显示"
+  },
+  "HomePlayFlag": {
+    "0": "不显示",
+    "1": "显示"
+  },
+  "adType": {
+    "P": "图片",
+    "V": "视频",
+    "C": "文字"
+  },
+  "Status1CList": {
+    "0": "0-未发布",
+    "1": "1-已发布"
+  },
+  "GrdList": {
+    "1": "1-一般公告",
+    "2": "2-紧急公告"
+  },
+  "UserStates":{
+    "N": "N-正常",
+    "D": "D-离职",
+    "O": "O-值班",
+    "H": "H-休假",
+    "S": "S-停用",
+    "L": "L-注销",
+    "LK": "LK-锁定"
+  },
+  "SysCode":{
+    "01": "柜面",
+    "05": "移动"
+  },
+  "operStep":{
+    "0": "新增",
+    "1": "修改",
+    "2": "审批生效",
+    "3": "审批拒绝",
+    "4": "删除"
+  },
+  "elec_sealstatus":{
+    "0": "待审批",
+    "1": "审批生效",
+    "2": "审批拒绝",
+    "3": "已删除"
+  },
+  "dealflagtype":{
+    "0": "未处理",
+    "1": "移交",
+    "2": "归还卡盾箱"
+  }
+}

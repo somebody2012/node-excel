@@ -40,7 +40,7 @@ class DoubleScreen {
       }
      */
     this.uniqSheetData =  _.groupBy(doubleScreenWorkSheet.slice(1),function(row){
-      return row[7] + "_" + row[17];
+      return row[7] + "_" + row[2];
     })
     // 双屏字段表
     this.uniqSheetFieldsData =  _.groupBy(doubleScreenFieldsWorkSheet.slice(1),function(row){
