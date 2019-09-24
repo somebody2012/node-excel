@@ -164,16 +164,16 @@ var deleteSql = utils.genDeleteSql(arr);
 
 let deleteAll = `\n
 DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'CI';
-DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%CI%';
-DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%CI%';
-DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%CI%';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'CI%';
+DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'CI%';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CI%';
 \n
 `;
 
 utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
 utils.writeToOutDir("customerInputDelete.sql",deleteSql + "\n" + deleteAll,"客户信息录入");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [deleteAll,insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-客户信息录入规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 db.dbHandler(arr,"客户信息录入");

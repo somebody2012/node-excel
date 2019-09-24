@@ -142,9 +142,9 @@ var deleteSql = utils.genDeleteSql(arr);
 
 let deleteAll = `\n
 DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'DH';
-DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%DH%';
-DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%DH%';
-DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%DH%';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'DH%';
+DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'DH%';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'DH%';
 \n
 `;
 
@@ -152,7 +152,7 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE '%DH%';
 utils.writeToOutDir("doubleLineInsert.sql",insertSql,"双热线");
 utils.writeToOutDir("doubleLineDelete.sql",deleteSql + "\n" + deleteAll,"双热线");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [deleteAll,insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-双热线规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 db.dbHandler(arr,"双热线");

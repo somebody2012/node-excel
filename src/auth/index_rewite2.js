@@ -576,12 +576,12 @@ class Auth {
     var col1 = curSheetRows[0][1]; // 功能码 
     var col2 = curSheetRows[0][2]; // 交易码 
     var col3 = curSheetRows[0][3]; // 交易名称 
-    var col4 = "人脸识别通过"; // 授权条件 
+    var col4 = `人脸识别通过`; // 授权条件 
     var col5 = groupId; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
-    var col9 = "人脸识别通过"; // 字段说明 
+    var col9 = `人脸识别通过`; // 字段说明  
     var col10 = "=="; // 比较符1 
     var col11 = "1"; // 比较值1 
     var col12 = ""; // 比较符2 
@@ -645,12 +645,12 @@ class Auth {
     var col1 = curSheetRows[0][1]; // 功能码 
     var col2 = curSheetRows[0][2]; // 交易码 
     var col3 = curSheetRows[0][3]; // 交易名称 
-    var col4 = "人脸识别不通过"; // 授权条件 
+    var col4 = `${curSheetRows[0][4]}`; // 授权条件  人脸识别不通过
     var col5 = curSheetRows[0][5]; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
-    var col9 = "人脸识别不通过"; // 字段说明 
+    var col9 = `${curSheetRows[0][9]}`; // 字段说明 人脸识别不通过
     var col10 = "in"; // 比较符1 
     var col11 = "0,"; // 比较值1 
     var col12 = ""; // 比较符2 
@@ -759,9 +759,9 @@ var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 
 var deleteAllAuth = `\n
   DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'AU';
-  DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE '%AU%';
-  DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE '%AU%';
-  DELETE FROM IB_OM_AUTHMODE_INFO WHERE MODE_NO LIKE '%AU%';
+  DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'AU%';
+  DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'AU%';
+  DELETE FROM IB_OM_AUTHMODE_INFO WHERE MODE_NO LIKE 'AU%';
 \n`;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
