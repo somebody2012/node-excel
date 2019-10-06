@@ -532,8 +532,8 @@ class Auth {
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
-    var col15 = "本地授权"; // 授权方式 
-    var col16 = "1"; // 授权级别 
+    var col15 = curSheetRows[0][15]; // 授权方式  手工通过按照不通过授权
+    var col16 = curSheetRows[0][16]; // 授权级别 
     var col17 = ""; // 通过人脸识别时授权方式 
     var col18 = ""; // 人脸识别结果 
     var col19 = ""; // 通过人脸识别时授权级别 
