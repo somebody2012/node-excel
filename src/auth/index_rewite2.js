@@ -658,9 +658,9 @@ class Auth {
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
-    var col9 = `${curSheetRows[0][9]}`; // 字段说明 人脸识别不通过
+    var col9 = `${curSheetRows[0][9]} 人脸识别不通过`; // 字段说明 人脸识别不通过
     var col10 = "in"; // 比较符1 
-    var col11 = "0,"; // 比较值1 
+    var col11 = ""; // 比较值1 
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
