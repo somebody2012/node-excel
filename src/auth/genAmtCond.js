@@ -312,6 +312,8 @@ class GenAmtCond{
     for(var i=0;i<currencyCond.length;i++){
       var curItem = currencyCond[i];
       for(var j=0;j<curItem.cash.length;j++){
+        let cashOper1 = ">";
+        let cashOper2 = "<=";
         var cash = curItem.cash;
         var curCondNo = "AU" + this.condNoObj().padStart(5);
         var tnNwSnCond = [ curCondNo,TnNwSn,"==","0","","","","现金支付触发授权","",this.curDayStr,"批量新增","1","0","现金支付" ];
