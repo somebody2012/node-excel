@@ -7,6 +7,7 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 
+
 utils.copySrcExcel(config.srcExcelName,__dirname);
 
 var { amtCondsObj,amtConds } = require("./genAmtCond.js");
@@ -412,7 +413,7 @@ class Auth {
     var OPER_SYM_2 = "";	 // 运算符号2
     var VALUE2 = "";	 // 比较值2
     var TRAN_CD = curSheetRow[2];	 // 交易码
-    var COND_DESCR = `${curSheetRow[2]} 人脸识别通过`;	 // 条件描述
+    var COND_DESCR = `${curSheetRow[2]}`;	 // 条件描述
     var OPER_TELR_NO = "900001";	 // 操作柜员号
     var OPER_DT = this.curDayStr;	 // 操作时间
     var OPER_RSN =  "批量新增";	 // 操作原因
@@ -581,12 +582,12 @@ class Auth {
     var col1 = curSheetRows[0][1]; // 功能码 
     var col2 = curSheetRows[0][2]; // 交易码 
     var col3 = curSheetRows[0][3]; // 交易名称 
-    var col4 = `${curSheetRows[0][4]} 人脸识别通过`; // 授权条件 
+    var col4 = `${curSheetRows[0][4]}`; // 授权条件 
     var col5 = groupId; // 条件关系 
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
-    var col9 = `${curSheetRows[0][9]} 人脸识别通过`; // 字段说明  
+    var col9 = `${curSheetRows[0][9]}`; // 字段说明  
     var col10 = "=="; // 比较符1 
     var col11 = "1"; // 比较值1 
     var col12 = ""; // 比较符2 
@@ -658,7 +659,7 @@ class Auth {
     var col6 = "否"; // 是否强制授权 
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
-    var col9 = `${curSheetRows[0][9]} 人脸识别不通过`; // 字段说明 人脸识别不通过
+    var col9 = `${curSheetRows[0][9]}`; // 字段说明 人脸识别不通过  不需要人脸识别条件  不通过不会到授权
     var col10 = "in"; // 比较符1 
     var col11 = ""; // 比较值1 
     var col12 = ""; // 比较符2 
