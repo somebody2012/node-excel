@@ -8,9 +8,10 @@ var utils = require("../utils/index");
 var db = require("../db/index");
 
 
+
 utils.copySrcExcel(config.srcExcelName,__dirname);
 
-var { amtCondsObj,amtConds } = require("./genAmtCond.js");
+var { amtCondsObj,amtConds,currencyCond } = require("./genAmtCond.js");
 var isFilteredData = []; // 被过滤的数据
 var excelPath = path.resolve(__dirname,config.srcExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -143,7 +144,15 @@ class Auth {
 
       if(isAmtCond){
         // 金额条件
-        this.generateAmtCondData(RULE_NO,curSheetRows[0]);
+        
+        var needAmtCondSingle = ["00802002"];
+        if(needAmtCondSingle.includes(curSheetRows[0][2])){
+          // 单独公共金额条件
+          this.generateAmtCondDataSingle(RULE_NO,curSheetRows[0]);
+        }else{
+          // 用公共金额条件
+          this.generateAmtCondData(RULE_NO,curSheetRows[0]);
+        }
       }else{
         // 不是金额条件
         var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
@@ -254,7 +263,88 @@ class Auth {
       this.authModeData.push(curRow);
     }
   }
-  // 生成金额条件表
+  // 金额条件 非公共金额条件
+  generateAmtCondDataSingle(RULE_NO,curSheetRow){
+    // 生成 条件 模式--begin
+    var TnNwSn = curSheetRow[10] || "CASH_TRAN_FLG";
+    var txAmt = curSheetRow[8] || "TX_AMT";
+    var Ccy =  curSheetRow[12] || "CUR_CD";
+    var tempCondRuleNo = [];// 零时规则条件号 生成规则条件映射
+
+    for(var i=0;i<currencyCond.length;i++){
+      var curItem = currencyCond[i];
+      for(var j=0;j<curItem.cash.length;j++){
+        let cashOper1 = ">";
+        let cashOper2 = "<=";
+        if(j == 0) cashOper1 = ">=";
+
+        var cash = curItem.cash;
+        var curCondNo = "AU" + this.condNoObj().padStart(5);
+        tempCondRuleNo.push(curCondNo);
+        var tnNwSnCond = [ curCondNo,TnNwSn,"==","0","","","","现金支付触发授权","",this.curDayStr,"批量新增","1","0","现金支付" ];
+        var txAmtCond = [ curCondNo,txAmt,cashOper1,cash[j][1],cashOper2,cash[j][2],"","金额超限触发授权","",this.curDayStr,"批量新增","1","0","交易金额" ];
+        var ccyCond = [ curCondNo,Ccy,  "==",curItem.Ccy,"",  "",       "","币种授权","",this.curDayStr,"批量新增","1","0",curItem.name ];
+        var mode = [curCondNo,"2",cash[j][0],"","","","*","",`${curItem.name},现金,金额在范围${cashOper1==">"?"(":"["}${cash[j][1]}-${cash[j][2]}${cashOper2=="<="?"]":")"}内，触发授权`,"","","","","现金金额超限模式",""];
+        // 生成条件
+        this.generateAmtCondDataInner(tnNwSnCond,curSheetRow);
+        this.generateAmtCondDataInner(txAmtCond,curSheetRow);
+        this.generateAmtCondDataInner(ccyCond,curSheetRow);
+        // 生成模式
+        this.generateAmtAuthModeData(mode);
+        if(curItem.cashFaceNotPassedIndex.includes(j)){
+          // 现金 只有 5w-10w 需要人脸识别规则，转账20w-50w 需要人脸识别规则
+          //faceRecognitionRow 人脸识别为 "" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
+          // 只判断50000,	100000 区间 不通过则判断 金额 和 币种
+          // var faceReCond = [ curCondNo,"faceChkRslt",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
+          var faceReCond = [ curCondNo,"faceChkRslt",  "in","2,","","","",`现金金额${cashOper1==">"?"(":"["}50000-100000${cashOper2=="<="?"]":")"} 人脸识别未通过授权`,"",this.curDayStr,"批量新增","1","0","人脸识别" ];
+          // 生成条件
+          this.generateAmtCondDataInner(faceReCond,curSheetRow);
+        }
+      }
+      for(var j=0;j<curItem.transfer.length;j++){
+        let cashOper1 = ">";
+        let cashOper2 = "<=";
+        if(j == 0) cashOper1 = ">=";
+
+
+        var transfer = curItem.transfer;
+        var curCondNo = "AU" + this.condNoObj().padStart(5);
+        tempCondRuleNo.push(curCondNo);
+        var tnNwSnCond = [ curCondNo,TnNwSn,"==","1","","","","转账触发授权","",this.curDayStr,"批量新增","1","0","转账标识" ];
+        var txAmtCond = [ curCondNo,txAmt,cashOper1,transfer[j][1],cashOper2,transfer[j][2],"","金额超限触发授权","",this.curDayStr,"批量新增","1","0","交易金额" ];
+        var ccyCond = [ curCondNo,Ccy,"==",curItem.Ccy,"","","","币种授权","",this.curDayStr,"批量新增","1","0",curItem.name];
+        var mode = [curCondNo,"2",transfer[j][0],"","","","*","",`${curItem.name},转账,金额在范围${cashOper1==">"?"(":"["}${transfer[j][1]}-${transfer[j][2]}${cashOper2=="<="?"]":")"}内，触发授权`,"","","","","转账金额超限模式",""];
+        // 生成条件
+        this.generateAmtCondDataInner(tnNwSnCond,curSheetRow);
+        this.generateAmtCondDataInner(txAmtCond,curSheetRow);
+        this.generateAmtCondDataInner(ccyCond,curSheetRow);
+        // 生成模式
+        this.generateAmtAuthModeData(mode);
+        if(curItem.transferFaceNotPassedIndex.includes(j)){
+          //faceRecognitionRow 人脸识别为 "" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
+          // 只判断50000,	  200000 区间 不通过则判断 金额 和 币种
+          // var faceReCond = [ curCondNo,"faceChkRslt",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
+          var faceReCond = [ curCondNo,"faceChkRslt",  "in","2,","","","",`转账金额${cashOper1==">"?"(":"["}50000-200000${cashOper2=="<="?"]":")"} 人脸识别未通过授权`,"",this.curDayStr,"批量新增","1","0","人脸识别" ];
+          // 生成条件
+          this.generateAmtCondDataInner(faceReCond,curSheetRow);
+        }
+      }
+    }
+    // 生成 条件 模式--end
+
+    // 生成规则条件映射表
+    for(var i = 0;i < tempCondRuleNo.length;i++){
+      var RULE_COND_NO = tempCondRuleNo[i]; // 条件号
+      var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
+      var OPRTN_RULE_NO = RULE_NO; // 规则号
+      var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
+      var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
+      if(!isExist){
+        this.ruleCondData.push(curRow);
+      }
+    }
+  }
+  // 生成金额条件表 公共条件
   generateAmtCondData(RULE_NO,curSheetRow){
     // 生成规则条件映射表
     for(var i = 0;i < amtConds.length;i++){
