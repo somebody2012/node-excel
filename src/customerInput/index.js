@@ -29,7 +29,7 @@ class CustomerInput {
     })
     this.ruleNoObj = utils.generateNo(config.CI_START_NUM);// 规则号生成函数
     this.condNoObj = utils.generateNo(config.CI_START_NUM);// 条件号生成函数
-    this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
+    this.FIELD_SEQ_NO_OBJ = utils.generateNo(config.CI_START_NUM);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
     this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_DT","OPER_RSN"]];

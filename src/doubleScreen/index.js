@@ -31,7 +31,7 @@ class DoubleScreen {
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     this.startRuleNoFun = utils.generateNo(config.DS_START_NUM);// 规则号
     this.startCondNoFun = utils.generateNo(config.DS_START_NUM);// 条件号
-    this.FIELD_SEQ_NO_FUN = utils.generateNo(1);// 模式序号
+    this.FIELD_SEQ_NO_FUN = utils.generateNo(config.DS_START_NUM);// 模式序号
     /**
      * uniqSheetData 结构
       {
