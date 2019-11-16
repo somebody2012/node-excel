@@ -623,8 +623,8 @@ class Auth {
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
-    var col15 = curSheetRows[0][15]; // 授权方式  手工通过按照不通过授权
-    var col16 = curSheetRows[0][16]; // 授权级别 
+    var col15 = "本地授权";//curSheetRows[0][15]; // 授权方式  手工通过按照不通过授权
+    var col16 = "1";//curSheetRows[0][16]; // 授权级别 
     var col17 = ""; // 通过人脸识别时授权方式 
     var col18 = ""; // 人脸识别结果 
     var col19 = ""; // 通过人脸识别时授权级别 
@@ -751,8 +751,8 @@ class Auth {
     var col7 = curSheetRows[0][7]; // 是否映射 
     var col8 = "faceChkRslt"; // 交易字段 
     var col9 = `${curSheetRows[0][9]}`; // 字段说明 人脸识别不通过  不需要人脸识别条件  不通过不会到授权
-    var col10 = "in"; // 比较符1 
-    var col11 = ""; // 比较值1 
+    var col10 = "!="; // 比较符1 
+    var col11 = "1"; // 比较值1 
     var col12 = ""; // 比较符2 
     var col13 = ""; // 比较值2 
     var col14 = "否"; // 是否人脸识别 
