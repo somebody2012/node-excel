@@ -117,11 +117,11 @@ var refreshCache = function(url,desc){
 
 var dbHandler = async function(arr,type,needRefresh = true,isDeleteKeyWords){
   // //插入DEV 数据库
-  console.log(chalk.red(`${type} - DEV`));
-  var deleteAllDev = arr.map(item => exeDelete(item.tableName,item.data,"DEV",isDeleteKeyWords));
-  await Promise.all(deleteAllDev);
-  var insertAllDev = arr.map(item => exeInsert(item.tableName,item.data,"DEV"));
-  await Promise.all(insertAllDev);
+  // console.log(chalk.red(`${type} - DEV`));
+  // var deleteAllDev = arr.map(item => exeDelete(item.tableName,item.data,"DEV",isDeleteKeyWords));
+  // await Promise.all(deleteAllDev);
+  // var insertAllDev = arr.map(item => exeInsert(item.tableName,item.data,"DEV"));
+  // await Promise.all(insertAllDev);
 
   // // // 插入 SIT 数据库
   // console.log(chalk.red(`${type} - SIT`));
@@ -132,17 +132,17 @@ var dbHandler = async function(arr,type,needRefresh = true,isDeleteKeyWords){
 
 
 
-  updateCacheVersion();
+  // updateCacheVersion();
 
   
-  if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
+  // if(!(String(process.argv[2]) || "").includes("0") && needRefresh){
     
-    // await Promise.all([
-    //   // refreshCache(config.refreshRedisUrlDev,"DEV"),
-    //   // refreshCache(config.refreshRedisUrlSit,"SIT")
-    // ]);
-    // process.exit();
-  }
+  //   // await Promise.all([
+  //   //   // refreshCache(config.refreshRedisUrlDev,"DEV"),
+  //   //   // refreshCache(config.refreshRedisUrlSit,"SIT")
+  //   // ]);
+  //   // process.exit();
+  // }
   
 }
 
