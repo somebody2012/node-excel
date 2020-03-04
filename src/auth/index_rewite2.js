@@ -9,7 +9,7 @@ var db = require("../db/index");
 
 
 
-utils.copySrcExcel(config.srcExcelName,__dirname);
+// utils.copySrcExcel(config.srcExcelName,__dirname);
 
 var { amtCondsObj,amtConds,currencyCond } = require("./genAmtCond.js");
 var isFilteredData = []; // 被过滤的数据
