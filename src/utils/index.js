@@ -70,7 +70,11 @@ var genDeleteSql = function(arr){
     var tableName = curTableInfo.tableName;
     var data = curTableInfo.data;
     var tableData = data.slice(1);
-    var keyWord = data[0][0]
+    var keyWord = data[0][0];
+    if(curTableInfo.tableName == 'IB_OM_RULECOND_RLT'){
+      delSql +=tableData.map(v => `DELETE FROM ${tableName} WHERE RULE_COND_NO='${v[0]}' AND CMPL_MODE_FLG='${v[1]}' AND OPRTN_RULE_NO='${v[2]}';`).join("\n")+"\n";
+      continue;
+    }
     var inValues = tableData.map(v => `"${String(v[0])}"`.replace(/\"/g,"\'").replace(/\'/g,"\'"));
     if(tableData.length > 0){
       delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n`;

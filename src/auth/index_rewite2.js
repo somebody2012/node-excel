@@ -117,8 +117,8 @@ class Auth {
     this.fieldFactor = [["DICTRY_NM","DICTRY_DESCR","DICTRY_TYP_CD","FIELD_CMPR","DATA_ATTR_DESCR"]];
 
     // 增加金额条件
-    this.condData = this.condData.concat(amtCondsObj.condData.slice(1));
-    this.authModeData = this.authModeData.concat(amtCondsObj.authModeData.slice(1));
+    // this.condData = this.condData.concat(amtCondsObj.condData.slice(1));
+    // this.authModeData = this.authModeData.concat(amtCondsObj.authModeData.slice(1));
     // console.log(chalk.green(`金额条件 ${this.condData[1][0]}  -  ${this.condData.slice(-1)[0][0]}`));
 
     this.init();
@@ -846,8 +846,8 @@ var auth = new Auth();
 var arr = [
   {tableName:"IB_OM_RULE_INFO",data:auth.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:auth.condData},
-  {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
   {tableName:"IB_OM_AUTHMODE_INFO",data:auth.authModeData},
+  {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
 ];
 var arr1 = [
   {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:auth.reflexData},
@@ -865,13 +865,13 @@ var deleteAllAuth = `\n
 \n`;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
-utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql + "\n" + deleteAllAuth,"授权2");
+utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql ,"授权2");
 utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权2");
 
 // db.dbHandler(arr,"授权",true);
 
 
-let updateVersionSql = [deleteTransWordSql,deleteAllAuth,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [deleteTransWordSql,insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-授权规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 
