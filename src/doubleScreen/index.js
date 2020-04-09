@@ -213,12 +213,12 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'DS%';
 `;
 
 utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
-utils.writeToOutDir("dsDelete.sql",deleteSql + "\n" + deleteAll,"双屏确认");
+utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
 
-let updateVersionSql = [deleteSql,deleteAll,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-双屏确认规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
-db.dbHandler(sqlParams,"双屏");
+// db.dbHandler(sqlParams,"双屏");
 
 
 

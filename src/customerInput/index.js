@@ -7,7 +7,7 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 var chalk = require("chalk");
-// utils.copySrcExcel(config.customerInputExcelName,__dirname);
+utils.copySrcExcel(config.customerInputExcelName,__dirname);
 
 var excelPath = path.resolve(__dirname,config.customerInputExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -171,10 +171,10 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CI%';
 `;
 
 utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
-utils.writeToOutDir("customerInputDelete.sql",deleteSql + "\n" + deleteAll,"客户信息录入");
+utils.writeToOutDir("customerInputDelete.sql",deleteSql,"客户信息录入");
 
-let updateVersionSql = [deleteAll,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-客户信息录入规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
-db.dbHandler(arr,"客户信息录入");
+// db.dbHandler(arr,"客户信息录入");
 
