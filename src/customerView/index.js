@@ -164,9 +164,9 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CV%';
 
 
 utils.writeToOutDir("customerViewInsert.sql",insertSql,"客户视图");
-utils.writeToOutDir("customerViewDelete.sql",deleteSql + "\n" + deleteAll,"客户视图");
+utils.writeToOutDir("customerViewDelete.sql",deleteSql,"客户视图");
 
-let updateVersionSql = [deleteAll,insertSql].join(`\n\n\n\n\n\n`);
+let updateVersionSql = [insertSql].join(`\n\n\n\n\n\n`);
 utils.writeToOutDir(`刁信瑞-SIT3-客户视图规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 
 db.dbHandler(arr,"客户视图");

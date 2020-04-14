@@ -23,8 +23,11 @@ doubleScreenWorkSheet = doubleScreenWorkSheet.filter(row => row.length !== 0);
 doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => row.length !== 0);
 doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => {
   var nullValue = ["",undefined,null]
-  console.log(chalk.blue(`${row[0]} 双屏确认字段信息 交易名称 或 推送字段 为空 被过滤`));
-  return !nullValue.includes(row[1]) && !nullValue.includes(row[4])
+  let passed = !nullValue.includes(row[1]) && !nullValue.includes(row[4]);
+  if(!passed){
+    console.log(chalk.blue(`${row[0]} 双屏确认字段信息 交易名称 或 推送字段 为空 被过滤`));
+  }
+  return passed;
 })
 class DoubleScreen {
   constructor(){
