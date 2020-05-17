@@ -20,7 +20,7 @@ module.exports = {
   CK_START_NUM:75000,// 复核
   // FE_START_NUM:80000,// 收费
   CI_START_NUM:95000,// 客户信息录入
-  AMT_RULE_NO:"005000",//金额授权规则开始值
+  AMT_RULE_NO:"005000",//金额授权规则号
   // SVN 规则统计目录
   svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/二阶段/",
   // DEV 刷新redis 缓存地址
