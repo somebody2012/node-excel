@@ -199,8 +199,8 @@ var sqlParams = [
   {tableName:"IB_OM_RULE_INFO",data:doubleScreen.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:doubleScreen.condData},
   {tableName:"IB_OM_MODE_INFO",data:doubleScreen.modeInfo},
+  {tableName:"TE_PARA_OUTCABINETCFG_INFO",data:doubleScreen.doubleScreenField},
   {tableName:"IB_OM_RULECOND_RLT",data:doubleScreen.ruleCondData},
-  {tableName:"TE_PARA_OUTCABINETCFG_INFO",data:doubleScreen.doubleScreenField}
 ];
 
 var insertSql = utils.genInsertSql(sqlParams);
@@ -218,8 +218,9 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'DS%';
 utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
 utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n\n\n\n\n\n`);
-utils.writeToOutDir(`刁信瑞-SIT3-双屏确认规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+let updateVersionSql = [deleteSql,insertSql].join(`\n`);
+// utils.writeToOutDir(`刁信瑞-SIT3-双屏确认规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+utils.writeToOutDir(config.DS_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 // db.dbHandler(sqlParams,"双屏");
 

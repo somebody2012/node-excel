@@ -132,8 +132,8 @@ var auth = new DoubleLine();
 var arr = [
   {tableName:"IB_OM_RULE_INFO",data:auth.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:auth.condData},
+  {tableName:"IB_OM_MODE_INFO",data:auth.modeInfo},
   {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
-  {tableName:"IB_OM_MODE_INFO",data:auth.modeInfo}
 ];
 var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
@@ -152,7 +152,8 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'DH%';
 utils.writeToOutDir("doubleLineInsert.sql",insertSql,"双热线");
 utils.writeToOutDir("doubleLineDelete.sql",deleteSql,"双热线");
 
-let updateVersionSql = [insertSql].join(`\n\n\n\n\n\n`);
-utils.writeToOutDir(`刁信瑞-SIT3-双热线规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+let updateVersionSql = [deleteSql,insertSql].join(`\n`);
+// utils.writeToOutDir(`刁信瑞-SIT3-双热线规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+utils.writeToOutDir(config.DH_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 // db.dbHandler(arr,"双热线");

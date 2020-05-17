@@ -55,16 +55,16 @@ var genInsertSql = function(arr){
     });
     if(tableData.length > 0){
       sql += `\n-- ${tableName} insert\n`;
-      sql += `INSERT INTO ${tableName} (${fields.toString()}) VALUES\n\n${sqlValues.join(",\n")};`;
+      sql += `INSERT INTO ${tableName} (${fields.toString()}) VALUES\n${sqlValues.join(",\n")};\n`;
     }
     
   }
-  sql = `${sql}`;
+  sql = `${sql}` + "\n";
   // utils.writeToOutDir(filename,sql,config.authSuffix);
 return sql;
 }
 var genDeleteSql = function(arr){
-  var delSql = "\n\n";
+  var delSql = "";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
     var tableName = curTableInfo.tableName;
@@ -77,15 +77,15 @@ var genDeleteSql = function(arr){
     }
     var inValues = tableData.map(v => `"${String(v[0])}"`.replace(/\"/g,"\'").replace(/\'/g,"\'"));
     if(tableData.length > 0){
-      delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n`;
+      delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n\n`;
     }
   }
-  delSql += "\n";
+  // delSql += "\n";
   return delSql;
 }
 // 删除字段转换表
 var genDeleteTransWordSql = function(arr){
-  var delSql = "\n\n";
+  var delSql = "";
   for(var i=0;i<arr.length;i++){
     var curTableInfo = arr[i];
     var tableName = curTableInfo.tableName;
@@ -97,9 +97,9 @@ var genDeleteTransWordSql = function(arr){
     delSql += (data.slice(1).map((value,index) => {
       var sqlItem = `DELETE FROM ${tableName} WHERE ${keyWord0}='${value[0]}' AND ${keyWord1}='${value[1]}';\n`;
       return sqlItem
-    }).join("") + "\n")
+    }).join(""))
   }
-  delSql += "\n";
+  // delSql += "\n";
   return delSql;
 }
 

@@ -145,8 +145,8 @@ var auth = new CustomerView();
 var arr = [
   {tableName:"IB_OM_RULE_INFO",data:auth.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:auth.condData},
+  {tableName:"IB_OM_MODE_INFO",data:auth.modeInfo},
   {tableName:"IB_OM_RULECOND_RLT",data:auth.ruleCondData},
-  {tableName:"IB_OM_MODE_INFO",data:auth.modeInfo}
 ];
 var insertSql = utils.genInsertSql(arr);
 var deleteSql = utils.genDeleteSql(arr);
@@ -166,8 +166,9 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CV%';
 utils.writeToOutDir("customerViewInsert.sql",insertSql,"客户视图");
 utils.writeToOutDir("customerViewDelete.sql",deleteSql,"客户视图");
 
-let updateVersionSql = [insertSql].join(`\n\n\n\n\n\n`);
-utils.writeToOutDir(`刁信瑞-SIT3-客户视图规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+let updateVersionSql = [deleteSql,insertSql].join(`\n`);
+// utils.writeToOutDir(`刁信瑞-SIT3-客户视图规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+utils.writeToOutDir(config.CV_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 db.dbHandler(arr,"客户视图");
 
