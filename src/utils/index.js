@@ -55,7 +55,12 @@ var genInsertSql = function(arr){
     });
     if(tableData.length > 0){
       sql += `\n-- ${tableName} insert\n`;
-      sql += `INSERT INTO ${tableName} (${fields.toString()}) VALUES\n${sqlValues.join(",\n")};\n`;
+      var transFields = fields.map(v => `\`${v}\``).join(",")
+      if(tableName == "TE_PARA_OUTCABINETCFG_INFO"){
+        sql += `INSERT INTO   \`pub_db\`.\`${tableName}\` (${transFields}) VALUES\n${sqlValues.join(",\n")};\n`;
+      }else{
+        sql += `INSERT INTO   \`pub_db\`.\`${tableName}\` (${transFields}) VALUES\n${sqlValues.join(",\n")};\n`;
+      }
     }
     
   }
@@ -72,12 +77,16 @@ var genDeleteSql = function(arr){
     var tableData = data.slice(1);
     var keyWord = data[0][0];
     if(curTableInfo.tableName == 'IB_OM_RULECOND_RLT'){
-      delSql +=tableData.map(v => `DELETE FROM ${tableName} WHERE RULE_COND_NO='${v[0]}' AND CMPL_MODE_FLG='${v[1]}' AND OPRTN_RULE_NO='${v[2]}';`).join("\n")+"\n";
+      delSql +=tableData.map(v => `DELETE FROM \`pub_db\`.\`${tableName}\` WHERE \`RULE_COND_NO\`='${v[0]}' AND \`CMPL_MODE_FLG\`='${v[1]}' AND \`OPRTN_RULE_NO\`='${v[2]}';`).join("\n")+"\n";
       continue;
     }
     var inValues = tableData.map(v => `"${String(v[0])}"`.replace(/\"/g,"\'").replace(/\'/g,"\'"));
     if(tableData.length > 0){
-      delSql += `DELETE FROM ${tableName} WHERE ${keyWord} IN ( ${inValues.join(",")} );\n\n`;
+      if(curTableInfo.tableName == 'TE_PARA_OUTCABINETCFG_INFO'){
+        delSql += `DELETE FROM \`pub_db\`.\`${tableName}\` WHERE \`${keyWord}\` IN ( ${inValues.join(",")} );\n\n`;
+      }else{
+        delSql += `DELETE FROM \`pub_db\`.\`${tableName}\` WHERE \`${keyWord}\` IN ( ${inValues.join(",")} );\n\n`;
+      }
     }
   }
   // delSql += "\n";

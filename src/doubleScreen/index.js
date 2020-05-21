@@ -100,7 +100,7 @@ class DoubleScreen {
     var HOLI_FLG = "N";
     var RULE_TRI_POSITION = "1";
     var SUIT_CHNL_SCP = "TE";
-    var SUIT_LPR_SCP = "0000";
+    var SUIT_LPR_SCP = "*";
     var SUIT_ORG_SCP = curSheetRow[6];
     var SUIT_TX_SCP = curSheetRow[7];
     var RULE_COMNT = curSheetRow[16];
@@ -199,7 +199,7 @@ var sqlParams = [
   {tableName:"IB_OM_RULE_INFO",data:doubleScreen.ruleInfoData},
   {tableName:"IB_OM_RULECOND_INFO",data:doubleScreen.condData},
   {tableName:"IB_OM_MODE_INFO",data:doubleScreen.modeInfo},
-  {tableName:"TE_PARA_OUTCABINETCFG_INFO",data:doubleScreen.doubleScreenField},
+  {tableName:"IB_PARA_OUTCABINETCFG_INFO",data:doubleScreen.doubleScreenField},
   {tableName:"IB_OM_RULECOND_RLT",data:doubleScreen.ruleCondData},
 ];
 

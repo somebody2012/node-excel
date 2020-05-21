@@ -11,7 +11,7 @@ module.exports = {
   // CI_START_NUM:90000,// 客户信息录入
   
   //二阶段
-  AU_START_NUM:5001,//授权
+  AU_START_NUM:5100,//授权
   CV_START_NUM:25000,// 客户视图
   DS_START_NUM:35000,// 双屏
   // NI_START_NUM:40000,// 联网核查

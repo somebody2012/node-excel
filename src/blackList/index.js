@@ -86,7 +86,7 @@ class BlackList {
     var HOLI_FLG = "N";  // 节假日标志
     var RULE_TRI_POSITION = "1";  // 规则触发位置
     var SUIT_CHNL_SCP = "TE";  // 适用渠道范围
-    var SUIT_LPR_SCP = curSheetRow[4] || "0000";  // 适用法人范围
+    var SUIT_LPR_SCP = curSheetRow[4] || "*";  // 适用法人范围
     var SUIT_ORG_SCP = curSheetRow[5] || "*,";  // 适用机构范围
     var SUIT_TX_SCP = curSheetRow[6];  // 适用交易范围---
     var RULE_COMNT = curSheetRow[9];  // 规则说明---
