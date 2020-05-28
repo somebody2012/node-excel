@@ -164,12 +164,10 @@ var transformEmpty = function(curWorkSheet){
 }
 var checkCond = function(condArr){
   var b = condArr.filter((v1,i1) => {
-    var b = condArr.filter(v2 => v2[0] == v1[0] && v2[1] == v1[1])
-    return b.length != 1
+    if(v1[1].length > 120){
+      console.info("字段超长",v1[1]);
+    }
   })
-  if(b.length > 0){
-    console.info("条件重复",b);
-  }
 }
 
 

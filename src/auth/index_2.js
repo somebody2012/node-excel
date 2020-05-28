@@ -9,7 +9,7 @@ var db = require("../db/index");
 
 
 
-// utils.copySrcExcel(config.srcExcelName,__dirname);
+utils.copySrcExcel(config.srcExcelName,__dirname);
 
 var { amtCondsObj,amtConds,currencyCond } = require("./genAmtCond_2.js");
 var isFilteredData = []; // 被过滤的数据
@@ -642,7 +642,7 @@ class Auth {
       /*一期*/'09908001','09908002','09908003','09908004','09908005','09908006','09908007',
       /*二期*/,'09908008','09908009','00101076'
     ];
-    if(notNeedPubCond.includes(col2)) return;
+    if(curSheetRows[0][8] == "faceChkRslt") return;
     this.dynamicWorkSheet.push(row);
   }
   // 改为非强制条件
