@@ -1,8 +1,8 @@
 {
   "scripts": {
     "http": "node src/ajax/index.js",
-    "AU": "node src/auth/index_rewite2.js",
-    "AU2": "node src/auth/index_2.js",
+    "AU1": "node src/auth/index_rewite2.js",
+    "AU": "node src/auth/index_2.js",
     "DS": "node src/doubleScreen/index.js",
     "CV": "node src/customerView/index.js",
     "BN": "node src/blackList/index.js",

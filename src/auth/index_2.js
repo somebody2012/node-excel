@@ -868,12 +868,12 @@ var insertSql = utils.genInsertSql(arr.concat(arr1));
 var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 
-var deleteAllAuth = `\n
-  DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'AU';
-  DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'AU%';
-  DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'AU%';
-  DELETE FROM IB_OM_AUTHMODE_INFO WHERE MODE_NO LIKE 'AU%';
-\n`;
+var deleteAllAuth = `
+DELETE FROM ib_om_rule_info WHERE RULE_NO BETWEEN '005000' AND '010000';
+DELETE FROM ib_om_rulecond_rlt WHERE OPRTN_RULE_NO BETWEEN '005000' AND '010000';
+DELETE FROM ib_om_rulecond_info WHERE OPRTN_COND_NO BETWEEN 'AU05000' AND 'AU10000';
+DELETE FROM ib_om_authmode_info WHERE MODE_NO BETWEEN 'AU05000' AND 'AU10000';
+`;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
 utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql ,"授权2");
@@ -882,7 +882,7 @@ utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权2"
 // db.dbHandler(arr,"授权",true);
 
 
-let updateVersionSql = [deleteTransWordSql,deleteSql,insertSql].join(`\n\n`);
+let updateVersionSql = [deleteTransWordSql,deleteAllAuth,insertSql].join(`\n\n`);
 utils.writeToOutDir(config.AU_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 
