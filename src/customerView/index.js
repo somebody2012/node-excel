@@ -154,10 +154,10 @@ var deleteSql = utils.genDeleteSql(arr);
 
 
 let deleteAll = `\n
-DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'CV';
-DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'CV%';
-DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'CV%';
-DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CV%';
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_NO BETWEEN '025000' AND '029000';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO BETWEEN 'CV25000' AND 'CV29000';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO BETWEEN 'CV25000' AND 'CV29000';
+DELETE FROM IB_OM_RULECOND_RLT WHERE OPRTN_RULE_NO BETWEEN '025000' AND '029000';
 \n
 `;
 
@@ -166,7 +166,7 @@ DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CV%';
 utils.writeToOutDir("customerViewInsert.sql",insertSql,"客户视图");
 utils.writeToOutDir("customerViewDelete.sql",deleteSql,"客户视图");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n`);
+let updateVersionSql = [deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-客户视图规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 utils.writeToOutDir(config.CV_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 

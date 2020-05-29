@@ -163,17 +163,17 @@ var deleteSql = utils.genDeleteSql(arr);
 
 
 let deleteAll = `\n
-DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'CI';
-DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'CI%';
-DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'CI%';
-DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'CI%';
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_NO BETWEEN '095000' AND '099000';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO BETWEEN 'CI95000' AND 'CI99000';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO BETWEEN 'CI95000' AND 'CI99000';
+DELETE FROM IB_OM_RULECOND_RLT WHERE OPRTN_RULE_NO BETWEEN '095000' AND '099000';
 \n
 `;
 
 utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
 utils.writeToOutDir("customerInputDelete.sql",deleteSql,"客户信息录入");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n`);
+let updateVersionSql = [deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-客户信息录入规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 utils.writeToOutDir(config.CI_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 

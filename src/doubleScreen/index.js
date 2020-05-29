@@ -208,17 +208,17 @@ var insertSql = utils.genInsertSql(sqlParams);
 var deleteSql = utils.genDeleteSql(sqlParams);
 
 let deleteAll = `\n
-DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'DS';
-DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'DS%';
-DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'DS%';
-DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO LIKE 'DS%';
+DELETE FROM IB_OM_RULE_INFO WHERE RULE_NO BETWEEN '035000' AND '039000';
+DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO BETWEEN 'DS35000' AND 'DS39000';
+DELETE FROM IB_OM_MODE_INFO WHERE RULE_MODE_NO BETWEEN 'DS35000' AND 'DS39000';
+DELETE FROM IB_OM_RULECOND_RLT WHERE OPRTN_RULE_NO BETWEEN '035000' AND '039000';
 \n
 `;
 
 utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
 utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
 
-let updateVersionSql = [deleteSql,insertSql].join(`\n`);
+let updateVersionSql = [deleteSql,deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-双屏确认规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 utils.writeToOutDir(config.DS_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
