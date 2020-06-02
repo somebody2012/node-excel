@@ -104,7 +104,7 @@ var genDeleteTransWordSql = function(arr){
     var keyWord1 = data[0][1];
 
     delSql += (data.slice(1).map((value,index) => {
-      var sqlItem = `DELETE FROM ${tableName} WHERE ${keyWord0}='${value[0]}' AND ${keyWord1}='${value[1]}';\n`;
+      var sqlItem = `DELETE FROM \`pub_db\`.\`${tableName}\` WHERE \`${keyWord0}\`='${value[0]}' AND \`${keyWord1}\`='${value[1]}';\n`;
       return sqlItem
     }).join(""))
   }

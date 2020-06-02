@@ -11,15 +11,15 @@ module.exports = {
   // CI_START_NUM:90000,// 客户信息录入
   
   //二阶段
-  AU_START_NUM:5100,//授权
-  CV_START_NUM:25000,// 客户视图
-  DS_START_NUM:35000,// 双屏
+  AU_START_NUM:5100,//授权+++++++++++++++++++++++++
+  CV_START_NUM:25000,// 客户视图+++++++++++++++++++
+  DS_START_NUM:35000,// 双屏+++++++++++++++++++++++
   // NI_START_NUM:40000,// 联网核查
-  DH_START_NUM:55000,// 双热线
-  BN_START_NUM:65000,// 黑名单
+  DH_START_NUM:55000,// 双热线++++++++++++++++++++
+  BN_START_NUM:65000,// 黑名单++++++++++++++++++++
   CK_START_NUM:75000,// 复核
   // FE_START_NUM:80000,// 收费
-  CI_START_NUM:95000,// 客户信息录入
+  CI_START_NUM:95000,// 客户信息录入+++++++++++++
   AMT_RULE_NO:"005000",//金额授权规则号
   // SVN 规则统计目录
   svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/二阶段/",
@@ -55,10 +55,10 @@ module.exports = {
   ckSheetNameField:"复核字段",
   ckSheetReflectField:"复核字段映射",
   // 输出
-  AU_OUT_FILENAME:"刁信瑞-DEV-授权规则-$date.txt",
-  CI_OUT_FILENAME:"刁信瑞-DEV-客户信息录入规则-$date.txt",
-  CV_OUT_FILENAME:"刁信瑞-DEV-客户视图规则-$date.txt",
-  DH_OUT_FILENAME:"刁信瑞-DEV-双热线规则-$date.txt",
-  BN_OUT_FILENAME:"刁信瑞-DEV-黑名单规则-$date.txt",
-  DS_OUT_FILENAME:"刁信瑞-DEV-双屏确认规则-$date.txt",
+  AU_OUT_FILENAME:"刁信瑞-SIT-授权规则-$date.txt",
+  CI_OUT_FILENAME:"刁信瑞-SIT-客户信息录入规则-$date.txt",
+  CV_OUT_FILENAME:"刁信瑞-SIT-客户视图规则-$date.txt",
+  DH_OUT_FILENAME:"刁信瑞-SIT-双热线规则-$date.txt",
+  BN_OUT_FILENAME:"刁信瑞-SIT-黑名单规则-$date.txt",
+  DS_OUT_FILENAME:"刁信瑞-SIT-双屏确认规则-$date.txt",
 }

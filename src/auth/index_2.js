@@ -869,10 +869,10 @@ var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 
 var deleteAllAuth = `
-DELETE FROM ib_om_rule_info WHERE RULE_NO BETWEEN '005000' AND '010000';
-DELETE FROM ib_om_rulecond_rlt WHERE OPRTN_RULE_NO BETWEEN '005000' AND '010000';
-DELETE FROM ib_om_rulecond_info WHERE OPRTN_COND_NO BETWEEN 'AU05000' AND 'AU10000';
-DELETE FROM ib_om_authmode_info WHERE MODE_NO BETWEEN 'AU05000' AND 'AU10000';
+DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\` BETWEEN '005000' AND '010000';
+DELETE FROM \`pub_db\`.\`ib_om_rulecond_rlt\` WHERE \`OPRTN_RULE_NO\` BETWEEN '005000' AND '010000';
+DELETE FROM \`pub_db\`.\`ib_om_rulecond_info\` WHERE \`OPRTN_COND_NO\` BETWEEN 'AU05000' AND 'AU10000';
+DELETE FROM \`pub_db\`.\`ib_om_authmode_info\` WHERE \`MODE_NO\` BETWEEN 'AU05000' AND 'AU10000';
 `;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
