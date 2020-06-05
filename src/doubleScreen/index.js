@@ -50,7 +50,7 @@ class DoubleScreen {
       return row[0] + "_" + row[5];
     })
     // 规则表 IB_OM_RULE_INFO
-    this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_DT","OPER_RSN"]];
+    this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","EFFT_DT","INVALID_DT","OPER_TELR_NO","OPER_DT","OPER_RSN"]];
     // 条件表 IB_OM_RULECOND_INFO
     this.condData = [["OPRTN_COND_NO","DICTRY_NM","OPER_SYM_1","CMPR_VAL","OPER_SYM_2","VALUE2","TRAN_CD","COND_DESCR","OPER_TELR_NO","OPER_DT","OPER_RSN","CMPR_VAL_DATA_DICTRY_FLG","PUB_DICTRY_FLG","DICTRY_DESCR"]];
     // 规则条件映射表 IB_OM_RULECOND_RLT
@@ -108,7 +108,9 @@ class DoubleScreen {
     var OPER_TELR_NO = "";
     var OPER_DT = this.curDayStr;  // 操作时间
     var OPER_RSN = "批量新增";
-    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,OPER_TELR_NO,OPER_DT,OPER_RSN];
+    var EFFT_DT = "2020-01-01";
+    var INVALID_DT = "2099-12-31";
+    var curRow = [RULE_NO,RULE_TYP_CD,HOLI_FLG,RULE_TRI_POSITION,SUIT_CHNL_SCP,SUIT_LPR_SCP,SUIT_ORG_SCP,SUIT_TX_SCP,RULE_COMNT,EFFT_FLG,EFFT_DT,INVALID_DT,OPER_TELR_NO,OPER_DT,OPER_RSN];
     var isExist = this.ruleInfoData.find(v => v[0] == RULE_NO);
     if(isExist) return;
     this.ruleInfoData.push(curRow);
