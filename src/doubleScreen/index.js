@@ -8,8 +8,8 @@ var _ = require("underscore");
 var db = require("../db/index");
 var chalk = require("chalk");
 
-
-utils.copySrcExcel(config.doubleSrceenExcelName,__dirname);
+var isStage1 = process.argv[2] == "1";
+utils.copySrcExcel(config.doubleSrceenExcelName,__dirname,isStage1);
 
 var excelPath = path.resolve(__dirname,config.doubleSrceenExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -32,8 +32,8 @@ doubleScreenFieldsWorkSheet = doubleScreenFieldsWorkSheet.filter(row => {
 class DoubleScreen {
   constructor(){
     this.curDayStr = utils.getCurDateStr(); // 当前日期
-    this.startRuleNoFun = utils.generateNo(config.DS_START_NUM);// 规则号
-    this.startCondNoFun = utils.generateNo(config.DS_START_NUM);// 条件号
+    this.startRuleNoFun = utils.generateNo(isStage1 ? config.DS_START_NUM_STAGE_1 : config.DS_START_NUM);// 规则号
+    this.startCondNoFun = utils.generateNo(isStage1 ? config.DS_START_NUM_STAGE_1 : config.DS_START_NUM);// 条件号
     this.FIELD_SEQ_NO_FUN = utils.generateNo(1);// 模式序号
     /**
      * uniqSheetData 结构
@@ -216,13 +216,22 @@ DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'DS350
 DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '035000' AND '039000';
 \n
 `;
+if(isStage1){
+  deleteAll = `\n
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`RULE_NO\` BETWEEN '030000' AND '034999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE \`OPRTN_COND_NO\` BETWEEN 'DS30000' AND 'DS34999';
+DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'DS30000' AND 'DS34999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '030000' AND '034999';
+\n
+`;
+}
 
 utils.writeToOutDir("dsInsert.sql",insertSql,"双屏确认");
 utils.writeToOutDir("dsDelete.sql",deleteSql,"双屏确认");
 
 let updateVersionSql = [deleteSql,deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-双屏确认规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
-utils.writeToOutDir(config.DS_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
+utils.writeToOutDir((isStage1 ? config.DS_OUT_FILENAME_STAGE_1 : config.DS_OUT_FILENAME).replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 // db.dbHandler(sqlParams,"双屏");
 

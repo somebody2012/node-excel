@@ -133,10 +133,10 @@ var svnUpdate = function(){
     console.log(chalk.red("svn update 出错"));
   } 
 }
-var copySrcExcel = function(srcFileName,distDirname){
-  svnUpdate();
+var copySrcExcel = function(srcFileName,distDirname,isStage1=false){
+  // svnUpdate();
   // var src = path.resolve(process.cwd(),"../../../","work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/" + srcFileName);
-  var src = path.resolve(config.svnStatisticsDir,srcFileName);
+  var src = path.resolve(isStage1?config.svnStatisticsDir1:config.svnStatisticsDir,srcFileName);
   var dist = path.resolve(distDirname,srcFileName);
   var isExist = fs.existsSync(src);
   if(isExist){

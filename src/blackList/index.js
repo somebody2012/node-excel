@@ -7,8 +7,8 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 var chalk = require("chalk");
-
-utils.copySrcExcel(config.blackListExcelName,__dirname);
+var isStage1 = process.argv[2] == "1";
+utils.copySrcExcel(config.blackListExcelName,__dirname,isStage1);
 
 var excelPath = path.resolve(__dirname,config.blackListExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -36,8 +36,8 @@ class BlackList {
     this.uniqSheetData = _.groupBy(curWorkSheet.slice(1),function(row){
       return row[7];
     })
-    this.ruleNoObj = utils.generateNo(config.BN_START_NUM);// 规则号生成函数
-    this.condNoObj = utils.generateNo(config.BN_START_NUM);// 条件号生成函数
+    this.ruleNoObj = utils.generateNo(isStage1 ? config.BN_START_NUM_STAGE_1 : config.BN_START_NUM);// 规则号生成函数
+    this.condNoObj = utils.generateNo(isStage1 ? config.BN_START_NUM_STAGE_1 : config.BN_START_NUM);// 条件号生成函数
     this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
@@ -168,7 +168,15 @@ DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'BN650
 DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '065000' AND '069000';
 \n
 `;
-
+if(isStage1){
+  deleteAll = `\n
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`RULE_NO\` BETWEEN '060000' AND '064999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE \`OPRTN_COND_NO\` BETWEEN 'BN60000' AND 'BN64999';
+DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'BN60000' AND 'BN64999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '060000' AND '064999';
+\n
+`;
+}
 
 
 utils.writeToOutDir("blackListInsert.sql",insertSql,"黑名单");
@@ -176,6 +184,6 @@ utils.writeToOutDir("blackListDelete.sql",deleteSql + "\n" + deleteAll,"黑名�
 
 let updateVersionSql = [deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-黑名单规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
-utils.writeToOutDir(config.BN_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
+utils.writeToOutDir((isStage1 ? config.BN_OUT_FILENAME_STAGE_1 : config.BN_OUT_FILENAME).replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 // db.dbHandler(arr,"黑名单");

@@ -7,7 +7,8 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 var chalk = require("chalk");
-utils.copySrcExcel(config.customerInputExcelName,__dirname);
+var isStage1 = process.argv[2] == "1";
+utils.copySrcExcel(config.customerInputExcelName,__dirname,isStage1);
 
 var excelPath = path.resolve(__dirname,config.customerInputExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -27,8 +28,8 @@ class CustomerInput {
     this.uniqSheetData = _.groupBy(curWorkSheet.slice(1),function(row){
       return row[5] + row[0];
     })
-    this.ruleNoObj = utils.generateNo(config.CI_START_NUM);// 规则号生成函数
-    this.condNoObj = utils.generateNo(config.CI_START_NUM);// 条件号生成函数
+    this.ruleNoObj = utils.generateNo(isStage1 ? config.CI_START_NUM_STAGE_1 : config.CI_START_NUM);// 规则号生成函数
+    this.condNoObj = utils.generateNo(isStage1 ? config.CI_START_NUM_STAGE_1 : config.CI_START_NUM);// 条件号生成函数
     this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
@@ -171,13 +172,22 @@ DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'CI950
 DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '095000' AND '099000';
 \n
 `;
+if(isStage1){
+  deleteAll = `\n
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`RULE_NO\` BETWEEN '090000' AND '094999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE \`OPRTN_COND_NO\` BETWEEN 'CI90000' AND 'CI94999';
+DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'CI90000' AND 'CI94999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '090000' AND '094999';
+\n
+`;
+}
 
 utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
 utils.writeToOutDir("customerInputDelete.sql",deleteSql,"客户信息录入");
 
 let updateVersionSql = [deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-客户信息录入规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
-utils.writeToOutDir(config.CI_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
+utils.writeToOutDir((isStage1 ? config.CI_OUT_FILENAME_STAGE_1 : config.CI_OUT_FILENAME).replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 // db.dbHandler(arr,"客户信息录入");
 

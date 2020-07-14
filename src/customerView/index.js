@@ -6,7 +6,8 @@ var _ = require("underscore");
 var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
-utils.copySrcExcel(config.customerViewExcelName,__dirname);
+var isStage1 = process.argv[2] == "1";
+utils.copySrcExcel(config.customerViewExcelName,__dirname,isStage1);
 
 var excelPath = path.resolve(__dirname,config.customerViewExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -26,8 +27,8 @@ class CustomerView {
     this.uniqSheetData = _.groupBy(curWorkSheet.slice(1),function(row){
       return row[7] + row[2];
     })
-    this.ruleNoObj = utils.generateNo(config.CV_START_NUM);// 规则号生成函数
-    this.condNoObj = utils.generateNo(config.CV_START_NUM);// 条件号生成函数
+    this.ruleNoObj = utils.generateNo(isStage1 ? config.CV_START_NUM_STAGE_1 : config.CV_START_NUM);// 规则号生成函数
+    this.condNoObj = utils.generateNo(isStage1 ? config.CV_START_NUM_STAGE_1 : config.CV_START_NUM);// 条件号生成函数
     this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
@@ -162,7 +163,15 @@ DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'CV250
 DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '025000' AND '029000';
 \n
 `;
-
+if(isStage1){
+  deleteAll = `\n
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`RULE_NO\` BETWEEN '020000' AND '024999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE \`OPRTN_COND_NO\` BETWEEN 'CV20000' AND 'CV24999';
+DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'CV20000' AND 'CV24999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '020000' AND '024999';
+\n
+`;
+}
 
 
 utils.writeToOutDir("customerViewInsert.sql",insertSql,"客户视图");
@@ -170,7 +179,7 @@ utils.writeToOutDir("customerViewDelete.sql",deleteSql,"客户视图");
 
 let updateVersionSql = [deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-客户视图规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
-utils.writeToOutDir(config.CV_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
+utils.writeToOutDir((isStage1 ? config.CV_OUT_FILENAME_STAGE_1 : config.CV_OUT_FILENAME).replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 db.dbHandler(arr,"客户视图");
 

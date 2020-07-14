@@ -7,8 +7,8 @@ var config = require("../config");
 var utils = require("../utils/index");
 var db = require("../db/index");
 var chalk = require("chalk");
-
-utils.copySrcExcel(config.doubleLineExcelName,__dirname);
+var isStage1 = process.argv[2] == "1";
+utils.copySrcExcel(config.doubleLineExcelName,__dirname,isStage1);
 
 var excelPath = path.resolve(__dirname,config.doubleLineExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
@@ -28,8 +28,8 @@ class DoubleLine {
     this.uniqSheetData = _.groupBy(curWorkSheet.slice(1),function(row){
       return row[4] + row[5];
     })
-    this.ruleNoObj = utils.generateNo(config.DH_START_NUM);// 规则号生成函数
-    this.condNoObj = utils.generateNo(config.DH_START_NUM);// 条件号生成函数
+    this.ruleNoObj = utils.generateNo(isStage1 ? config.DH_START_NUM_STAGE_1 : config.DH_START_NUM);// 规则号生成函数
+    this.condNoObj = utils.generateNo(isStage1 ? config.DH_START_NUM_STAGE_1 : config.DH_START_NUM);// 条件号生成函数
     this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
@@ -149,13 +149,21 @@ DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'DH550
 DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '055000' AND '059000';
 \n
 `;
-
+if(isStage1){
+  deleteAll = `\n
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`RULE_NO\` BETWEEN '050000' AND '054999';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE \`OPRTN_COND_NO\` BETWEEN 'DH50000' AND 'DH54999';
+DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`RULE_MODE_NO\` BETWEEN 'DH50000' AND 'DH50000';
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '050000' AND '054999';
+\n
+`;
+}
 
 utils.writeToOutDir("doubleLineInsert.sql",insertSql,"双热线");
 utils.writeToOutDir("doubleLineDelete.sql",deleteSql,"双热线");
 
 let updateVersionSql = [deleteAll,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-双热线规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
-utils.writeToOutDir(config.DH_OUT_FILENAME.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
+utils.writeToOutDir((isStage1 ? config.DH_OUT_FILENAME_STAGE_1 : config.DH_OUT_FILENAME).replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 // db.dbHandler(arr,"双热线");

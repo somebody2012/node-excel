@@ -357,16 +357,16 @@ class Auth {
   // 生成金额条件表 公共条件
   generateAmtCondData(RULE_NO,curSheetRow){
     // 生成规则条件映射表
-    for(var i = 0;i < amtConds.length;i++){
-      var RULE_COND_NO = amtConds[i]; // 条件号
-      var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
-      var OPRTN_RULE_NO = RULE_NO; // 规则号
-      var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
-      var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
-      if(!isExist){
-        this.ruleCondData.push(curRow);
-      }
-    }
+    // for(var i = 0;i < amtConds.length;i++){
+    //   var RULE_COND_NO = amtConds[i]; // 条件号
+    //   var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
+    //   var OPRTN_RULE_NO = RULE_NO; // 规则号
+    //   var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
+    //   var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
+    //   if(!isExist){
+    //     this.ruleCondData.push(curRow);
+    //   }
+    // }
     // 生成字段映射
     var TnNwSn_PUB = "CASH_TRAN_FLG";
     var txAmt_PUB = "TX_AMT";

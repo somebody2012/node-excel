@@ -9,7 +9,7 @@ var db = require("../db/index");
 
 
 
-utils.copySrcExcel(config.srcExcelName,__dirname);
+utils.copySrcExcel(config.srcExcelName,__dirname,true);
 
 var { amtCondsObj,amtConds,currencyCond } = require("./genAmtCond.js");
 var isFilteredData = []; // 被过滤的数据
@@ -96,10 +96,10 @@ class Auth {
       return row[5];
     })
     this.amtKeywords = "金额超限";// 判断是否金额授权
-    // this.ruleNoObj = utils.generateNo(config.AU_START_NUM);// 规则号生成函数
-    this.ruleNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 规则号生成函数
-    // this.condNoObj = utils.generateNo(config.AU_START_NUM);// 条件号生成函数
-    this.condNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 条件号生成函数
+    this.ruleNoObj = utils.generateNo(config.AU_START_NUM_STAGE_1);// 规则号生成函数
+    // this.ruleNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 规则号生成函数
+    this.condNoObj = utils.generateNo(config.AU_START_NUM_STAGE_1);// 条件号生成函数
+    // this.condNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 条件号生成函数
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
     this.ruleInfoData = [["RULE_NO","RULE_TYP_CD","HOLI_FLG","RULE_TRI_POSITION","SUIT_CHNL_SCP","SUIT_LPR_SCP","SUIT_ORG_SCP","SUIT_TX_SCP","RULE_COMNT","EFFT_FLG","OPER_TELR_NO","OPER_DT","OPER_RSN"]];
@@ -134,7 +134,7 @@ class Auth {
       var sameCondData = this.uniqSheetData[key];
       var curSheetRows = sameCondData;
       var RULE_NO = this.ruleNoObj().padStart(6);
-      this.generateRuleInfoData(RULE_NO,sameCondData[0]);
+      
       // 是否需要人脸识别
       var isNeedFaceAuth = (sameCondData[0][14] || "否").includes("是");
       // 是否强制授权
@@ -148,13 +148,19 @@ class Auth {
         var needAmtCondSingle = ["00802002"];
         if(needAmtCondSingle.includes(curSheetRows[0][2])){
           // 单独公共金额条件
+          this.generateRuleInfoData(RULE_NO,curSheetRows[0]);
           this.generateAmtCondDataSingle(RULE_NO,curSheetRows[0]);
         }else{
-          // 用公共金额条件
-          this.generateAmtCondData(RULE_NO,curSheetRows[0]);
+          // // 用公共金额条件
+          // this.generateAmtCondData(RULE_NO,curSheetRows[0]);
+          curSheetRows.forEach(curSheetRow => {
+            this.generateRuleInfoData(config.AMT_RULE_NO,curSheetRow);
+            this.generateAmtCondData(RULE_NO,curSheetRow);
+          })
         }
       }else{
         // 不是金额条件
+        this.generateRuleInfoData(RULE_NO,sameCondData[0]);
         var OPRTN_COND_NO = "AU" + this.condNoObj().padStart(5);
         if(isForceCond){
           // 是强制条件
@@ -296,7 +302,7 @@ class Auth {
           //faceRecognitionRow 人脸识别为 "" 表示未通过 或未成功 "1" 成功 三个条件且关系 不通过就远程授权
           // 只判断50000,	100000 区间 不通过则判断 金额 和 币种
           // var faceReCond = [ curCondNo,"faceChkRslt",  "==","0","","","","人脸识别授权","",this.curDayStr,"批量新增","1","0","人脸识别" ];
-          var faceReCond = [ curCondNo,"faceChkRslt",  "in","2,","","","",`现金金额${cashOper1==">"?"(":"["}50000-100000${cashOper2=="<="?"]":")"} 人脸识别未通过授权`,"",this.curDayStr,"批量新增","1","0","人脸识别" ];
+          var faceReCond = [ curCondNo,"faceChkRslt",  "in","2,","","","",`现金金额${cashOper1==">"?"(":"["}50000-200000${cashOper2=="<="?"]":")"} 人脸识别未通过授权`,"",this.curDayStr,"批量新增","1","0","人脸识别" ];
           // 生成条件
           this.generateAmtCondDataInner(faceReCond,curSheetRow);
         }
@@ -347,16 +353,16 @@ class Auth {
   // 生成金额条件表 公共条件
   generateAmtCondData(RULE_NO,curSheetRow){
     // 生成规则条件映射表
-    for(var i = 0;i < amtConds.length;i++){
-      var RULE_COND_NO = amtConds[i]; // 条件号
-      var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
-      var OPRTN_RULE_NO = RULE_NO; // 规则号
-      var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
-      var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
-      if(!isExist){
-        this.ruleCondData.push(curRow);
-      }
-    }
+    // for(var i = 0;i < amtConds.length;i++){
+    //   var RULE_COND_NO = amtConds[i]; // 条件号
+    //   var CMPL_MODE_FLG = "1"; //强制条件 0 是 | 1 否
+    //   var OPRTN_RULE_NO = RULE_NO; // 规则号
+    //   var curRow = [RULE_COND_NO,CMPL_MODE_FLG,OPRTN_RULE_NO];
+    //   var isExist = this.ruleCondData.find(v => v[0] == RULE_COND_NO && v[1] == CMPL_MODE_FLG && v[2] == OPRTN_RULE_NO);
+    //   if(!isExist){
+    //     this.ruleCondData.push(curRow);
+    //   }
+    // }
     // 生成字段映射
     var TnNwSn_PUB = "CASH_TRAN_FLG";
     var txAmt_PUB = "TX_AMT";
@@ -857,22 +863,18 @@ var insertSql = utils.genInsertSql(arr.concat(arr1));
 var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 
-var deleteAllAuth = `\n
-  DELETE FROM IB_OM_RULE_INFO WHERE RULE_TYP_CD = 'AU';
-  DELETE FROM IB_OM_RULECOND_INFO WHERE OPRTN_COND_NO LIKE 'AU%';
-  DELETE FROM IB_OM_RULECOND_RLT WHERE RULE_COND_NO LIKE 'AU%';
-  DELETE FROM IB_OM_AUTHMODE_INFO WHERE MODE_NO LIKE 'AU%';
-\n`;
+var deleteAllAuth = `
+DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\` BETWEEN '000000' AND '004999';
+DELETE FROM \`pub_db\`.\`ib_om_rulecond_rlt\` WHERE \`OPRTN_RULE_NO\` BETWEEN '000000' AND '004999';
+DELETE FROM \`pub_db\`.\`ib_om_rulecond_info\` WHERE \`OPRTN_COND_NO\` BETWEEN 'AU00000' AND 'AU04999';
+DELETE FROM \`pub_db\`.\`ib_om_authmode_info\` WHERE \`MODE_NO\` BETWEEN 'AU00000' AND 'AU04999';
+`;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
-utils.writeToOutDir("authDelete.sql",deleteSql + "\n" + deleteTransWordSql ,"授权2");
-utils.writeToOutDir("被过滤的数据.txt",isFilteredData.join("\n"),"授权2");
+utils.writeToOutDir("authDelete.sql",deleteAllAuth + "\n" + deleteTransWordSql ,"授权2");
 
-// db.dbHandler(arr,"授权",true);
-
-
-let updateVersionSql = [deleteTransWordSql,insertSql].join(`\n\n\n\n\n\n`);
-utils.writeToOutDir(`刁信瑞-SIT3-授权规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
+let updateVersionSql = [deleteAllAuth,deleteTransWordSql,insertSql].join(`\n`);
+utils.writeToOutDir(config.AU_OUT_FILENAME_STAGE_1.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 
 utils.checkCond(arr[1].data);
