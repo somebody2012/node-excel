@@ -134,7 +134,7 @@ var svnUpdate = function(){
   } 
 }
 var copySrcExcel = function(srcFileName,distDirname,isStage1=false){
-  // svnUpdate();
+  svnUpdate();
   // var src = path.resolve(process.cwd(),"../../../","work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/" + srcFileName);
   var src = path.resolve(isStage1?config.svnStatisticsDir1:config.svnStatisticsDir,srcFileName);
   var dist = path.resolve(distDirname,srcFileName);
@@ -169,6 +169,13 @@ var checkCond = function(condArr){
     }
   })
 }
+var genDeleteAmtSql = function(ruleInfoData){
+  let amtRule = ruleInfoData.filter(v => v[0] == config.AMT_RULE_NO);
+  let deleteAmtSql = amtRule.map(v => {
+    return `DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\`='${config.AMT_RULE_NO}' AND \`SUIT_TX_SCP\`='${v[7]}' AND \`RULE_TYP_CD\`='AU';`
+  })
+  return deleteAmtSql.join("\n");
+}
 
 
 module.exports = {
@@ -180,5 +187,6 @@ module.exports = {
   copySrcExcel,
   genDeleteTransWordSql,
   transformEmpty,
-  checkCond
+  checkCond,
+  genDeleteAmtSql
 }

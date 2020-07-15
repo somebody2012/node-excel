@@ -859,6 +859,9 @@ var arr1 = [
   {tableName:"TE_PARA_TRANKEYWORDS_INFO",data:auth.reflexData},
   {tableName:"IB_PARA_KEYWORDS_INFO",data:auth.fieldFactor},
 ];
+
+let deleteAmtSql = utils.genDeleteAmtSql(auth.ruleInfoData);
+
 var insertSql = utils.genInsertSql(arr.concat(arr1));
 var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
@@ -871,9 +874,9 @@ DELETE FROM \`pub_db\`.\`ib_om_authmode_info\` WHERE \`MODE_NO\` BETWEEN 'AU0000
 `;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");
-utils.writeToOutDir("authDelete.sql",deleteAllAuth + "\n" + deleteTransWordSql ,"授权2");
+utils.writeToOutDir("authDelete.sql",deleteAmtSql + "\n" + deleteAllAuth + "\n" + deleteTransWordSql ,"授权2");
 
-let updateVersionSql = [deleteAllAuth,deleteTransWordSql,insertSql].join(`\n`);
+let updateVersionSql = [deleteAllAuth,deleteAmtSql,deleteTransWordSql,insertSql].join(`\n`);
 utils.writeToOutDir(config.AU_OUT_FILENAME_STAGE_1.replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 
 

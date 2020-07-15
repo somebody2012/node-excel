@@ -22,10 +22,10 @@ module.exports = {
   CI_START_NUM:95000,// 客户信息录入+++++++++++++
   AMT_RULE_NO:"005000",//金额授权规则号
   // SVN 规则统计目录
-  svnStatisticsDir:"/Users/apple/Desktop/二阶段excel",
-  svnStatisticsDir1:"/Users/apple/Desktop/一阶段excel",
-  // svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/二阶段/",
-  // svnStatisticsDir1:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/一阶段/",
+  // svnStatisticsDir:"/Users/apple/Desktop/二阶段excel",
+  // svnStatisticsDir1:"/Users/apple/Desktop/一阶段excel",
+  svnStatisticsDir:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/二阶段/",
+  svnStatisticsDir1:"E:/work/zantong/SVN/02工程活动/04设计与实现/交易数据统计/交易规则统计/一阶段/",
   // DEV 刷新redis 缓存地址
   // refreshRedisUrlDev:"http://10.16.2.228/abside/abs-te-ib-ownservices/loadCaceAtStap",
   refreshRedisUrlDev:"http://10.16.2.228/abside/abs-te-cacheserver/loadCaceAtStap",
