@@ -869,9 +869,11 @@ var arr1 = [
 var insertSql = utils.genInsertSql(arr.concat(arr1));
 var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
+let deleteAmtSql = utils.genDeleteAmtSql(auth.ruleInfoData);
 
 var deleteAllAuth = `
-DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\` BETWEEN '005000' AND '010000';
+${deleteAmtSql}
+DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\` BETWEEN '005001' AND '010000';
 DELETE FROM \`pub_db\`.\`ib_om_rulecond_rlt\` WHERE \`OPRTN_RULE_NO\` BETWEEN '005000' AND '010000';
 DELETE FROM \`pub_db\`.\`ib_om_rulecond_info\` WHERE \`OPRTN_COND_NO\` BETWEEN 'AU05000' AND 'AU10000';
 DELETE FROM \`pub_db\`.\`ib_om_authmode_info\` WHERE \`MODE_NO\` BETWEEN 'AU05000' AND 'AU10000';
