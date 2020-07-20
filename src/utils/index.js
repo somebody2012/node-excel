@@ -125,9 +125,9 @@ var svnUpdate = function(){
   try{
     console.log(chalk.green("SVN 开始更新"));
     var cwdPath = process.cwd();
-    shell.cd(config.svnStatisticsDir);
+    shell.cd(path.resolve(config.svnStatisticsDir,".."));
     var a = shell.exec("svn update");
-    console.log(chalk.green("SVN 更新完成"));
+    console.log(chalk.green("SVN 更新完成:"+path.resolve(config.svnStatisticsDir,"..")));
     shell.cd(cwdPath);
   }catch(e){
     console.log(chalk.red("svn update 出错"));
