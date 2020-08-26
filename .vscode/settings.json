@@ -1,0 +1,8 @@
+{
+  "mysql.host": "14.0.28.3",
+  "mysql.database": "pub_db",
+  "mysql.user": "pub_db@gz_ibs0_27#gzone_dev",
+  "mysql.password": "agree123",
+  "bash.exe": "D:\\Program Files\\Git\\bin\\bash.exe",
+  "request.address": "http://14.36.7.28:8341"
+}
