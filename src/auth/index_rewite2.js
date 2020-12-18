@@ -9,7 +9,7 @@ var db = require("../db/index");
 
 
 
-utils.copySrcExcel(config.srcExcelName,__dirname,true);
+// utils.copySrcExcel(config.srcExcelName,__dirname,true);
 
 var { amtCondsObj,amtConds,currencyCond } = require("./genAmtCond.js");
 var isFilteredData = []; // 被过滤的数据
@@ -98,7 +98,7 @@ class Auth {
     this.amtKeywords = "金额超限";// 判断是否金额授权
     this.ruleNoObj = utils.generateNo(config.AU_START_NUM_STAGE_1);// 规则号生成函数
     // this.ruleNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 规则号生成函数
-    this.condNoObj = utils.generateNo(config.AU_START_NUM_STAGE_1);// 条件号生成函数
+    this.condNoObj = utils.generateNo(config.AU_START_NUM_STAGE_1_COND_NUM);// 条件号生成函数
     // this.condNoObj = utils.generateNo(amtCondsObj.condNoObj().number);// 条件号生成函数
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
@@ -870,11 +870,39 @@ var insertSql = utils.genInsertSql(arr.concat(arr1));
 var deleteSql = utils.genDeleteSql(arr);
 var deleteTransWordSql = utils.genDeleteTransWordSql(arr1);
 
+// var deleteAllAuth = `
+// DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\` BETWEEN '000000' AND '004999';
+// DELETE FROM \`pub_db\`.\`ib_om_rulecond_rlt\` WHERE \`OPRTN_RULE_NO\` BETWEEN '000000' AND '004999';
+// DELETE FROM \`pub_db\`.\`ib_om_rulecond_info\` WHERE \`OPRTN_COND_NO\` BETWEEN 'AU00000' AND 'AU04999';
+// DELETE FROM \`pub_db\`.\`ib_om_authmode_info\` WHERE \`MODE_NO\` BETWEEN 'AU00000' AND 'AU04999';
+// `;
+let SUIT_TX_SCP_ALL = auth.ruleInfoData
+  .slice(1)
+  .map(v => `'${v[7]}'`)
+
+SUIT_TX_SCP_ALL = SUIT_TX_SCP_ALL
+  .filter((v,i) => SUIT_TX_SCP_ALL.indexOf(v) == i)
+  .join(",")
+console.log(SUIT_TX_SCP_ALL);
 var deleteAllAuth = `
-DELETE FROM \`pub_db\`.\`ib_om_rule_info\` WHERE \`RULE_NO\` BETWEEN '000000' AND '004999';
-DELETE FROM \`pub_db\`.\`ib_om_rulecond_rlt\` WHERE \`OPRTN_RULE_NO\` BETWEEN '000000' AND '004999';
-DELETE FROM \`pub_db\`.\`ib_om_rulecond_info\` WHERE \`OPRTN_COND_NO\` BETWEEN 'AU00000' AND 'AU04999';
-DELETE FROM \`pub_db\`.\`ib_om_authmode_info\` WHERE \`MODE_NO\` BETWEEN 'AU00000' AND 'AU04999';
+-- 删除授权模式表
+DELETE FROM \`pub_db\`.\`IB_OM_AUTHMODE_INFO\` WHERE \`MODE_NO\` IN (
+	SELECT \`RULE_COND_NO\` FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` IN (
+		SELECT \`RULE_NO\` FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'AU' AND \`RULE_NO\` !='005000'
+	)
+);
+-- 删除条件表
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE OPRTN_COND_NO IN (
+	SELECT \`RULE_COND_NO\` FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` IN (
+		SELECT \`RULE_NO\` FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'AU' AND \`RULE_NO\` !='005000'
+	)
+);
+-- 删除条件规则关联表  
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` IN (
+	SELECT \`RULE_NO\` FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'AU' AND \`RULE_NO\` !='005000'
+);
+-- 删规则表
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND RULE_TYP_CD = 'AU';
 `;
 
 utils.writeToOutDir("authInsert.sql",insertSql,"授权2");

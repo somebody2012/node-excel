@@ -1,6 +1,8 @@
 module.exports = {
   //一阶段
-  AU_START_NUM_STAGE_1:0,//授权
+  AU_START_NUM_STAGE_1:5668,//授权
+  AU_START_NUM_STAGE_1_COND_NUM:5772,
+
   CV_START_NUM_STAGE_1:20000,// 客户视图
   DS_START_NUM_STAGE_1:30000,// 双屏
   // NI_START_NUM_STAGE_1:40000,// 联网核查
