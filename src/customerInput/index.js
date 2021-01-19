@@ -8,7 +8,7 @@ var utils = require("../utils/index");
 var db = require("../db/index");
 var chalk = require("chalk");
 var isStage1 = process.argv[2] == "1";
-utils.copySrcExcel(config.customerInputExcelName,__dirname,isStage1);
+// utils.copySrcExcel(config.customerInputExcelName,__dirname,isStage1);
 
 var excelPath = path.resolve(__dirname,config.customerInputExcelName);
 var workSheets = xlsx.parse(fs.readFileSync(excelPath));
