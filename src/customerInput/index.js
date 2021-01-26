@@ -29,7 +29,7 @@ class CustomerInput {
       return row[5] + row[0];
     })
     this.ruleNoObj = utils.generateNo(isStage1 ? config.CI_START_NUM_STAGE_1 : config.CI_START_NUM);// 规则号生成函数
-    this.condNoObj = utils.generateNo(isStage1 ? config.CI_START_NUM_STAGE_1 : config.CI_START_NUM);// 条件号生成函数
+    this.condNoObj = utils.generateNo(isStage1 ? config.CI_START_NUM_STAGE_1_COND_NUM : config.CI_START_NUM_COND_NUM);// 条件号生成函数
     this.FIELD_SEQ_NO_OBJ = utils.generateNo(1);// 模式表FIELD_SEQ_NO 递增
     this.curDayStr = utils.getCurDateStr(); // 当前日期
     // 规则表
@@ -182,10 +182,40 @@ DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` BETWEEN '0
 `;
 }
 
-utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
-utils.writeToOutDir("customerInputDelete.sql",deleteSql,"客户信息录入");
 
-let updateVersionSql = [deleteAll,insertSql].join(`\n`);
+let SUIT_TX_SCP_ALL = auth.ruleInfoData
+  .slice(1)
+  .map(v => `'${v[7]}'`)
+
+SUIT_TX_SCP_ALL = SUIT_TX_SCP_ALL
+  .filter((v,i) => SUIT_TX_SCP_ALL.indexOf(v) == i)
+  .join(",")
+console.log(SUIT_TX_SCP_ALL);
+var deleteAllAuth = `
+-- 删除模式表
+DELETE FROM \`pub_db\`.\`IB_OM_MODE_INFO\` WHERE \`MODE_NO\` IN (
+	SELECT \`RULE_COND_NO\` FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` IN (
+		SELECT \`RULE_NO\` FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'CI' AND \`RULE_NO\` !='005000'
+	)
+);
+-- 删除条件表
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_INFO\` WHERE OPRTN_COND_NO IN (
+	SELECT \`RULE_COND_NO\` FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` IN (
+		SELECT \`RULE_NO\` FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'CI' AND \`RULE_NO\` !='005000'
+	)
+);
+-- 删除条件规则关联表  
+DELETE FROM \`pub_db\`.\`IB_OM_RULECOND_RLT\` WHERE \`OPRTN_RULE_NO\` IN (
+	SELECT \`RULE_NO\` FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'CI' AND \`RULE_NO\` !='005000'
+);
+-- 删规则表
+DELETE FROM \`pub_db\`.\`IB_OM_RULE_INFO\` WHERE \`SUIT_TX_SCP\` IN (${SUIT_TX_SCP_ALL}) AND \`RULE_TYP_CD\` = 'CI';
+`;
+
+utils.writeToOutDir("customerInputInsert.sql",insertSql,"客户信息录入");
+utils.writeToOutDir("customerInputDelete.sql",deleteAllAuth,"客户信息录入");
+
+let updateVersionSql = [deleteSql,insertSql].join(`\n`);
 // utils.writeToOutDir(`刁信瑞-SIT3-客户信息录入规则${utils.getCurDateStr()}-.txt`,updateVersionSql,"上版");
 utils.writeToOutDir((isStage1 ? config.CI_OUT_FILENAME_STAGE_1 : config.CI_OUT_FILENAME).replace("$date",utils.getCurDateStr()),updateVersionSql,"上版");
 

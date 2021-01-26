@@ -11,6 +11,7 @@ module.exports = {
   CK_START_NUM_STAGE_1:70000,// 复核
   // FE_START_NUM_STAGE_1:80000,// 收费
   CI_START_NUM_STAGE_1:90000,// 客户信息录入
+  CI_START_NUM_STAGE_1_COND_NUM:90000,
   
   //二阶段
   AU_START_NUM:5100,//授权+++++++++++++++++++++++++
@@ -21,7 +22,8 @@ module.exports = {
   BN_START_NUM:65000,// 黑名单++++++++++++++++++++
   CK_START_NUM:75000,// 复核
   // FE_START_NUM:80000,// 收费
-  CI_START_NUM:95000,// 客户信息录入+++++++++++++
+  CI_START_NUM:95190,// 客户信息录入+++++++++++++
+  CI_START_NUM_COND_NUM:95190,// 客户信息录入+++++++++++++
   AMT_RULE_NO:"005000",//金额授权规则号
   // SVN 规则统计目录
   // svnStatisticsDir:"/Users/apple/Desktop/二阶段excel",
